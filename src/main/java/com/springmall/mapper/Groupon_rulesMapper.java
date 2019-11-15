@@ -2,8 +2,9 @@ package com.springmall.mapper;
 
 import com.springmall.bean.Groupon_rules;
 import com.springmall.bean.Groupon_rulesExample;
-import java.util.List;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 public interface Groupon_rulesMapper {
     long countByExample(Groupon_rulesExample example);

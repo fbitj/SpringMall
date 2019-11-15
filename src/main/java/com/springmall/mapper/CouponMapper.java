@@ -2,8 +2,9 @@ package com.springmall.mapper;
 
 import com.springmall.bean.Coupon;
 import com.springmall.bean.CouponExample;
-import java.util.List;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 public interface CouponMapper {
     long countByExample(CouponExample example);

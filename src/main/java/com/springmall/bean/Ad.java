@@ -1,10 +1,7 @@
 package com.springmall.bean;
 
-import lombok.Data;
-
 import java.util.Date;
 
-@Data
 public class Ad {
     private Integer id;
 

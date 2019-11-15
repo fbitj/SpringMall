@@ -1,9 +1,11 @@
 package com.springmall.mapper;
 
+import com.springmall.bean.AdRequest;
 import com.springmall.bean.Ad;
 import com.springmall.bean.AdExample;
-import java.util.List;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 public interface AdMapper {
     long countByExample(AdExample example);
@@ -27,4 +29,6 @@ public interface AdMapper {
     int updateByPrimaryKeySelective(Ad record);
 
     int updateByPrimaryKey(Ad record);
+
+    List<Ad> selectAllWithParm(AdRequest adRequest);
 }

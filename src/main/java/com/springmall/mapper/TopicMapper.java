@@ -2,8 +2,9 @@ package com.springmall.mapper;
 
 import com.springmall.bean.Topic;
 import com.springmall.bean.TopicExample;
-import java.util.List;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 public interface TopicMapper {
     long countByExample(TopicExample example);

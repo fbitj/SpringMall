@@ -30,6 +30,6 @@ build/
 ### VS Code ###
 .vscode/
 
-src/main/resources/application-db.yml
+application-db.yml
 
 aaa.txt

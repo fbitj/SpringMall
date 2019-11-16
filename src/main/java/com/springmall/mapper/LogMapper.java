@@ -2,9 +2,8 @@ package com.springmall.mapper;
 
 import com.springmall.bean.Log;
 import com.springmall.bean.LogExample;
-import org.apache.ibatis.annotations.Param;
-
 import java.util.List;
+import org.apache.ibatis.annotations.Param;
 
 public interface LogMapper {
     long countByExample(LogExample example);

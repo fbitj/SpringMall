@@ -2,9 +2,8 @@ package com.springmall.mapper;
 
 import com.springmall.bean.Permission;
 import com.springmall.bean.PermissionExample;
-import org.apache.ibatis.annotations.Param;
-
 import java.util.List;
+import org.apache.ibatis.annotations.Param;
 
 public interface PermissionMapper {
     long countByExample(PermissionExample example);

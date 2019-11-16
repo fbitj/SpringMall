@@ -1,20 +1,10 @@
 package com.springmall.controller;
-import java.io.File;
 import java.io.IOException;
-import java.util.Date;
 
 
-
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
 import com.springmall.bean.*;
-import com.springmall.mapper.AdminMapper;
-import com.springmall.mapper.RoleMapper;
-import com.springmall.server.AdminService;
-import com.springmall.server.AdminServiceImpl;
-import com.springmall.utils.StringUtil;
+import com.springmall.service.AdminService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 

@@ -69,7 +69,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, name, desc, enabled, add_time, update_time, deleted
+    id, `name`, `desc`, enabled, add_time, update_time, deleted
   </sql>
   <select id="selectByExample" parameterType="com.springmall.bean.RoleExample" resultMap="BaseResultMap">
     select
@@ -108,7 +108,7 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.springmall.bean.Role">
-    insert into cskaoyan_mall_role (id, name, desc, 
+    insert into cskaoyan_mall_role (id, `name`, `desc`,
       enabled, add_time, update_time, 
       deleted)
     values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{desc,jdbcType=VARCHAR}, 
@@ -202,8 +202,8 @@
   <update id="updateByExample" parameterType="map">
     update cskaoyan_mall_role
     set id = #{record.id,jdbcType=INTEGER},
-      name = #{record.name,jdbcType=VARCHAR},
-      desc = #{record.desc,jdbcType=VARCHAR},
+      `name` = #{record.name,jdbcType=VARCHAR},
+      `desc` = #{record.desc,jdbcType=VARCHAR},
       enabled = #{record.enabled,jdbcType=BIT},
       add_time = #{record.addTime,jdbcType=TIMESTAMP},
       update_time = #{record.updateTime,jdbcType=TIMESTAMP},
@@ -212,6 +212,20 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
+  <update id="updateByExampleDetail" parameterType="map">
+    update cskaoyan_mall_role
+    set
+    `name` = #{record.name,jdbcType=VARCHAR},
+    `desc` = #{record.desc,jdbcType=VARCHAR},
+    enabled = #{record.enabled,jdbcType=BIT},
+    add_time = #{record.addTime,jdbcType=TIMESTAMP},
+    update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+    deleted = #{record.deleted,jdbcType=BIT}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+
   <update id="updateByPrimaryKeySelective" parameterType="com.springmall.bean.Role">
     update cskaoyan_mall_role
     <set>

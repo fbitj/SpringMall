@@ -1,8 +1,10 @@
 package com.springmall.bean;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.util.Date;
 
-public class storage {
+public class Storage {
     private Integer id;
 
     private String key;
@@ -15,8 +17,10 @@ public class storage {
 
     private String url;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH-mm-ss")
     private Date addTime;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH-mm-ss")
     private Date updateTime;
 
     private Boolean deleted;

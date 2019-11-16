@@ -1,6 +1,7 @@
 package com.springmall.mapper;
 
 import com.springmall.bean.Role;
+import com.springmall.bean.Role2;
 import com.springmall.bean.RoleExample;
 import org.apache.ibatis.annotations.Param;
 
@@ -26,6 +27,8 @@ public interface RoleMapper {
     int updateByExampleSelective(@Param("record") Role record, @Param("example") RoleExample example);
 
     int updateByExample(@Param("record") Role record, @Param("example") RoleExample example);
+
+    int updateByExampleDetail(@Param("record") Role2 record, @Param("example") RoleExample example);
 
     int updateByPrimaryKeySelective(Role record);
 

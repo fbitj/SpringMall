@@ -17,6 +17,12 @@ public class GoodsServiceImpl implements GoodsService {
     GoodsMapper goodsMapper;
 
     @Override
+    public int deleteGoods(Goods goods) {
+        goods.setDeleted(true);
+        return goodsMapper.updateByPrimaryKeySelective(goods);
+    }
+
+    @Override
     public List<Goods> queryGoodsByPage(String page, String limit, String goodsSn, String name, String sortField, String order) {
         PageHelper.startPage(Integer.parseInt(page), Integer.parseInt(limit));
         GoodsExample goodsExample = new GoodsExample();

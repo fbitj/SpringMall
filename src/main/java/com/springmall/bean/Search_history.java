@@ -1,5 +1,7 @@
 package com.springmall.bean;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.util.Date;
 
 public class Search_history {
@@ -10,7 +12,7 @@ public class Search_history {
     private String keyword;
 
     private String from;
-
+    @JsonFormat(pattern = "yyyy-MM-dd hh:mm:ss",timezone = "GMT+8")
     private Date addTime;
 
     private Date updateTime;

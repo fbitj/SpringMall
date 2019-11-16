@@ -1,5 +1,8 @@
 package com.springmall.bean;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import org.apache.ibatis.annotations.Param;
+
 import java.util.Date;
 
 public class Collect {
@@ -10,7 +13,7 @@ public class Collect {
     private Integer valueId;
 
     private Byte type;
-
+    @JsonFormat(pattern = "yyyy-MM-dd hh:mm:ss",timezone = "GMT+8")
     private Date addTime;
 
     private Date updateTime;

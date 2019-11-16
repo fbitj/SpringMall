@@ -1,5 +1,7 @@
 package com.springmall.bean;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.util.Date;
 
 public class Feedback {
@@ -20,7 +22,7 @@ public class Feedback {
     private Boolean hasPicture;
 
     private String picUrls;
-
+    @JsonFormat(pattern = "yyyy-MM-dd hh:mm:ss",timezone = "GMT+8")
     private Date addTime;
 
     private Date updateTime;

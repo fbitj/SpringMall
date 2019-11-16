@@ -34,7 +34,6 @@ build/
 aaa.txt
 ###liaohao's Role###
 *.yml
-.gitignore
 *application-db.yml
 
 

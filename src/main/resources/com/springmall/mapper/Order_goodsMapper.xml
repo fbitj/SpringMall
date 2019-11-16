@@ -350,4 +350,12 @@
       deleted = #{deleted,jdbcType=BIT}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+
+  <select id="selectGoodsStat" resultType="com.springmall.bean.GoodsStat">
+    SELECT DATE_FORMAT(o.add_time,'%Y-%m-%d') day,count(distinct o.id) orders,sum(og.number) as products,sum(og.number*og.price) as amount
+    FROM cskaoyan_mall_order o left join cskaoyan_mall_order_goods og on o.id=og.order_id GROUP BY day;
+  </select>
+
+
 </mapper>

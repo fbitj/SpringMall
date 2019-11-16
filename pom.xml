@@ -9,9 +9,9 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.springmall</groupId>
-    <artifactId>liaohao</artifactId>
+    <artifactId>mall</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>liaohao</name>
+    <name>mall</name>
     <description>Demo project for Spring Boot</description>
 
     <properties>
@@ -60,10 +60,17 @@
                 </exclusion>
             </exclusions>
         </dependency>
+        <!--分页插件-->
         <dependency>
             <groupId>com.github.pagehelper</groupId>
             <artifactId>pagehelper-spring-boot-starter</artifactId>
             <version>1.2.12</version>
+        </dependency>
+        <!--文件上传依赖-->
+        <dependency>
+            <groupId>commons-fileupload</groupId>
+            <artifactId>commons-fileupload</artifactId>
+            <version>1.3.3</version>
         </dependency>
         <dependency>
             <groupId>com.alibaba</groupId>

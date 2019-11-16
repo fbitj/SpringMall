@@ -1,30 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.springmall.mapper.AdMapper">
-
-
-  <select id="selectAllWithParm" resultMap="BaseResultMap">
-    select <include refid="Base_Column_List"/> from cskaoyan_mall_ad
-    <where>
-      <if test="name != null">
-        name like concat('%', #{name}, '%')
-      </if>
-      <if test="content != null">
-        and content like concat('%', #{content}, '%')
-      </if>
-    </where>
-  </select>
-
-  <resultMap id="BaseResultMap" type="com.springmall.bean.Ad">
+<mapper namespace="com.springmall.mapper.ProductMapper">
+  <resultMap id="BaseResultMap" type="com.springmall.bean.Product">
     <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="name" jdbcType="VARCHAR" property="name" />
-    <result column="link" jdbcType="VARCHAR" property="link" />
+    <result column="goods_id" jdbcType="INTEGER" property="goodsId" />
+    <result column="specifications" jdbcType="VARCHAR" property="specifications" />
+    <result column="price" jdbcType="DECIMAL" property="price" />
+    <result column="number" jdbcType="INTEGER" property="number" />
     <result column="url" jdbcType="VARCHAR" property="url" />
-    <result column="position" jdbcType="TINYINT" property="position" />
-    <result column="content" jdbcType="VARCHAR" property="content" />
-    <result column="start_time" jdbcType="TIMESTAMP" property="startTime" />
-    <result column="end_time" jdbcType="TIMESTAMP" property="endTime" />
-    <result column="enabled" jdbcType="BIT" property="enabled" />
     <result column="add_time" jdbcType="TIMESTAMP" property="addTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
     <result column="deleted" jdbcType="BIT" property="deleted" />
@@ -88,16 +71,15 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, name, link, url, position, content, start_time, end_time, enabled, add_time, 
-    update_time, deleted
+    id, goods_id, specifications, price, number, url, add_time, update_time, deleted
   </sql>
-  <select id="selectByExample" parameterType="com.springmall.bean.AdExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.springmall.bean.ProductExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from cskaoyan_mall_ad
+    from cskaoyan_mall_goods_product
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -108,63 +90,49 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from cskaoyan_mall_ad
+    from cskaoyan_mall_goods_product
     where id = #{id,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    delete from cskaoyan_mall_ad
+    delete from cskaoyan_mall_goods_product
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <delete id="deleteByExample" parameterType="com.springmall.bean.AdExample">
-    delete from cskaoyan_mall_ad
+  <delete id="deleteByExample" parameterType="com.springmall.bean.ProductExample">
+    delete from cskaoyan_mall_goods_product
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.springmall.bean.Ad">
-    insert into cskaoyan_mall_ad (id, name, link, 
-      url, position, content, 
-      start_time, end_time, enabled, 
+  <insert id="insert" parameterType="com.springmall.bean.Product">
+    insert into cskaoyan_mall_goods_product (id, goods_id, specifications, 
+      price, number, url, 
       add_time, update_time, deleted
       )
-    values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{link,jdbcType=VARCHAR}, 
-      #{url,jdbcType=VARCHAR}, #{position,jdbcType=TINYINT}, #{content,jdbcType=VARCHAR}, 
-      #{startTime,jdbcType=TIMESTAMP}, #{endTime,jdbcType=TIMESTAMP}, #{enabled,jdbcType=BIT}, 
+    values (#{id,jdbcType=INTEGER}, #{goodsId,jdbcType=INTEGER}, #{specifications,jdbcType=VARCHAR}, 
+      #{price,jdbcType=DECIMAL}, #{number,jdbcType=INTEGER}, #{url,jdbcType=VARCHAR}, 
       #{addTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{deleted,jdbcType=BIT}
       )
   </insert>
-  <insert id="insertSelective" parameterType="com.springmall.bean.Ad">
-    <selectKey order="AFTER" keyColumn="aid" resultType="int" keyProperty="id">
-      select LAST_INSERT_ID() as aid
-    </selectKey>
-    insert into cskaoyan_mall_ad
+  <insert id="insertSelective" parameterType="com.springmall.bean.Product">
+    insert into cskaoyan_mall_goods_product
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
         id,
       </if>
-      <if test="name != null">
-        name,
+      <if test="goodsId != null">
+        goods_id,
       </if>
-      <if test="link != null">
-        link,
+      <if test="specifications != null">
+        specifications,
+      </if>
+      <if test="price != null">
+        price,
+      </if>
+      <if test="number != null">
+        number,
       </if>
       <if test="url != null">
         url,
-      </if>
-      <if test="position != null">
-        position,
-      </if>
-      <if test="content != null">
-        content,
-      </if>
-      <if test="startTime != null">
-        start_time,
-      </if>
-      <if test="endTime != null">
-        end_time,
-      </if>
-      <if test="enabled != null">
-        enabled,
       </if>
       <if test="addTime != null">
         add_time,
@@ -180,29 +148,20 @@
       <if test="id != null">
         #{id,jdbcType=INTEGER},
       </if>
-      <if test="name != null">
-        #{name,jdbcType=VARCHAR},
+      <if test="goodsId != null">
+        #{goodsId,jdbcType=INTEGER},
       </if>
-      <if test="link != null">
-        #{link,jdbcType=VARCHAR},
+      <if test="specifications != null">
+        #{specifications,jdbcType=VARCHAR},
+      </if>
+      <if test="price != null">
+        #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="number != null">
+        #{number,jdbcType=INTEGER},
       </if>
       <if test="url != null">
         #{url,jdbcType=VARCHAR},
-      </if>
-      <if test="position != null">
-        #{position,jdbcType=TINYINT},
-      </if>
-      <if test="content != null">
-        #{content,jdbcType=VARCHAR},
-      </if>
-      <if test="startTime != null">
-        #{startTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="endTime != null">
-        #{endTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="enabled != null">
-        #{enabled,jdbcType=BIT},
       </if>
       <if test="addTime != null">
         #{addTime,jdbcType=TIMESTAMP},
@@ -215,41 +174,32 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.springmall.bean.AdExample" resultType="java.lang.Long">
-    select count(*) from cskaoyan_mall_ad
+  <select id="countByExample" parameterType="com.springmall.bean.ProductExample" resultType="java.lang.Long">
+    select count(*) from cskaoyan_mall_goods_product
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update cskaoyan_mall_ad
+    update cskaoyan_mall_goods_product
     <set>
       <if test="record.id != null">
         id = #{record.id,jdbcType=INTEGER},
       </if>
-      <if test="record.name != null">
-        name = #{record.name,jdbcType=VARCHAR},
+      <if test="record.goodsId != null">
+        goods_id = #{record.goodsId,jdbcType=INTEGER},
       </if>
-      <if test="record.link != null">
-        link = #{record.link,jdbcType=VARCHAR},
+      <if test="record.specifications != null">
+        specifications = #{record.specifications,jdbcType=VARCHAR},
+      </if>
+      <if test="record.price != null">
+        price = #{record.price,jdbcType=DECIMAL},
+      </if>
+      <if test="record.number != null">
+        number = #{record.number,jdbcType=INTEGER},
       </if>
       <if test="record.url != null">
         url = #{record.url,jdbcType=VARCHAR},
-      </if>
-      <if test="record.position != null">
-        position = #{record.position,jdbcType=TINYINT},
-      </if>
-      <if test="record.content != null">
-        content = #{record.content,jdbcType=VARCHAR},
-      </if>
-      <if test="record.startTime != null">
-        start_time = #{record.startTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="record.endTime != null">
-        end_time = #{record.endTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="record.enabled != null">
-        enabled = #{record.enabled,jdbcType=BIT},
       </if>
       <if test="record.addTime != null">
         add_time = #{record.addTime,jdbcType=TIMESTAMP},
@@ -266,16 +216,13 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update cskaoyan_mall_ad
+    update cskaoyan_mall_goods_product
     set id = #{record.id,jdbcType=INTEGER},
-      name = #{record.name,jdbcType=VARCHAR},
-      link = #{record.link,jdbcType=VARCHAR},
+      goods_id = #{record.goodsId,jdbcType=INTEGER},
+      specifications = #{record.specifications,jdbcType=VARCHAR},
+      price = #{record.price,jdbcType=DECIMAL},
+      number = #{record.number,jdbcType=INTEGER},
       url = #{record.url,jdbcType=VARCHAR},
-      position = #{record.position,jdbcType=TINYINT},
-      content = #{record.content,jdbcType=VARCHAR},
-      start_time = #{record.startTime,jdbcType=TIMESTAMP},
-      end_time = #{record.endTime,jdbcType=TIMESTAMP},
-      enabled = #{record.enabled,jdbcType=BIT},
       add_time = #{record.addTime,jdbcType=TIMESTAMP},
       update_time = #{record.updateTime,jdbcType=TIMESTAMP},
       deleted = #{record.deleted,jdbcType=BIT}
@@ -283,32 +230,23 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.springmall.bean.Ad">
-    update cskaoyan_mall_ad
+  <update id="updateByPrimaryKeySelective" parameterType="com.springmall.bean.Product">
+    update cskaoyan_mall_goods_product
     <set>
-      <if test="name != null">
-        name = #{name,jdbcType=VARCHAR},
+      <if test="goodsId != null">
+        goods_id = #{goodsId,jdbcType=INTEGER},
       </if>
-      <if test="link != null">
-        link = #{link,jdbcType=VARCHAR},
+      <if test="specifications != null">
+        specifications = #{specifications,jdbcType=VARCHAR},
+      </if>
+      <if test="price != null">
+        price = #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="number != null">
+        number = #{number,jdbcType=INTEGER},
       </if>
       <if test="url != null">
         url = #{url,jdbcType=VARCHAR},
-      </if>
-      <if test="position != null">
-        position = #{position,jdbcType=TINYINT},
-      </if>
-      <if test="content != null">
-        content = #{content,jdbcType=VARCHAR},
-      </if>
-      <if test="startTime != null">
-        start_time = #{startTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="endTime != null">
-        end_time = #{endTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="enabled != null">
-        enabled = #{enabled,jdbcType=BIT},
       </if>
       <if test="addTime != null">
         add_time = #{addTime,jdbcType=TIMESTAMP},
@@ -322,16 +260,13 @@
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.springmall.bean.Ad">
-    update cskaoyan_mall_ad
-    set name = #{name,jdbcType=VARCHAR},
-      link = #{link,jdbcType=VARCHAR},
+  <update id="updateByPrimaryKey" parameterType="com.springmall.bean.Product">
+    update cskaoyan_mall_goods_product
+    set goods_id = #{goodsId,jdbcType=INTEGER},
+      specifications = #{specifications,jdbcType=VARCHAR},
+      price = #{price,jdbcType=DECIMAL},
+      number = #{number,jdbcType=INTEGER},
       url = #{url,jdbcType=VARCHAR},
-      position = #{position,jdbcType=TINYINT},
-      content = #{content,jdbcType=VARCHAR},
-      start_time = #{startTime,jdbcType=TIMESTAMP},
-      end_time = #{endTime,jdbcType=TIMESTAMP},
-      enabled = #{enabled,jdbcType=BIT},
       add_time = #{addTime,jdbcType=TIMESTAMP},
       update_time = #{updateTime,jdbcType=TIMESTAMP},
       deleted = #{deleted,jdbcType=BIT}

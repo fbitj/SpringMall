@@ -2,8 +2,9 @@ package com.springmall.mapper;
 
 import com.springmall.bean.Goods;
 import com.springmall.bean.GoodsExample;
-import java.util.List;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 public interface GoodsMapper {
     long countByExample(GoodsExample example);

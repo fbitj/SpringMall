@@ -13,12 +13,25 @@ public class MallConfigServiceImpl implements MallConfigService {
     @Autowired
     MallConfigMapper mallConfigMapper;
 
+    /**
+     * 获取商场配置信息
+     * @return 现商场配置信息对象
+     */
     @Override
     public MallConfig queryMallConfig () {
         MallConfigExample mallConfigExample = new MallConfigExample();
         return mallConfigMapper.selectByExample(mallConfigExample).get(0);
     }
 
+    /**
+     * 更新商场配置信息
+     * @param mallConfig
+     * @return
+     * -1表示服务器繁忙，
+     * 0表示更新失败，
+     * 1表示更新成功，
+     * 2表示更新条件输入不完整。
+     */
     @Override
     public int updateMallConfig (MallConfig  mallConfig ) {
         if (StringUtils.isEmpty(mallConfig.getLitemall_mall_name()) ||

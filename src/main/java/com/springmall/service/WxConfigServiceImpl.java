@@ -13,12 +13,32 @@ public class WxConfigServiceImpl implements WxConfigService {
     @Autowired
     WxConfigMapper wxConfigMapper;
 
+    /**
+     * 获取微信小程序配置信息
+     * @return 现微信小程序配置信息对象
+     */
     @Override
     public WxConfig queryWxConfig() {
         WxConfigExample wxConfigExample = new WxConfigExample();
         return wxConfigMapper.selectByExample(wxConfigExample).get(0);
     }
 
+    /**
+     * 更新微信小程序配置信息
+     * @param wxConfig
+     * @return
+     * -1表示服务器繁忙，
+     * 0表示更新失败，
+     * 1表示更新成功，
+     * 2表示更新条件输入不完整，
+     * 3表示新品首发栏目商品显示数量为负数，
+     * 4表示分类栏目商品显示数量为负数，
+     * 5表示分类栏目显示数量为负数，
+     * 6表示品牌制造商直供栏目品牌商显示数量为负数
+     * 7表示人气推荐栏目商品显示数量为负数
+     * 8表示专题精选栏目显示数量为负数
+     * 9表示修改参数中要求输入数字处存在非数字。
+     */
     @Override
     public int updateWxConfig(WxConfig wxConfig) {
         if (StringUtils.isEmpty(wxConfig.getLitemall_wx_index_new()) ||

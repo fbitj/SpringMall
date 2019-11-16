@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
  *      /admin/config/order
  *      /admin/config/wx
  */
-
 @RestController
 @RequestMapping("admin/config")
 public class ConfigController {
@@ -33,18 +32,16 @@ public class ConfigController {
     @Autowired
     WxConfigService wxConfigService;
 
-    //GET请求，没有修改商场配置信息，请求参数为空，返回参数中有data属性。
-
     /**
      * 获取商场配置信息
      * @return 返回参数：
      * {
      * 	"errno": 0,
      * 	"data": {
-     * 		"litemall_mall_phone": "123464567356",
+     * 		"litemall_mall_phone": "10086",
      * 		"litemall_mall_address": "武汉",
-     * 		"litemall_mall_name": "嘿嘿嘿",
-     * 		"litemall_mall_qq": "12345"
+     * 		"litemall_mall_name": "光谷店",
+     * 		"litemall_mall_qq": "123456789"
      *        },
      * 	"errmsg": "成功"
      * }
@@ -59,7 +56,21 @@ public class ConfigController {
         return baseReqVo;
     }
 
-    //POST请求，有修改商场配置信息，请求参数为修改信息，对修改参数进行判空，返回参数中没有data属性。
+    /**
+     * 更新商场配置信息
+     * @param mallConfig 获取参数：
+     * {
+     * 	"litemall_mall_phone": "10086",
+     * 	"litemall_mall_address": "武汉",
+     * 	"litemall_mall_name": "光谷店",
+     * 	"litemall_mall_qq": "123456789"
+     * }
+     * @return 返回参数：
+     * {
+     * 	"errno": 0,
+     * 	"errmsg": "成功"
+     * }
+     */
     @RequestMapping(value = "mall", method = RequestMethod.POST)
     public BaseReqVo updateMallConfig(@RequestBody MallConfig mallConfig){
         BaseReqVo baseReqVo = new BaseReqVo();
@@ -78,7 +89,18 @@ public class ConfigController {
         return baseReqVo;
     }
 
-    //GET请求，没有修改运费配置信息，请求参数为空，返回参数中有data属性。
+    /**
+     * 获取运费配置信息
+     * @return 返回参数：
+     * {
+     * 	"errno": 0,
+     * 	"data": {
+     * 		"litemall_express_freight_min": "58",
+     * 		"litemall_express_freight_value": "9"
+     *        },
+     * 	"errmsg": "成功"
+     * }
+     */
     @RequestMapping(value = "express", method = RequestMethod.GET)
     public BaseReqVo queryExpressConfig() {
         BaseReqVo baseReqVo = new BaseReqVo();
@@ -89,7 +111,21 @@ public class ConfigController {
         return baseReqVo;
     }
 
-    //POST请求，有修改商场配置信息，请求参数为修改信息，对修改参数进行判断，返回参数中没有data属性。
+    /**
+     * 更新运费配置信息
+     * @param expressConfig 获取参数：
+     * {
+     * 	"litemall_mall_phone": "10086",
+     * 	"litemall_mall_address": "武汉",
+     * 	"litemall_mall_name": "光谷店",
+     * 	"litemall_mall_qq": "123456789"
+     * }
+     * @return 返回参数：
+     * {
+     * 	"errno": 0,
+     * 	"errmsg": "成功"
+     * }
+     */
     @RequestMapping(value = "express", method = RequestMethod.POST)
     public BaseReqVo updateExpressConfig(@RequestBody ExpressConfig expressConfig) {
         BaseReqVo baseReqVo = new BaseReqVo();
@@ -120,7 +156,19 @@ public class ConfigController {
         return baseReqVo;
     }
 
-    //GET请求，没有修改订单配置信息，请求参数为空，返回参数中有data属性。
+    /**
+     * 获取订单配置信息
+     * @return 返回参数：
+     * {
+     * 	"errno": 0,
+     * 	"data": {
+     * 		"litemall_order_comment": "6",
+     * 		"litemall_order_unpaid": "450",
+     * 		"litemall_order_unconfirm": "6"
+     *        },
+     * 	"errmsg": "成功"
+     * }
+     */
     @RequestMapping(value = "order", method = RequestMethod.GET)
     public BaseReqVo queryOrderConfig() {
         BaseReqVo baseReqVo = new BaseReqVo();
@@ -131,7 +179,20 @@ public class ConfigController {
         return baseReqVo;
     }
 
-    //POST请求，有修改订单配置信息，请求参数为修改信息，对修改参数进行判断，返回参数中没有data属性。
+    /**
+     * 更新订单配置信息
+     * @param orderConfig 获取参数：
+     * {
+     * 	"litemall_order_comment": "88888",
+     * 	"litemall_order_unpaid": "11",
+     * 	"litemall_order_unconfirm": "454545"
+     * }
+     * @return 返回参数：
+     * {
+     * 	"errno": 0,
+     * 	"errmsg": "成功"
+     * }
+     */
     @RequestMapping(value = "order", method = RequestMethod.POST)
     public BaseReqVo updateOrderConfig(@RequestBody OrderConfig orderConfig) {
         BaseReqVo baseReqVo = new BaseReqVo();
@@ -166,7 +227,23 @@ public class ConfigController {
         return baseReqVo;
     }
 
-    //GET请求，没有修改微信小程序配置信息，请求参数为空，返回参数中有data属性。
+    /**
+     * 获取微信小程序配置信息
+     * @return 返回参数：
+     * {
+     * 	"errno": 0,
+     * 	"data": {
+     * 		"litemall_wx_index_new": "10",
+     * 		"litemall_wx_catlog_goods": "4",
+     * 		"litemall_wx_catlog_list": "4",
+     * 		"litemall_wx_share": "true",
+     * 		"litemall_wx_index_brand": "4",
+     * 		"litemall_wx_index_hot": "4",
+     * 		"litemall_wx_index_topic": "4"
+     *        },
+     * 	"errmsg": "成功"
+     * }
+     */
     @RequestMapping(value = "wx", method = RequestMethod.GET)
     public BaseReqVo queryWxConfig() {
         BaseReqVo baseReqVo = new BaseReqVo();
@@ -177,7 +254,24 @@ public class ConfigController {
         return baseReqVo;
     }
 
-    //POST请求，有修改微信小程序配置信息，请求参数为修改信息，对修改参数进行判断，返回参数中没有data属性。
+    /**
+     * 更新微信小程序配置信息
+     * @param wxConfig 获取参数：
+     * {
+     * 	"litemall_wx_index_new": "10",
+     * 	"litemall_wx_catlog_goods": "787899",
+     * 	"litemall_wx_catlog_list": "6",
+     * 	"litemall_wx_share": "false",
+     * 	"litemall_wx_index_brand": "4",
+     * 	"litemall_wx_index_hot": "51",
+     * 	"litemall_wx_index_topic": "6"
+     * }
+     * @return 返回参数：
+     * {
+     * 	"errno": 0,
+     * 	"errmsg": "成功"
+     * }
+     */
     @RequestMapping(value = "wx", method = RequestMethod.POST)
     public BaseReqVo updateWxConfig(@RequestBody WxConfig wxConfig) {
         BaseReqVo baseReqVo = new BaseReqVo();

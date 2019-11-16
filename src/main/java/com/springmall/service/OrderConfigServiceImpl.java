@@ -13,12 +13,29 @@ public class OrderConfigServiceImpl implements OrderConfigService {
     @Autowired
     OrderConfigMapper orderConfigMapper;
 
+    /**
+     * 获取订单配置信息
+     * @return 现订单配置信息对象
+     */
     @Override
     public OrderConfig queryOrderConfig() {
         OrderConfigExample orderConfigExample = new OrderConfigExample();
         return orderConfigMapper.selectByExample(orderConfigExample).get(0);
     }
 
+    /**
+     * 更新订单配置信息
+     * @param orderConfig
+     * @return
+     * -1表示服务器繁忙，
+     * 0表示更新失败，
+     * 1表示更新成功，
+     * 2表示更新条件输入不完整，
+     * 3表示确认收货后超期天数不为正数，
+     * 4表示用户下单后超时分钟数不为正数，
+     * 5表示订单发货后超期天数不为正数，
+     * 6表示修改参数中存在非数字。
+     */
     @Override
     public int updateOrderConfig(OrderConfig orderConfig) {
         if (StringUtils.isEmpty(orderConfig.getLitemall_order_comment()) ||

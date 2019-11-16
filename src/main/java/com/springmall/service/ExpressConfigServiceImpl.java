@@ -13,12 +13,28 @@ public class ExpressConfigServiceImpl implements ExpressConfigService {
     @Autowired
     ExpressConfigMapper expressConfigMapper;
 
+    /**
+     * 获取运费配置信息
+     * @return 现运费配置信息对象
+     */
     @Override
     public ExpressConfig queryExpressConfig() {
         ExpressConfigExample expressConfigExample = new ExpressConfigExample();
         return expressConfigMapper.selectByExample(expressConfigExample).get(0);
     }
 
+    /**
+     * 更新运费配置信息
+     * @param expressConfig
+     * @return
+     * -1表示服务器繁忙，
+     * 0表示更新失败，
+     * 1表示更新成功，
+     * 2表示更新条件输入不完整，
+     * 3表示运费满减所需最低消费不为正数，
+     * 4表示运费满减不足所需运费不为正数，
+     * 5表示修改参数中存在非数字。
+     */
     @Override
     public int updateExpressConfig(ExpressConfig expressConfig) {
         if (StringUtils.isEmpty(expressConfig.getLitemall_express_freight_min()) ||

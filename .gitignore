@@ -31,13 +31,10 @@ build/
 ### VS Code ###
 .vscode/
 
-src/main/resources/application-db.yml
-
 aaa.txt
 ###liaohao's Role###
 *.yml
 .gitignore
 *application-db.yml
 
-aaa.txt
 

@@ -10,4 +10,8 @@ public class InfoData {
     String name;
     List<String> perms;
     List<String> roles;
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> dev

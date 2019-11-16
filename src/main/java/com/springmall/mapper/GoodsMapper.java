@@ -5,6 +5,11 @@ import com.springmall.bean.GoodsExample;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+<<<<<<< HEAD
+=======
+import java.util.List;
+import org.apache.ibatis.annotations.Param;
+>>>> dev
 
 public interface GoodsMapper {
     long countByExample(GoodsExample example);

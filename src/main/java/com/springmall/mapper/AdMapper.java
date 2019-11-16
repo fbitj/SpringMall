@@ -31,4 +31,5 @@ public interface AdMapper {
     int updateByPrimaryKey(Ad record);
 
     List<Ad> selectAllWithParm(AdRequest adRequest);
+
 }

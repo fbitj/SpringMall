@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.springmall.mapper.StorageMapper">
-  <resultMap id="BaseResultMap" type="com.springmall.bean.Storage">
+<mapper namespace="com.springmall.mapper.ProductMapper">
+  <resultMap id="BaseResultMap" type="com.springmall.bean.Product">
     <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="key" jdbcType="VARCHAR" property="key" />
-    <result column="name" jdbcType="VARCHAR" property="name" />
-    <result column="type" jdbcType="VARCHAR" property="type" />
-    <result column="size" jdbcType="INTEGER" property="size" />
+    <result column="goods_id" jdbcType="INTEGER" property="goodsId" />
+    <result column="specifications" jdbcType="VARCHAR" property="specifications" />
+    <result column="price" jdbcType="DECIMAL" property="price" />
+    <result column="number" jdbcType="INTEGER" property="number" />
     <result column="url" jdbcType="VARCHAR" property="url" />
     <result column="add_time" jdbcType="TIMESTAMP" property="addTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
@@ -71,15 +71,15 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, `key`, `name`, `type`, `size`, `url`, add_time, update_time, deleted
+    id, goods_id, specifications, price, number, url, add_time, update_time, deleted
   </sql>
-  <select id="selectByExample" parameterType="com.springmall.bean.StorageExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.springmall.bean.ProductExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from cskaoyan_mall_storage
+    from cskaoyan_mall_goods_product
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -90,50 +90,49 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from cskaoyan_mall_storage
+    from cskaoyan_mall_goods_product
     where id = #{id,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    delete from cskaoyan_mall_storage
+    delete from cskaoyan_mall_goods_product
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <delete id="deleteByExample" parameterType="com.springmall.bean.StorageExample">
-    delete from cskaoyan_mall_storage
+  <delete id="deleteByExample" parameterType="com.springmall.bean.ProductExample">
+    delete from cskaoyan_mall_goods_product
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.springmall.bean.Storage">
-    insert into cskaoyan_mall_storage (id, key, name, 
-      type, size, url, add_time, 
-      update_time, deleted)
-    values (#{id,jdbcType=INTEGER}, #{key,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
-      #{type,jdbcType=VARCHAR}, #{size,jdbcType=INTEGER}, #{url,jdbcType=VARCHAR}, #{addTime,jdbcType=TIMESTAMP}, 
-      #{updateTime,jdbcType=TIMESTAMP}, #{deleted,jdbcType=BIT})
+  <insert id="insert" parameterType="com.springmall.bean.Product">
+    insert into cskaoyan_mall_goods_product (id, goods_id, specifications, 
+      price, number, url, 
+      add_time, update_time, deleted
+      )
+    values (#{id,jdbcType=INTEGER}, #{goodsId,jdbcType=INTEGER}, #{specifications,jdbcType=VARCHAR}, 
+      #{price,jdbcType=DECIMAL}, #{number,jdbcType=INTEGER}, #{url,jdbcType=VARCHAR}, 
+      #{addTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{deleted,jdbcType=BIT}
+      )
   </insert>
-  <insert id="insertSelective" parameterType="com.springmall.bean.Storage">
-    <selectKey resultType="int" keyColumn="id" keyProperty="id" order="AFTER">
-      SELECT LAST_INSERT_ID()
-    </selectKey>
-    insert into cskaoyan_mall_storage
+  <insert id="insertSelective" parameterType="com.springmall.bean.Product">
+    insert into cskaoyan_mall_goods_product
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
         id,
       </if>
-      <if test="key != null">
-        `key`,
+      <if test="goodsId != null">
+        goods_id,
       </if>
-      <if test="name != null">
-        `name`,
+      <if test="specifications != null">
+        specifications,
       </if>
-      <if test="type != null">
-        `type`,
+      <if test="price != null">
+        price,
       </if>
-      <if test="size != null">
-        `size`,
+      <if test="number != null">
+        number,
       </if>
       <if test="url != null">
-        `url`,
+        url,
       </if>
       <if test="addTime != null">
         add_time,
@@ -149,17 +148,17 @@
       <if test="id != null">
         #{id,jdbcType=INTEGER},
       </if>
-      <if test="key != null">
-        #{key,jdbcType=VARCHAR},
+      <if test="goodsId != null">
+        #{goodsId,jdbcType=INTEGER},
       </if>
-      <if test="name != null">
-        #{name,jdbcType=VARCHAR},
+      <if test="specifications != null">
+        #{specifications,jdbcType=VARCHAR},
       </if>
-      <if test="type != null">
-        #{type,jdbcType=VARCHAR},
+      <if test="price != null">
+        #{price,jdbcType=DECIMAL},
       </if>
-      <if test="size != null">
-        #{size,jdbcType=INTEGER},
+      <if test="number != null">
+        #{number,jdbcType=INTEGER},
       </if>
       <if test="url != null">
         #{url,jdbcType=VARCHAR},
@@ -175,29 +174,29 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.springmall.bean.StorageExample" resultType="java.lang.Long">
-    select count(*) from cskaoyan_mall_storage
+  <select id="countByExample" parameterType="com.springmall.bean.ProductExample" resultType="java.lang.Long">
+    select count(*) from cskaoyan_mall_goods_product
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update cskaoyan_mall_storage
+    update cskaoyan_mall_goods_product
     <set>
       <if test="record.id != null">
         id = #{record.id,jdbcType=INTEGER},
       </if>
-      <if test="record.key != null">
-        key = #{record.key,jdbcType=VARCHAR},
+      <if test="record.goodsId != null">
+        goods_id = #{record.goodsId,jdbcType=INTEGER},
       </if>
-      <if test="record.name != null">
-        name = #{record.name,jdbcType=VARCHAR},
+      <if test="record.specifications != null">
+        specifications = #{record.specifications,jdbcType=VARCHAR},
       </if>
-      <if test="record.type != null">
-        type = #{record.type,jdbcType=VARCHAR},
+      <if test="record.price != null">
+        price = #{record.price,jdbcType=DECIMAL},
       </if>
-      <if test="record.size != null">
-        size = #{record.size,jdbcType=INTEGER},
+      <if test="record.number != null">
+        number = #{record.number,jdbcType=INTEGER},
       </if>
       <if test="record.url != null">
         url = #{record.url,jdbcType=VARCHAR},
@@ -217,12 +216,12 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update cskaoyan_mall_storage
+    update cskaoyan_mall_goods_product
     set id = #{record.id,jdbcType=INTEGER},
-      key = #{record.key,jdbcType=VARCHAR},
-      name = #{record.name,jdbcType=VARCHAR},
-      type = #{record.type,jdbcType=VARCHAR},
-      size = #{record.size,jdbcType=INTEGER},
+      goods_id = #{record.goodsId,jdbcType=INTEGER},
+      specifications = #{record.specifications,jdbcType=VARCHAR},
+      price = #{record.price,jdbcType=DECIMAL},
+      number = #{record.number,jdbcType=INTEGER},
       url = #{record.url,jdbcType=VARCHAR},
       add_time = #{record.addTime,jdbcType=TIMESTAMP},
       update_time = #{record.updateTime,jdbcType=TIMESTAMP},
@@ -231,20 +230,20 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.springmall.bean.Storage">
-    update cskaoyan_mall_storage
+  <update id="updateByPrimaryKeySelective" parameterType="com.springmall.bean.Product">
+    update cskaoyan_mall_goods_product
     <set>
-      <if test="key != null">
-        key = #{key,jdbcType=VARCHAR},
+      <if test="goodsId != null">
+        goods_id = #{goodsId,jdbcType=INTEGER},
       </if>
-      <if test="name != null">
-        name = #{name,jdbcType=VARCHAR},
+      <if test="specifications != null">
+        specifications = #{specifications,jdbcType=VARCHAR},
       </if>
-      <if test="type != null">
-        type = #{type,jdbcType=VARCHAR},
+      <if test="price != null">
+        price = #{price,jdbcType=DECIMAL},
       </if>
-      <if test="size != null">
-        size = #{size,jdbcType=INTEGER},
+      <if test="number != null">
+        number = #{number,jdbcType=INTEGER},
       </if>
       <if test="url != null">
         url = #{url,jdbcType=VARCHAR},
@@ -261,12 +260,12 @@
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.springmall.bean.Storage">
-    update cskaoyan_mall_storage
-    set key = #{key,jdbcType=VARCHAR},
-      name = #{name,jdbcType=VARCHAR},
-      type = #{type,jdbcType=VARCHAR},
-      size = #{size,jdbcType=INTEGER},
+  <update id="updateByPrimaryKey" parameterType="com.springmall.bean.Product">
+    update cskaoyan_mall_goods_product
+    set goods_id = #{goodsId,jdbcType=INTEGER},
+      specifications = #{specifications,jdbcType=VARCHAR},
+      price = #{price,jdbcType=DECIMAL},
+      number = #{number,jdbcType=INTEGER},
       url = #{url,jdbcType=VARCHAR},
       add_time = #{addTime,jdbcType=TIMESTAMP},
       update_time = #{updateTime,jdbcType=TIMESTAMP},

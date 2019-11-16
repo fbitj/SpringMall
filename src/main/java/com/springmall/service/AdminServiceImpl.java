@@ -2,6 +2,7 @@ package com.springmall.service;
 
 import com.springmall.bean.Admin;
 import com.springmall.bean.AdminExample;
+import com.springmall.bean.LoginVo;
 import com.springmall.mapper.AdminMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

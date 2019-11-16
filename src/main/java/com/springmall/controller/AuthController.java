@@ -9,20 +9,21 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
+
 
 /**
  * Created by fwj on 2019-11-15.
  */
 
-@Controller
+@RestController
 @RequestMapping("admin/auth")
 public class AuthController {
     @Autowired
     AdminService adminService;
 
-    @ResponseBody
     @RequestMapping("login")
     public BaseReqVo<String> login(@RequestBody Admin admin) {
         BaseReqVo<String> baseReqVo = new BaseReqVo<>();
@@ -38,21 +39,22 @@ public class AuthController {
     }
 
     @RequestMapping("info")
-    @ResponseBody
-    public BaseReqVo info(String token) {
+    public BaseReqVo getInfo(String token){
+        // 通过请求参数中sessionid获取到session中的管理员系信息
         BaseReqVo baseReqVo = new BaseReqVo();
-        InfoData infoData = new InfoData();
-        ArrayList<String> roleList = new ArrayList<>();
-        roleList.add("超级管理员");
-        infoData.setRoles(roleList);
-        infoData.setName("admin");
+        InfoData data = new InfoData();
+        data.setAvatar("https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif");
+        data.setName("songge");
         ArrayList<String> perms = new ArrayList<>();
         perms.add("*");
-        infoData.setPerms(perms);
-        infoData.setAvatar("https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif");
-        baseReqVo.setErrno(0);
-        baseReqVo.setData(infoData);
+        data.setPerms(perms);
+        ArrayList<String> roles = new ArrayList<>();
+        roles.add("超级管理员");
+        data.setRoles(roles);
+
+        baseReqVo.setData(data);
         baseReqVo.setErrmsg("成功");
+        baseReqVo.setErrno(0);
         return baseReqVo;
     }
 }

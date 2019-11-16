@@ -31,12 +31,9 @@ build/
 ### VS Code ###
 .vscode/
 
-<<<<<<< HEAD
 ###MyRole###
 *.yml
 .gitignore
-=======
 application-db.yml
-
 aaa.txt
->>>>>>> 2cf51b272762e8935427014aa95bf36ab05295d2
+

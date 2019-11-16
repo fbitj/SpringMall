@@ -71,11 +71,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-<<<<<<< HEAD
     id, `key`, `name`, `type`, `size`, `url`, add_time, update_time, deleted
-=======
-    id, key, name, type, size, url, add_time, update_time, deleted
->>>>>>> 2cf51b272762e8935427014aa95bf36ab05295d2
   </sql>
   <select id="selectByExample" parameterType="com.springmall.bean.StorageExample" resultMap="BaseResultMap">
     select
@@ -138,21 +134,6 @@
       </if>
       <if test="url != null">
         `url`,
-=======
-        key,
-      </if>
-      <if test="name != null">
-        name,
-      </if>
-      <if test="type != null">
-        type,
-      </if>
-      <if test="size != null">
-        size,
-      </if>
-      <if test="url != null">
-        url,
->>>>>>> 2cf51b272762e8935427014aa95bf36ab05295d2
       </if>
       <if test="addTime != null">
         add_time,

@@ -2,7 +2,6 @@ package com.springmall.controller;
 
 import com.springmall.bean.BaseReqVo;
 import com.springmall.bean.Storage;
-<<<<<<< HEAD
 import com.springmall.service.StorageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,15 +12,10 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.Date;
-=======
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
->>>>>>> 2cf51b272762e8935427014aa95bf36ab05295d2
 
 @RestController
 @RequestMapping("admin/storage")
 public class StorageController {
-<<<<<<< HEAD
     @Autowired
     StorageService storageService;
 //    @Autowired
@@ -79,11 +73,5 @@ public class StorageController {
         baseReqVo.setErrmsg();
         baseReqVo.setErrno();*/
         return baseReqVo;
-=======
-
-    @RequestMapping("create")
-    public BaseReqVo<Storage> create() {
-        return new BaseReqVo<>();
->>>>>>> 2cf51b272762e8935427014aa95bf36ab05295d2
     }
 }

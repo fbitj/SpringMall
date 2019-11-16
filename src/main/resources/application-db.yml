@@ -1,8 +1,7 @@
 spring:
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/project2_mall?useUnicode=true&characterEncoding=utf-8
-    username: root
-    password: 123456
-    type: com.alibaba.druid.pool.DruidDataSource
+    url: jdbc:mysql://localhost:3306/springmall?useUnicode=true&characterEncoding=utf-8
+    username: Lemon
+    password: Lemonfish.
 

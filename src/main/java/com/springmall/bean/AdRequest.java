@@ -11,4 +11,21 @@ public class AdRequest {
     //类型待定
     private String sort;
     private String desc;
+
+    //优惠券请求新增
+    private Short type;
+    private Short status;
+    private String order;
+
+    //listuser请求新增
+    private String couponId;
+    private String userId;
+
+    //topic请求新增
+    private String title;
+    private String subtitle;
+
+    //groupon请求新增
+    private Integer goodsId;
+
 }

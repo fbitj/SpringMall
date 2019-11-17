@@ -30,17 +30,6 @@ public class AdvertiseServiceImpl implements AdvertiseService {
         //分页
         PageHelper.startPage(adRequest.getPage(), adRequest.getLimit());
 
-        /*AdExample example = new AdExample();
-        String name = adRequest.getName();
-        String content = adRequest.getContent();
-        //AdExample.Criteria criteria = example.createCriteria();
-        if (name != null) {
-            example.createCriteria().andNameLike(name);
-        }
-        if (content != null) {
-            example.createCriteria().andContentLike(content);
-        }
-        List<Ad> advertises = advertiseMapper.selectByExample(example);*/
 
         List<Ad> advertises = advertiseMapper.selectAllWithParm(adRequest);
 
@@ -66,7 +55,7 @@ public class AdvertiseServiceImpl implements AdvertiseService {
 
         AdExample example = new AdExample();
         example.createCriteria().andIdEqualTo(advertise.getId());
-        advertiseMapper.updateByExample(advertise, example);
+        advertiseMapper.updateByExampleSelective(advertise, example);
         return advertise;
     }
 
@@ -81,7 +70,15 @@ public class AdvertiseServiceImpl implements AdvertiseService {
         advertise.setUpdateTime(date);
         advertise.setAddTime(date);
         advertiseMapper.insertSelective(advertise);
-        advertise.setId(advertise.getId());
         return advertise;
+    }
+
+    /**
+     * 删除ad表中的某条数据
+     * @param id
+     */
+    @Override
+    public void delete(Integer id) {
+        advertiseMapper.deleteByPrimaryKey(id);
     }
 }

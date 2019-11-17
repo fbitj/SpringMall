@@ -25,6 +25,8 @@ public interface AdminMapper {
 
     int updateByExample(@Param("record") Admin record, @Param("example") AdminExample example);
 
+    int updateByExampleDetail(@Param("record") Admin record, @Param("example") AdminExample example);
+
     int updateByPrimaryKeySelective(Admin record);
 
     int updateByPrimaryKey(Admin record);

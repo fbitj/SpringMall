@@ -5,10 +5,11 @@ import java.util.Date;
 import java.util.List;
 
 public class CategoryExample {
+    //升序还是降序:字段+空格+asc(desc)
     protected String orderByClause;
-
+    //去除重复:true是选择不重复记录,false反之
     protected boolean distinct;
-
+    //自定义查询条件
     protected List<Criteria> oredCriteria;
 
     public CategoryExample() {

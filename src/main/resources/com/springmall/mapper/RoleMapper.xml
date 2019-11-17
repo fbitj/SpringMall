@@ -218,7 +218,6 @@
     `name` = #{record.name,jdbcType=VARCHAR},
     `desc` = #{record.desc,jdbcType=VARCHAR},
     enabled = #{record.enabled,jdbcType=BIT},
-    add_time = #{record.addTime,jdbcType=TIMESTAMP},
     update_time = #{record.updateTime,jdbcType=TIMESTAMP},
     deleted = #{record.deleted,jdbcType=BIT}
     <if test="_parameter != null">

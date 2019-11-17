@@ -81,9 +81,14 @@ public class AdminController {
         BaseReqVo<Object> baseReqVo = new BaseReqVo<>();
         Storage storage = adminService.storageCreate(request, response, file);
         response.setContentType("image/jpeg");
-        baseReqVo.setData(storage);
-        baseReqVo.setErrmsg("成功");
-        baseReqVo.setErrno(0);
+        if(storage.getSize() == -1) {
+            baseReqVo.setErrmsg("最大上传图片大小为1048576字节(1MB)");
+            baseReqVo.setErrno(500);
+        }else {
+            baseReqVo.setData(storage);
+            baseReqVo.setErrmsg("成功");
+            baseReqVo.setErrno(0);
+        }
         return baseReqVo;
     }
 
@@ -123,8 +128,8 @@ public class AdminController {
             admin2.setPassword(admin.getPassword());
             admin2.setAvatar(admin.getAvatar());
             admin2.setRoleIds(Arrays.toString(admin.getRoleIds()));
-            Admin admin1 = adminService.adminCreate(admin2, request);
-            baseReqVo.setData(admin1);
+            Map map = adminService.adminCreate(admin2, request);
+            baseReqVo.setData(map);
             baseReqVo.setErrmsg("成功");
             baseReqVo.setErrno(0);
             return baseReqVo;
@@ -199,6 +204,7 @@ public class AdminController {
     }
 
     /**
+     * 显示所有角色信息
      * request
      * admin/role/list?page=1&limit=20&sort=add_time&order=desc
      * response
@@ -293,6 +299,7 @@ public class AdminController {
 //
 
     /**
+     * 授权信息
      * request          admin/role/permissions?roleId=73
      * response
      * {
@@ -323,6 +330,183 @@ public class AdminController {
         BaseReqVo<Object> baseReqVo = new BaseReqVo<>();
         Map map = adminService.rolePermissions(roleId);
         baseReqVo.setData(map);
+        baseReqVo.setErrmsg("成功");
+        baseReqVo.setErrno(0);
+        return baseReqVo;
+    }
+
+    /**
+     * 删除角色
+     * response
+     * {"errno":642,"errmsg":"当前角色存在管理员，不能删除"}
+     * request
+     * {
+     * 	"id": 74,
+     * 	"name": "li的角色",
+     * 	"desc": "li的角色",
+     * 	"enabled": true,
+     * 	"addTime": "2019-10-03 20:55:44",
+     * 	"updateTime": "2019-10-03 20:55:44",
+     * 	"deleted": false
+     * }
+     * @return
+     */
+    @RequestMapping("role/delete")
+    public BaseReqVo roleDelete(@RequestBody Role role){
+        BaseReqVo baseReqVo = new BaseReqVo();
+        int i = adminService.roleDelete(role);
+        if(i != -1) {
+            baseReqVo.setErrmsg("成功");
+            baseReqVo.setErrno(0);
+            return baseReqVo;
+        }else{
+            baseReqVo.setErrmsg("当前角色存在管理员，不能删除");
+            baseReqVo.setErrno(-1);
+            return baseReqVo;
+        }
+    }
+
+    /**
+     * 登陆日志
+     * request
+     * admin/log/list?page=1&limit=20&sort=add_time&order=desc
+     * response
+     * {
+     * 	"errno": 0,
+     * 	"data": {
+     * 		"total": 5056,
+     * 		"items": [{
+     * 			"id": 5056,
+     * 			"admin": "admin123",
+     * 			"ip": "192.168.4.7",
+     * 			"type": 1,
+     * 			"action": "登录",
+     * 			"status": true,
+     * 			"result": "",
+     * 			"comment": "",
+     * 			"addTime": "2019-11-17 05:34:32",
+     * 			"updateTime": "2019-11-17 05:34:32",
+     * 			"deleted": false
+     *        }]*
+     *   },
+     * 	"errmsg": "成功"
+     * }
+     * @return
+     */
+    @RequestMapping("log/list")
+    public BaseReqVo adminLog(int page, int limit ,String name, String sort, String order){
+        BaseReqVo<Object> baseReqVo = new BaseReqVo<>();
+        Map map = adminService.logList(page, limit, name, sort, order);
+        baseReqVo.setData(map);
+        baseReqVo.setErrmsg("成功");
+        baseReqVo.setErrno(0);
+        return baseReqVo;
+    }
+
+    /**
+     * 对象存储
+     * request
+     * admin/storage/list?page=1&limit=20&key=&name=&sort=add_time&order=desc
+     * response
+     * {
+     * 	"errno": 0,
+     * 	"data": {
+     * 		"total": 1772,
+     * 		"items": [{
+     * 			"id": 1885,
+     * 			"key": "96u55jj1u3rs8oh6w8fk.jpg",
+     * 			"name": "bubule.jpg",
+     * 			"type": "image/jpeg",
+     * 			"size": 106700,
+     * 			"url": "http://192.168.2.100:8081/wx/storage/fetch/96u55jj1u3rs8oh6w8fk.jpg",
+     * 			"addTime": "2019-11-17 05:52:22",
+     * 			"updateTime": "2019-11-17 05:52:22",
+     * 			"deleted": false
+     *                }]* 	},
+     * 	"errmsg": "成功"
+     * }
+     * @param page
+     * @param limit
+     * @param key
+     * @param name
+     * @param sort
+     * @param order
+     * @return
+     */
+    @RequestMapping("storage/list")
+    public BaseReqVo storageList(int page, int limit ,String key, String name, String sort, String order){
+        BaseReqVo<Object> baseReqVo = new BaseReqVo<>();
+        Map map = adminService.storageList(page, limit, key, name, sort, order);
+        baseReqVo.setData(map);
+        baseReqVo.setErrmsg("成功");
+        baseReqVo.setErrno(0);
+        return baseReqVo;
+    }
+
+    /**
+     * 修改图片信息
+     * request
+     * {
+     * 	"id": 1894,
+     * 	"key": "oplirid7yhjc3efyayi7.jpg",
+     * 	"name": "gggh.jpg",
+     * 	"type": "image/jpeg",
+     * 	"size": 15639,
+     * 	"url": "http://192.168.2.100:8081/wx/storage/fetch/oplirid7yhjc3efyayi7.jpg",
+     * 	"addTime": "2019-11-17 06:10:01",
+     * 	"updateTime": "2019-11-17 06:10:01",
+     * 	"deleted": false
+     * }
+     * response
+     * {
+     * 	"errno": 0,
+     * 	"data": {
+     * 		"id": 1894,
+     * 		"key": "oplirid7yhjc3efyayi7.jpg",
+     * 		"name": "gggh.jpg",
+     * 		"type": "image/jpeg",
+     * 		"size": 15639,
+     * 		"url": "http://192.168.2.100:8081/wx/storage/fetch/oplirid7yhjc3efyayi7.jpg",
+     * 		"addTime": "2019-11-17 06:10:01",
+     * 		"updateTime": "2019-11-17 06:48:06",
+     * 		"deleted": false
+     *        },
+     * 	"errmsg": "成功"
+     * }
+     * @return
+     */
+    @RequestMapping("storage/update")
+    public BaseReqVo storageUpdate(@RequestBody Storage storage){
+        BaseReqVo<Object> baseReqVo = new BaseReqVo<>();
+        Storage storage1 = adminService.storageUpdate(storage);
+        baseReqVo.setData(storage1);
+        baseReqVo.setErrmsg("成功");
+        baseReqVo.setErrno(0);
+        return baseReqVo;
+    }
+
+    /**
+     * 删除图片信息
+     * request
+     * {
+     * 	"id": 1876,
+     * 	"key": "85wsq9hrx79zh1wdnlu5.png",
+     * 	"name": "head-login-img.png",
+     * 	"type": "image/png",
+     * 	"size": 2297,
+     * 	"url": "http://192.168.2.100:8081/wx/storage/fetch/85wsq9hrx79zh1wdnlu5.png",
+     * 	"addTime": "2019-11-17 05:28:15",
+     * 	"updateTime": "2019-11-17 05:28:15",
+     * 	"deleted": false
+     * }
+     * response
+     * {"errno":0,"errmsg":"成功"}
+     * @return
+     */
+    @RequestMapping("storage/delete")
+    public BaseReqVo storageDelete(@RequestBody Storage storage){
+        BaseReqVo<Object> baseReqVo = new BaseReqVo<>();
+        adminService.storageDelete(storage);
         baseReqVo.setErrmsg("成功");
         baseReqVo.setErrno(0);
         return baseReqVo;

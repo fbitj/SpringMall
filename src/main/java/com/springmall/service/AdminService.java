@@ -16,6 +16,7 @@ import java.util.Map;
  * @date 2019/11/16 15:34
  */
 public interface AdminService {
+
     int login(Admin admin);
 
     Storage storageCreate(HttpServletRequest request, HttpServletResponse response, MultipartFile file) throws IOException;
@@ -24,7 +25,7 @@ public interface AdminService {
 
     Map adminList(String page, int limit, String username, String sort, String order);
 
-    Admin adminCreate(Admin admin, HttpServletRequest request);
+    Map adminCreate(Admin admin, HttpServletRequest request);
 
     int sameToAdminName(Admin admin);
 
@@ -41,4 +42,14 @@ public interface AdminService {
     Map rolePermissions(int roleId);
 
     int sameToRoleName(Role role);
+
+    int roleDelete(Role role);
+
+    Map logList(int page, int limit ,String name, String sort, String order);
+
+    Map storageList(int page, int limit ,String key, String name, String sort, String order);
+
+    Storage storageUpdate(Storage storage);
+
+    int storageDelete(Storage storage);
 }

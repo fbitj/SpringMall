@@ -12,4 +12,9 @@ public class PasswordUtil {
         int codes = i + "tangyan".hashCode();
         return String.valueOf(codes);
     }
+
+    public static String stringInt2String(String code){
+
+        return "";
+    }
 }

@@ -7,6 +7,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 
 import com.springmall.mapper.AdminMapper;
+import com.springmall.mapper.LogMapper;
 import com.springmall.mapper.RoleMapper;
 import com.springmall.mapper.StorageMapper;
 import com.springmall.utils.PasswordUtil;
@@ -35,12 +36,15 @@ public class AdminServiceImpl implements AdminService{
     AdminMapper adminMapper;
     @Autowired
     RoleMapper roleMapper;
+    @Autowired
+    LogMapper logMapper;
 
 
     @Override
     public int login(Admin admin) {
         AdminExample adminExample = new AdminExample();
-        adminExample.createCriteria().andUsernameEqualTo(admin.getUsername()).andPasswordEqualTo(admin.getPassword());
+        adminExample.createCriteria().andUsernameEqualTo(admin.getUsername())
+                .andPasswordEqualTo(PasswordUtil.string2Stringint(admin.getPassword()));
         List<Admin> admins = adminMapper.selectByExample(adminExample);
         if (admins.size() == 0) return 0;
         return 1;
@@ -49,6 +53,10 @@ public class AdminServiceImpl implements AdminService{
     @Override
     public Storage storageCreate(HttpServletRequest request, HttpServletResponse response, MultipartFile file) throws IOException {
         Storage storage = new Storage();
+        if(file.getSize() > 1048576){
+            storage.setSize(-1);
+            return storage;
+        }
         storage.setId(null);
         UUID uuid = UUID.randomUUID();
         StringBuffer requestURL = new StringBuffer();
@@ -83,6 +91,21 @@ public class AdminServiceImpl implements AdminService{
 
     @Override
     public List roleOption() {
+        RoleExample roleExample = new RoleExample();
+        roleExample.createCriteria().andIdIsNotNull();
+        List<Role> roles = roleMapper.selectByExample(roleExample);
+        List list = new LinkedList();
+        for (Role role : roles) {
+            HashMap<Object, Object> map = new HashMap<>();
+            map.put("value",role.getId());
+            map.put("label",role.getName());
+            list.add(map);
+        }
+        return list;
+    }
+/*
+@Override
+    public List roleOption() {
         List<Integer> integerList = new ArrayList<>();
         AdminExample adminExample = new AdminExample();
         adminExample.createCriteria().andIdIsNotNull();
@@ -111,12 +134,12 @@ public class AdminServiceImpl implements AdminService{
         }
         return list1;
     }
+*/
 
     @Override
     public Map adminList(String page, int limit, String username, String sort, String order) {
         HashMap<String, Object> map = new HashMap<>();
         AdminExample adminExample = new AdminExample();
-//        adminExample.createCriteria().and
         if(!StringUtil.isEmpty(username)) {
             adminExample.createCriteria().andIdIsNotNull().andUsernameLike("%" + username + "%");
         }else{
@@ -125,7 +148,8 @@ public class AdminServiceImpl implements AdminService{
         adminMapper.selectByExample(adminExample);
         long count = adminMapper.countByExample(adminExample);
         map.put("total",(int)count);
-        PageHelper.startPage(Integer.parseInt(page),limit);
+        String s1 = sort + " " + order;
+        PageHelper.startPage(Integer.parseInt(page),limit,s1);
         List<Admin> list1 = adminMapper.selectByExample(adminExample);
         PageInfo<Admin> adminPageInfo = new PageInfo<>(list1);
         long total = adminPageInfo.getTotal();
@@ -154,7 +178,8 @@ public class AdminServiceImpl implements AdminService{
     }
 
     @Override
-    public Admin adminCreate(Admin admin, HttpServletRequest request) {
+    public Map adminCreate(Admin admin, HttpServletRequest request) {
+        HashMap<Object, Object> map = new HashMap<>();
         admin.setId(null);
         admin.setUsername(admin.getUsername());
         //密码的简单hash散列加密
@@ -166,7 +191,20 @@ public class AdminServiceImpl implements AdminService{
         admin.setDeleted(admin.getDeleted());
         admin.setRoleIds(admin.getRoleIds());
         adminMapper.insert(admin);
-        return admin;
+
+        map.put("id",admin.getId());
+        map.put("username",admin.getUsername());
+        map.put("password",admin.getPassword());
+        map.put("avatar",admin.getAvatar());
+        map.put("addTime",admin.getAddTime());
+        map.put("updateTime",admin.getUpdateTime());
+        String[] arr = admin.getRoleIds().substring(1,admin.getRoleIds().length() - 1).split(",");
+        ArrayList arrayList = new ArrayList();
+        for (String s : arr) {
+            arrayList.add(Integer.parseInt(s.trim()));
+        }
+        map.put("roleIds",arrayList);
+        return map;
     }
 
     @Override
@@ -186,15 +224,17 @@ public class AdminServiceImpl implements AdminService{
         admin.setUsername(admin.getUsername());
         admin.setPassword(PasswordUtil.string2Stringint(admin.getPassword()));
         Admin admin1 = adminMapper.selectByPrimaryKey(admin.getId());
-        if(admin1.getAvatar().equals(admin.getAvatar())){   //图片没有变化
-            admin.setAvatar(admin.getAvatar());
-        }else{      //如果变化了则删除旧的图片
-            StorageExample storageExample = new StorageExample();
-            storageExample.createCriteria().andUrlEqualTo(admin.getAvatar());
-            //级联删除管理员的上传图片信息
-            storageMapper.deleteByExample(storageExample);
-            admin.setAvatar(admin.getAvatar());
+        //如果更新图片，图片名字肯定有变化
+        //级联删除数据库中图片，本地图片库中图片
+        StorageExample storageExample1 = new StorageExample();
+        storageExample1.createCriteria().andUrlEqualTo(admin1.getAvatar());
+        List<Storage> storages = storageMapper.selectByExample(storageExample1);
+        if(storages != null){
+            for (Storage storage : storages) {
+                storageDelete(storage);
+            }
         }
+
         admin.setUpdateTime(new Date());
         admin.setRoleIds(admin.getRoleIds());
         AdminExample adminExample = new AdminExample();
@@ -207,10 +247,16 @@ public class AdminServiceImpl implements AdminService{
     public int adminDelete(Admin2 admin2) {
         //删除管理员账号
         adminMapper.deleteByPrimaryKey(admin2.getId());
+        //级联删除管理员的上传图片信息
+        //删除本地图片库的对应图片
         StorageExample storageExample = new StorageExample();
         storageExample.createCriteria().andUrlEqualTo(admin2.getAvatar());
-        //级联删除管理员的上传图片信息
-        storageMapper.deleteByExample(storageExample);
+        List<Storage> storages = storageMapper.selectByExample(storageExample);
+        if(storages.size() > 0){
+            for (Storage storage : storages) {
+                storageDelete(storage);
+            }
+        }
         return 1;
     }
 
@@ -226,9 +272,9 @@ public class AdminServiceImpl implements AdminService{
         long count = roleMapper.countByExample(roleExample);
         map.put("total",(int)count);
 
-        PageHelper.startPage(page,limit);
+        String s1 = sort + " " + order;
+        PageHelper.startPage(page,limit,s1);
         List<Role> roles = roleMapper.selectByExample(roleExample);
-
         PageInfo<Role> rolePageInfo = new PageInfo<>(roles);
         long total1 = rolePageInfo.getTotal();
 
@@ -257,18 +303,18 @@ public class AdminServiceImpl implements AdminService{
         role2.setDesc(role.getDesc());
         if(role.getEnabled() != null) {
             if (role.getEnabled()) {
-                role2.setEnabled(1);//启用
+                role2.setEnabled(1);//启用    true
             } else {
-                role2.setEnabled(0);//不启用
+                role2.setEnabled(0);//不启用   false
             }
         }
         Date date = new Date();
         role2.setUpdateTime(date);
         if(role.getDeleted() != null) {
             if (role.getDeleted()) {
-                role2.setDeleted(0);//删除
+                role2.setDeleted(0);//删除    true
             } else {
-                role2.setDeleted(1);//不删除
+                role2.setDeleted(1);//不删除   false
             }
         }
         roleMapper.updateByExampleDetail(role2,roleExample);
@@ -304,6 +350,113 @@ public class AdminServiceImpl implements AdminService{
         List<Role> roles = roleMapper.selectByExample(roleExample);
         if(roles.size() > 0){
             return -1;
+        }
+        return 1;
+    }
+
+    @Override
+    public int roleDelete(Role role) {
+        AdminExample adminExample = new AdminExample();
+        adminExample.createCriteria().andRoleIdsLessThan("[]");
+        List<Admin> list = adminMapper.selectByExample(adminExample);
+        for (Admin admin : list) {
+            String[] array = admin.getRoleIds().substring(1,admin.getRoleIds().length() - 1).split(",");
+            for (String s : array) {
+                if(Integer.parseInt(s.trim()) == role.getId()){
+                    return -1;
+                }
+            }
+        }
+        roleMapper.deleteByPrimaryKey(role.getId());
+        return 1;
+    }
+
+    @Override
+    public Map logList(int page, int limit, String name, String sort, String order) {
+        HashMap<Object, Object> map = new HashMap<>();
+        LogExample logExample = new LogExample();
+        if(!StringUtil.isEmpty(name)) {
+            logExample.createCriteria().andIdIsNotNull().andAdminLike("%" + name + "%");
+        }else{
+            logExample.createCriteria().andIdIsNotNull();
+        }
+        long count = logMapper.countByExample(logExample);
+        String s1 = sort + " " + order;
+        map.put("total",(int)count);
+
+        PageHelper.startPage(page,limit,s1);
+        List list = new LinkedList();
+        List<Log> logs = logMapper.selectByExample(logExample);
+        PageInfo<Log> logPageInfo = new PageInfo<>(logs);
+
+        for (Log log : logs) {
+            list.add(log);
+        }
+        map.put("items",list);
+        return map;
+    }
+
+    @Override
+    public Map storageList(int page, int limit, String key, String name, String sort, String order) {
+        HashMap<Object, Object> map = new HashMap<>();
+        StorageExample storageExample = new StorageExample();
+        if(StringUtil.isEmpty(name) && StringUtil.isEmpty(key)){
+            storageExample.createCriteria().andIdIsNotNull();
+        }
+        if(!StringUtil.isEmpty(name) && !StringUtil.isEmpty(key)) {
+            storageExample.createCriteria().andNameLike("%" + name + "%").andKeyLike("%" + key + "%");
+        }else if(!StringUtil.isEmpty(name) && StringUtil.isEmpty(key)) {
+            storageExample.createCriteria().andNameLike("%" + name + "%");
+        }else if(StringUtil.isEmpty(name) && !StringUtil.isEmpty(key)){
+            storageExample.createCriteria().andKeyLike("%" + key + "%");
+        }
+        long count = storageMapper.countByExample(storageExample);
+        String s1 = sort + " " + order;
+        map.put("total",(int)count);
+
+        PageHelper.startPage(page,limit,s1);
+        List<Storage> storageList = storageMapper.selectByExample(storageExample);
+        PageInfo<Storage> storagePageInfo = new PageInfo<>(storageList);
+
+        List list = new LinkedList();
+        for (Storage storage : storageList) {
+            list.add(storage);
+        }
+        map.put("items",list);
+        return map;
+    }
+
+    @Override
+    public Storage storageUpdate(Storage storage) {
+        StorageExample storageExample = new StorageExample();
+        storageExample.createCriteria().andIdEqualTo(storage.getId());
+        Storage2 storage2 = new Storage2();
+        storage2.setKey(storage.getKey());
+        storage2.setName(storage.getName());
+        storage2.setType(storage.getType());
+        storage2.setSize(storage.getSize());
+        storage2.setUrl(storage.getUrl());
+        Date updateTime = new Date();
+        storage2.setUpdateTime(updateTime);
+        storage.setUpdateTime(updateTime);
+
+        if(storage.getDeleted() != null) {
+            if (storage.getDeleted()) {
+                storage2.setDeleted(1); //true  删除
+            } else {
+                storage2.setDeleted(0); //false 不删除
+            }
+        }
+        storageMapper.updateByExampleDetail(storage2,storageExample);
+        return storage;
+    }
+
+    @Override
+    public int storageDelete(Storage storage) {
+        storageMapper.deleteByPrimaryKey(storage.getId());
+        File file = new File("C:/SpringMallImage/" + storage.getKey());
+        if(file.isFile()){
+            file.delete();
         }
         return 1;
     }

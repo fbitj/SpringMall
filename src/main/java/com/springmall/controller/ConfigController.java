@@ -54,10 +54,7 @@ public class ConfigController {
 
     /**
      * 更新商场配置信息
-     * @param litemall_mall_phone 商场联系电话
-     * @param litemall_mall_address 商场地址
-     * @param litemall_mall_name 商场名称
-     * @param litemall_mall_qq 商场联系QQ
+     * @param requestMap 商场配置信息的封装Map
      * @return 返回参数：
      * {
      * 	"errno": 0,
@@ -65,24 +62,19 @@ public class ConfigController {
      * }
      */
     @RequestMapping(value = "mall", method = RequestMethod.POST)
-    public BaseReqVo updateMallConfig(
-            @RequestBody String litemall_mall_phone,
-            @RequestBody String litemall_mall_address,
-            @RequestBody String litemall_mall_name,
-            @RequestBody String litemall_mall_qq
-    ){
+    public BaseReqVo updateMallConfig(@RequestBody Map<String,String> requestMap){
         Map<String,String> map1 = new HashMap<>();
         Map<String,String> map2 = new HashMap<>();
         Map<String,String> map3 = new HashMap<>();
         Map<String,String> map4 = new HashMap<>();
         map1.put("paramName","cskaoyan_mall_mall_name");
-        map1.put("paramValue",litemall_mall_name);
+        map1.put("paramValue",requestMap.get("litemall_mall_name"));
         map2.put("paramName","cskaoyan_mall_mall_address");
-        map2.put("paramValue",litemall_mall_address);
+        map2.put("paramValue",requestMap.get("litemall_mall_address"));
         map3.put("paramName","cskaoyan_mall_mall_phone");
-        map3.put("paramValue",litemall_mall_phone);
+        map3.put("paramValue",requestMap.get("litemall_mall_phone"));
         map4.put("paramName","cskaoyan_mall_mall_qq");
-        map4.put("paramValue",litemall_mall_qq);
+        map4.put("paramValue",requestMap.get("litemall_mall_qq"));
         List<Map<String,String>> paramMapList = new ArrayList<>();
         paramMapList.add(map1);
         paramMapList.add(map2);
@@ -128,8 +120,7 @@ public class ConfigController {
 
     /**
      * 更新运费配置信息
-     * @param litemall_express_freight_min 运费满减所需最低消费
-     * @param litemall_express_freight_value 运费满减不足所需运费
+     * @param requestMap 运费配置信息的封装Map
      * @return 返回参数：
      * {
      * 	"errno": 0,
@@ -137,16 +128,13 @@ public class ConfigController {
      * }
      */
     @RequestMapping(value = "express", method = RequestMethod.POST)
-    public BaseReqVo updateExpressConfig(
-            @RequestBody String litemall_express_freight_min,
-            @RequestBody String litemall_express_freight_value
-    ) {
+    public BaseReqVo updateExpressConfig(@RequestBody Map<String,String> requestMap) {
         Map<String,String> map1 = new HashMap<>();
         Map<String,String> map2 = new HashMap<>();
         map1.put("paramName","cskaoyan_mall_express_freight_min");
-        map1.put("paramValue",litemall_express_freight_min);
+        map1.put("paramValue",requestMap.get("litemall_express_freight_min"));
         map2.put("paramName","cskaoyan_mall_express_freight_value");
-        map2.put("paramValue",litemall_express_freight_value);
+        map2.put("paramValue",requestMap.get("litemall_express_freight_value"));
         List<Map<String,String>> paramMapList = new ArrayList<>();
         paramMapList.add(map1);
         paramMapList.add(map2);
@@ -199,9 +187,7 @@ public class ConfigController {
 
     /**
      * 更新订单配置信息
-     * @param litemall_order_comment 确认收货后超期天数
-     * @param litemall_order_unpaid 用户下单后超时分钟数
-     * @param litemall_order_unconfirm 订单发货后超期天数
+     * @param requestMap 订单配置信息的封装Map
      * @return 返回参数：
      * {
      * 	"errno": 0,
@@ -209,20 +195,16 @@ public class ConfigController {
      * }
      */
     @RequestMapping(value = "order", method = RequestMethod.POST)
-    public BaseReqVo updateOrderConfig(
-            @RequestBody String litemall_order_comment,
-            @RequestBody String litemall_order_unpaid,
-            @RequestBody String litemall_order_unconfirm
-    ) {
+    public BaseReqVo updateOrderConfig(@RequestBody Map<String,String> requestMap) {
         Map<String,String> map1 = new HashMap<>();
         Map<String,String> map2 = new HashMap<>();
         Map<String,String> map3 = new HashMap<>();
         map1.put("paramName","cskaoyan_mall_order_comment");
-        map1.put("paramValue",litemall_order_comment);
+        map1.put("paramValue",requestMap.get("litemall_order_comment"));
         map2.put("paramName","cskaoyan_mall_order_unpaid");
-        map2.put("paramValue",litemall_order_unpaid);
+        map2.put("paramValue",requestMap.get("litemall_order_unpaid"));
         map3.put("paramName","cskaoyan_mall_order_unconfirm");
-        map3.put("paramValue",litemall_order_unconfirm);
+        map3.put("paramValue",requestMap.get("litemall_order_unconfirm"));
         List<Map<String,String>> paramMapList = new ArrayList<>();
         paramMapList.add(map1);
         paramMapList.add(map2);
@@ -280,13 +262,7 @@ public class ConfigController {
 
     /**
      * 更新微信小程序配置信息
-     * @param litemall_wx_index_new 新品首发栏目商品显示数量
-     * @param litemall_wx_catlog_goods 分类栏目商品显示数量
-     * @param litemall_wx_catlog_list 分类栏目显示数量
-     * @param litemall_wx_share 商品分享功能开关
-     * @param litemall_wx_index_brand 品牌制造商直供栏目品牌商显示数量
-     * @param litemall_wx_index_hot 人气推荐栏目商品显示数量
-     * @param litemall_wx_index_topic 专题精选栏目显示数量
+     * @param requestMap 微信小程序配置信息的封装Map
      * @return 返回参数：
      * {
      * 	"errno": 0,
@@ -294,15 +270,7 @@ public class ConfigController {
      * }
      */
     @RequestMapping(value = "wx", method = RequestMethod.POST)
-    public BaseReqVo updateWxConfig(
-            @RequestBody String litemall_wx_index_new,
-            @RequestBody String litemall_wx_catlog_goods,
-            @RequestBody String litemall_wx_catlog_list,
-            @RequestBody String litemall_wx_share,
-            @RequestBody String litemall_wx_index_brand,
-            @RequestBody String litemall_wx_index_hot,
-            @RequestBody String litemall_wx_index_topic
-    ) {
+    public BaseReqVo updateWxConfig(@RequestBody Map<String,String> requestMap) {
         Map<String,String> map1 = new HashMap<>();
         Map<String,String> map2 = new HashMap<>();
         Map<String,String> map3 = new HashMap<>();
@@ -311,19 +279,19 @@ public class ConfigController {
         Map<String,String> map6 = new HashMap<>();
         Map<String,String> map7 = new HashMap<>();
         map1.put("paramName","cskaoyan_mall_wx_index_new");
-        map1.put("paramValue",litemall_wx_index_new);
+        map1.put("paramValue",requestMap.get("litemall_wx_index_new"));
         map2.put("paramName","cskaoyan_mall_wx_catlog_goods");
-        map2.put("paramValue",litemall_wx_catlog_goods);
+        map2.put("paramValue",requestMap.get("litemall_wx_catlog_goods"));
         map3.put("paramName","cskaoyan_mall_wx_catlog_list");
-        map3.put("paramValue",litemall_wx_catlog_list);
+        map3.put("paramValue",requestMap.get("litemall_wx_catlog_list"));
         map4.put("paramName","cskaoyan_mall_wx_share");
-        map4.put("paramValue",litemall_wx_share);
+        map4.put("paramValue",requestMap.get("litemall_wx_share"));
         map5.put("paramName","cskaoyan_mall_wx_index_brand");
-        map5.put("paramValue",litemall_wx_index_brand);
+        map5.put("paramValue",requestMap.get("litemall_wx_index_brand"));
         map6.put("paramName","cskaoyan_mall_wx_index_hot");
-        map6.put("paramValue",litemall_wx_index_hot);
+        map6.put("paramValue",requestMap.get("litemall_wx_index_hot"));
         map7.put("paramName","cskaoyan_mall_wx_index_topic");
-        map7.put("paramValue",litemall_wx_index_topic);
+        map7.put("paramValue",requestMap.get("litemall_wx_index_topic"));
         List<Map<String,String>> paramMapList = new ArrayList<>();
         paramMapList.add(map1);
         paramMapList.add(map2);

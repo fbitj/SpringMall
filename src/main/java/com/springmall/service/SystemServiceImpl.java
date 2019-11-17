@@ -278,12 +278,14 @@ public class SystemServiceImpl implements SystemService {
             if(StringUtils.isEmpty(paramValue)){    //修改条件不完整
                 return 2;
             }
-            try{
-                if (Integer.parseInt(paramValue)<0 && (!"cskaoyan_mall_wx_share".equals(paramValue))){    //除去商品分享功能开关，其余的参数需大于等于0。
-                    return 3;
+            if (!"cskaoyan_mall_wx_share".equals(paramName)){
+                try{
+                    if (Integer.parseInt(paramValue)<0){    //除去商品分享功能开关，其余的参数需大于等于0。
+                        return 3;
+                    }
+                }catch (Exception e){    //类型转换失败，存在非整数。
+                    return 4;
                 }
-            }catch (Exception e){    //类型转换失败，存在非整数。
-                return 4;
             }
             System system = new System();    //set更新数据
             system.setKeyName(paramName);

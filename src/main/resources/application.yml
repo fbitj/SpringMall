@@ -1,3 +1,26 @@
+
+server:
+  port: 8080
+  servlet:
+    context-path: /
+#  mvc:
+#    static-path-pattern: /**
+#    static-locations:
+#      file: /H:\MySpring\GithubMall\wx\storage\fetch\
+
+
+
+pagehelper:
+  helper-dialect: mysql
+logging:
+  level:
+    com:
+      springmall:
+        mapper: debug
+mybatis:
+  type-handlers-package: com.springmall.handler
+
 spring:
   profiles:
     active: db
+

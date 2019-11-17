@@ -3,6 +3,9 @@ package com.springmall.mapper;
 import com.springmall.bean.Order;
 import com.springmall.bean.OrderExample;
 import java.util.List;
+
+import com.springmall.bean.OrderStat;
+import com.springmall.bean.UserStat;
 import org.apache.ibatis.annotations.Param;
 
 public interface OrderMapper {
@@ -27,4 +30,6 @@ public interface OrderMapper {
     int updateByPrimaryKeySelective(Order record);
 
     int updateByPrimaryKey(Order record);
+
+    List<OrderStat> selectOrderStat();
 }

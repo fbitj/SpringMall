@@ -1,5 +1,6 @@
 package com.springmall.mapper;
 
+import com.springmall.bean.GoodsStat;
 import com.springmall.bean.Order_goods;
 import com.springmall.bean.Order_goodsExample;
 import java.util.List;
@@ -29,4 +30,7 @@ public interface Order_goodsMapper {
     int updateByPrimaryKeySelective(Order_goods record);
 
     int updateByPrimaryKey(Order_goods record);
+    // 获取订单与商品的统计数据
+    List<GoodsStat> selectGoodsStat();
 }
+

@@ -10,7 +10,8 @@
     <result column="content" jdbcType="VARCHAR" property="content" />
     <result column="status" jdbcType="INTEGER" property="status" />
     <result column="has_picture" jdbcType="BIT" property="hasPicture" />
-    <result column="pic_urls" jdbcType="VARCHAR" property="picUrls" />
+    <!--这里将String转化为String[]-->
+    <result column="pic_urls" jdbcType="VARCHAR" property="picUrls" typeHandler="com.springmall.handler.StringToArrayTypeHandler"/>
     <result column="add_time" jdbcType="TIMESTAMP" property="addTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
     <result column="deleted" jdbcType="BIT" property="deleted" />

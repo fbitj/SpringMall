@@ -4,6 +4,7 @@ import com.springmall.bean.Storage;
 import com.springmall.mapper.StorageMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ClassUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
@@ -42,6 +43,7 @@ public class StorageServiceImpl implements StorageService {
         filename=uuid + filename.substring(filename.indexOf('.'));
         // 获取到项目根目录
 //        String realPath = request.getServletContext().getRealPath("");
+
         String filePath = "H:/static/storage/goodsImg/" + filename;
         // 存入服务器
         File file = new File(filePath);

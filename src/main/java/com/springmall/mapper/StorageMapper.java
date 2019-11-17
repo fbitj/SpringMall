@@ -1,6 +1,7 @@
 package com.springmall.mapper;
 
 import com.springmall.bean.Storage;
+import com.springmall.bean.Storage2;
 import com.springmall.bean.StorageExample;
 import org.apache.ibatis.annotations.Param;
 
@@ -24,6 +25,8 @@ public interface StorageMapper {
     int updateByExampleSelective(@Param("record") Storage record, @Param("example") StorageExample example);
 
     int updateByExample(@Param("record") Storage record, @Param("example") StorageExample example);
+
+    int updateByExampleDetail(@Param("record") Storage2 record, @Param("example") StorageExample example);
 
     int updateByPrimaryKeySelective(Storage record);
 

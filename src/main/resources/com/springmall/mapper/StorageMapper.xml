@@ -104,8 +104,8 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.springmall.bean.Storage">
-    insert into cskaoyan_mall_storage (id, key, name,
-      type, size, url, add_time,
+    insert into cskaoyan_mall_storage (id, `key`, `name`,
+      `type`, `size`, url, add_time,
       update_time, deleted)
     values (#{id,jdbcType=INTEGER}, #{key,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR},
       #{type,jdbcType=VARCHAR}, #{size,jdbcType=INTEGER}, #{url,jdbcType=VARCHAR}, #{addTime,jdbcType=TIMESTAMP},

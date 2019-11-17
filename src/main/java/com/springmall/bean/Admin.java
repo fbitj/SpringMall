@@ -1,5 +1,7 @@
 package com.springmall.bean;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.util.Date;
 
 public class Admin {
@@ -11,12 +13,15 @@ public class Admin {
 
     private String lastLoginIp;
 
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date lastLoginTime;
 
     private String avatar;
 
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date addTime;
 
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date updateTime;
 
     private Boolean deleted;

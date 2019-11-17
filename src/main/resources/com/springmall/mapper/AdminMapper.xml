@@ -242,6 +242,20 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
+
+  <update id="updateByExampleDetail" parameterType="map">
+    update cskaoyan_mall_admin
+    set id = #{record.id,jdbcType=INTEGER},
+    username = #{record.username,jdbcType=VARCHAR},
+    password = #{record.password,jdbcType=VARCHAR},
+    avatar = #{record.avatar,jdbcType=VARCHAR},
+    update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+    role_ids = #{record.roleIds,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+
   <update id="updateByPrimaryKeySelective" parameterType="com.springmall.bean.Admin">
     update cskaoyan_mall_admin
     <set>

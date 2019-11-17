@@ -1,8 +1,11 @@
 package com.springmall.bean;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.util.Date;
 
 public class Role {
+
     private Integer id;
 
     private String name;
@@ -11,8 +14,10 @@ public class Role {
 
     private Boolean enabled;
 
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date addTime;
 
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date updateTime;
 
     private Boolean deleted;

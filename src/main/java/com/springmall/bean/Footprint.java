@@ -1,5 +1,7 @@
 package com.springmall.bean;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.util.Date;
 
 public class Footprint {
@@ -8,7 +10,7 @@ public class Footprint {
     private Integer userId;
 
     private Integer goodsId;
-
+    @JsonFormat(pattern = "yyyy-MM-dd hh:mm:ss",timezone = "GMT+8")
     private Date addTime;
 
     private Date updateTime;

@@ -1,5 +1,7 @@
 package com.springmall.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.springmall.bean.Feedback;
 import com.springmall.bean.FeedbackExample;
 import com.springmall.mapper.FeedbackMapper;
@@ -20,6 +22,7 @@ public class FeedBackServiceImpl implements FeedBackService {
     public List<Feedback> queryFeedBackList(Integer id, String username) {
         FeedbackExample feedbackExample = new FeedbackExample();
         List<Feedback> feedbackList = null;
+        ObjectMapper objectMapper=new ObjectMapper();
         if (id == null && username == null) {
             feedbackList = feedbackMapper.selectByExample(feedbackExample);
         } else if (id != null && username == null) {
@@ -32,6 +35,13 @@ public class FeedBackServiceImpl implements FeedBackService {
             feedbackExample.createCriteria().andUsernameLike("%" + username + "%").andIdEqualTo(id);
             feedbackList = feedbackMapper.selectByExample(feedbackExample);
         }
+/*        for (Feedback feedback : feedbackList) {
+            try {
+                String[] urls= objectMapper.readValue(feedback.getPicUrls(), String[].class);
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            }
+        }*/
         return feedbackList;
     }
 }

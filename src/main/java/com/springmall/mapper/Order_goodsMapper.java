@@ -20,6 +20,8 @@ public interface Order_goodsMapper {
 
     Order_goods selectByPrimaryKey(Integer id);
 
+    Order_goods selectByPrimaryKey2(Integer orderId);
+
     int updateByExampleSelective(@Param("record") Order_goods record, @Param("example") Order_goodsExample example);
 
     int updateByExample(@Param("record") Order_goods record, @Param("example") Order_goodsExample example);

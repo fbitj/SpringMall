@@ -61,7 +61,7 @@ public class StorageController {
         storage.setType(myfile.getContentType());
         long size = myfile.getSize();
         storage.setSize((int)size);
-        storage.setUrl("http://192.168.2.100:8081/"+filepath.substring(filepath.indexOf("/")+1));
+        storage.setUrl("http://192.168.2.100:8080/"+filepath.substring(filepath.indexOf("/")+1));
         storage.setAddTime(new Date());
         storage.setUpdateTime(new Date());
         storage.setDeleted(false);

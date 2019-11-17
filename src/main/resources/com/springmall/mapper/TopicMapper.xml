@@ -143,6 +143,9 @@
       )
   </insert>
   <insert id="insertSelective" parameterType="com.springmall.bean.Topic">
+    <selectKey order="AFTER" keyColumn="tid" keyProperty="id" resultType="int">
+      select LAST_INSERT_ID() as tid
+    </selectKey>
     insert into cskaoyan_mall_topic
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">

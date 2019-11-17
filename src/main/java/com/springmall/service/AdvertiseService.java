@@ -11,4 +11,6 @@ public interface AdvertiseService {
     Ad update(Ad advertise);
 
     Ad create(Ad advertise);
+
+    void delete(Integer id);
 }

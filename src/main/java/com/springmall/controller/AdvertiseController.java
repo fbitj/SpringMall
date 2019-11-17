@@ -50,10 +50,29 @@ public class AdvertiseController {
         return reqVo;
     }
 
+    /**
+     * 新增广告
+     * @param advertise
+     * @return
+     */
     @RequestMapping("create")
     public BaseReqVo<Ad> createAd(@RequestBody Ad advertise) {
         Ad result = advertiseService.create(advertise);
         BaseReqVo reqVo = ResultUtil.success(result);
         return reqVo;
     }
+
+    /**
+     * 删除某条广告信息
+     * @param advertise
+     * @return
+     */
+    @RequestMapping("delete")
+    public BaseReqVo deleteById(@RequestBody Ad advertise) {
+        //暂定仅删除单表中的数据
+        advertiseService.delete(advertise.getId());
+        return ResultUtil.success(null);
+    }
+
+
 }

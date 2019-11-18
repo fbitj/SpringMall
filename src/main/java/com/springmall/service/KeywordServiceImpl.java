@@ -23,6 +23,7 @@ public class KeywordServiceImpl implements KeywordService {
         PageHelper.startPage(page, limit);
         //查询
         KeywordExample keywordExample = new KeywordExample();
+        keywordExample.createCriteria().andDeletedEqualTo(false);
         if(keyword != null && url != null) {
             keywordExample.createCriteria().andKeywordLike("%" + keyword + "%").andUrlLike("%" + url + "%");
         }
@@ -78,7 +79,12 @@ public class KeywordServiceImpl implements KeywordService {
      */
     @Override
     public int deleteKeyword(Keyword keyword) {
-        int delete = keywordMapper.deleteByPrimaryKey(keyword.getId());
+        //逻辑删除
+        keyword.setDeleted(true);
+        Date date = new Date();
+        keyword.setUpdateTime(date);
+        int delete = keywordMapper.updateByPrimaryKeySelective(keyword);
+        //int delete = keywordMapper.deleteByPrimaryKey(keyword.getId());
         return delete;
     }
 }

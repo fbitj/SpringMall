@@ -5,6 +5,7 @@ import com.springmall.mapper.CategoryMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -21,7 +22,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public List<CategoryResp> queryCategory() {
         CategoryExample categoryExample = new CategoryExample();
-        categoryExample.createCriteria().andLevelEqualTo("L1");
+        categoryExample.createCriteria().andLevelEqualTo("L1").andDeletedEqualTo(false);
         List<Category> categories = categoryMapper.selectByExample(categoryExample);
         ArrayList<CategoryResp> categoryResps = new ArrayList<>();
         for (Category category : categories) {
@@ -50,7 +51,7 @@ public class CategoryServiceImpl implements CategoryService {
      */
     public List<CategoryChildren> queryCategoryChildren(Category category) {
         CategoryExample categoryExample = new CategoryExample();
-        categoryExample.createCriteria().andPidEqualTo(category.getId()).andLevelEqualTo("L2");
+        categoryExample.createCriteria().andPidEqualTo(category.getId()).andLevelEqualTo("L2").andDeletedEqualTo(false);
         List<Category> children = categoryMapper.selectByExample(categoryExample);
         ArrayList<CategoryChildren> categoryChildren = new ArrayList<>();
         for (Category child : children) {
@@ -88,9 +89,9 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     /**
-     * 根据商品id删除商品
-     * 如果level==L1 删除其本身，将其下所有商品deleteed属性标记为1
-     * 如果level==L2，删除其本身
+     * 根据商品id删除商品（逻辑删除，将deleteed属性标记为1）
+     * 如果level==L1 先删除其下所有的二级商品，再删除
+     * 如果level==L2，直接删除
      * @param categoryResp
      * @return
      */
@@ -98,6 +99,23 @@ public class CategoryServiceImpl implements CategoryService {
     public int deleteCategory(CategoryResp categoryResp) {
         CategoryExample categoryExample = new CategoryExample();
         String level = categoryResp.getLevel();
+        if("L1".equals(level) && categoryResp.getChildren() != null) {
+            List<CategoryChildren> children = categoryResp.getChildren();
+            for (CategoryChildren child : children) {
+                Category category = new Category();
+                category.setId(child.getId());
+                category.setDeleted(true);
+                Date date = new Date();
+                category.setUpdateTime(date);
+                int deleteChild = categoryMapper.updateByPrimaryKeySelective(category);
+            }
+        }
+        Category category = new Category();
+        category.setId(categoryResp.getId());
+        category.setDeleted(true);
+        Date date = new Date();
+        category.setUpdateTime(date);
+        int delete = categoryMapper.updateByPrimaryKeySelective(category);
        /* if("L1".equals(level)) {
             categoryExample.createCriteria().andPidEqualTo(categoryResp.getId()).andLevelEqualTo("L2");
             int i = categoryMapper.deleteByExample(categoryExample);
@@ -115,7 +133,8 @@ public class CategoryServiceImpl implements CategoryService {
            delete = categoryMapper.deleteByExample(categoryExample);
        }*/
         categoryExample.createCriteria().andIdEqualTo(categoryResp.getId());
-        int delete = categoryMapper.deleteByExample(categoryExample);
+      // int delete = categoryMapper.deleteByExample(categoryExample);
+      //  return delete;
         return delete;
     }
 

@@ -30,6 +30,7 @@ public class BrandServiceImpl implements BrandService {
         PageHelper.startPage(page, limit);
         //查询
         BrandExample brandExample = new BrandExample();
+        brandExample.createCriteria().andDeletedEqualTo(false);
         List<Brand> brands = brandMapper.selectByExample(brandExample);
         //获取总页数
         PageInfo<Brand> brandPageInfo = new PageInfo<>(brands);
@@ -83,7 +84,12 @@ public class BrandServiceImpl implements BrandService {
      */
     @Override
     public int deleteBrand(Brand brand) {
-        int delete = brandMapper.deleteByPrimaryKey(brand.getId());
+        //逻辑删除
+        brand.setDeleted(true);
+        Date date = new Date();
+        brand.setUpdateTime(date);
+        int delete = brandMapper.updateByPrimaryKeySelective(brand);
+       // int delete = brandMapper.deleteByPrimaryKey(brand.getId());
         return delete;
     }
 

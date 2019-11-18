@@ -2,11 +2,16 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.springmall.mapper.AdMapper">
 
+  <update id="delete">
+    update cskaoyan_mall_ad set deleted = true where id = #{id}
+  </update>
+
   <select id="selectAllWithParm" resultMap="BaseResultMap">
     select <include refid="Base_Column_List"/> from cskaoyan_mall_ad
     <where>
+      deleted = 0
       <if test="name != null">
-        name like concat('%', #{name}, '%')
+        and name like concat('%', #{name}, '%')
       </if>
       <if test="content != null">
         and content like concat('%', #{content}, '%')
@@ -133,6 +138,9 @@
       )
   </insert>
   <insert id="insertSelective" parameterType="com.springmall.bean.Ad">
+    <selectKey order="AFTER" keyColumn="aid" resultType="int" keyProperty="id">
+      select LAST_INSERT_ID() as aid
+    </selectKey>
     insert into cskaoyan_mall_ad
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">

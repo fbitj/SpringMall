@@ -1,6 +1,6 @@
 package com.springmall.mapper;
 
-import com.springmall.bean.AdRequest;
+import com.springmall.bean.PageRequest;
 import com.springmall.bean.Ad;
 import com.springmall.bean.AdExample;
 import org.apache.ibatis.annotations.Param;
@@ -30,5 +30,7 @@ public interface AdMapper {
 
     int updateByPrimaryKey(Ad record);
 
-    List<Ad> selectAllWithParm(AdRequest adRequest);
+    List<Ad> selectAllWithParm(PageRequest adRequest);
+
+    int delete(Integer id);
 }

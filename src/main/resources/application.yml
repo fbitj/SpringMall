@@ -1,5 +1,23 @@
+
+server:
+  port: 8080
+  servlet:
+    context-path: /
+
+
+
+
+pagehelper:
+  helper-dialect: mysql
+logging:
+  level:
+    com:
+      springmall:
+        mapper: debug
+mybatis:
+  type-handlers-package: com.springmall.handler
+
 spring:
   profiles:
     active: db
-mybatis:
-  type-handlers-package: com.springmall.handler
+

@@ -85,7 +85,7 @@
     </if>
   </select>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-    select 
+    select
     <include refid="Base_Column_List" />
     from cskaoyan_mall_issue
     where id = #{id,jdbcType=INTEGER}
@@ -101,14 +101,17 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.springmall.bean.Issue">
-    insert into cskaoyan_mall_issue (id, question, answer, 
+    insert into cskaoyan_mall_issue (id, question, answer,
       add_time, update_time, deleted
       )
-    values (#{id,jdbcType=INTEGER}, #{question,jdbcType=VARCHAR}, #{answer,jdbcType=VARCHAR}, 
+    values (#{id,jdbcType=INTEGER}, #{question,jdbcType=VARCHAR}, #{answer,jdbcType=VARCHAR},
       #{addTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{deleted,jdbcType=BIT}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.springmall.bean.Issue">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
     insert into cskaoyan_mall_issue
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">

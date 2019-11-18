@@ -33,11 +33,8 @@ build/
 
 src/main/resources/application-db.yml
 
-
-
 ###liaohao's Role###
 *.yml
-.gitignore
 *application-db.yml
 
 

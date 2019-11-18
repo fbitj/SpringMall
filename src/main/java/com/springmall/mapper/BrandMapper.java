@@ -20,6 +20,8 @@ public interface BrandMapper {
 
     Brand selectByPrimaryKey(Integer id);
 
+    Brand selectByName(String name);
+
     int updateByExampleSelective(@Param("record") Brand record, @Param("example") BrandExample example);
 
     int updateByExample(@Param("record") Brand record, @Param("example") BrandExample example);

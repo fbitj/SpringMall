@@ -27,4 +27,6 @@ public interface Coupon_userMapper {
     int updateByPrimaryKeySelective(Coupon_user record);
 
     int updateByPrimaryKey(Coupon_user record);
+
+    int deleteByCouponId(Integer id);
 }

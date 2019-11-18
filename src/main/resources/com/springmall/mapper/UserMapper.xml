@@ -382,4 +382,8 @@
       deleted = #{deleted,jdbcType=BIT}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+  <select id="selectUserCountOfDay" resultType="com.springmall.bean.UserStat">
+    SELECT DATE_FORMAT(add_time,'%Y-%m-%d') day,count(*) users FROM cskaoyan_mall_user GROUP BY day;
+  </select>
 </mapper>

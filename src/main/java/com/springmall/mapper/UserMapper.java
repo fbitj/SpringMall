@@ -3,6 +3,9 @@ package com.springmall.mapper;
 import com.springmall.bean.User;
 import com.springmall.bean.UserExample;
 import java.util.List;
+import java.util.Map;
+
+import com.springmall.bean.UserStat;
 import org.apache.ibatis.annotations.Param;
 
 public interface UserMapper {
@@ -27,4 +30,7 @@ public interface UserMapper {
     int updateByPrimaryKeySelective(User record);
 
     int updateByPrimaryKey(User record);
+
+    // 查询用户增长的统计数据
+    List<UserStat> selectUserCountOfDay();
 }

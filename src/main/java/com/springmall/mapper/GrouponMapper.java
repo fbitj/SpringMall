@@ -2,6 +2,8 @@ package com.springmall.mapper;
 
 import com.springmall.bean.Groupon;
 import com.springmall.bean.GrouponExample;
+import com.springmall.bean.GrouponResult;
+import com.springmall.bean.PageRequest;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -28,4 +30,6 @@ public interface GrouponMapper {
     int updateByPrimaryKeySelective(Groupon record);
 
     int updateByPrimaryKey(Groupon record);
+
+    List<GrouponResult> selectWholesale(PageRequest request);
 }

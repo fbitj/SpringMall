@@ -1,5 +1,7 @@
 package com.springmall.bean;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.util.Date;
 
 public class User {
@@ -10,7 +12,7 @@ public class User {
     private String password;
 
     private Byte gender;
-
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date birthday;
 
     private Date lastLoginTime;

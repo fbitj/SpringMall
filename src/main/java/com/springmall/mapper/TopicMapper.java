@@ -34,4 +34,6 @@ public interface TopicMapper {
     int updateByPrimaryKeyWithBLOBs(Topic record);
 
     int updateByPrimaryKey(Topic record);
+
+    int deleteById(Integer id);
 }

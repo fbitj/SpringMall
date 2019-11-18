@@ -71,7 +71,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, `key`, `name`, `type`, `size`, `url`, add_time, update_time, deleted
+    `id`, `key` , `name`, `type`, `size`, `url`, add_time, update_time, deleted
   </sql>
   <select id="selectByExample" parameterType="com.springmall.bean.StorageExample" resultMap="BaseResultMap">
     select
@@ -88,7 +88,7 @@
     </if>
   </select>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-    select 
+    select
     <include refid="Base_Column_List" />
     from cskaoyan_mall_storage
     where id = #{id,jdbcType=INTEGER}
@@ -104,11 +104,11 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.springmall.bean.Storage">
-    insert into cskaoyan_mall_storage (id, key, name, 
-      type, size, url, add_time, 
+    insert into cskaoyan_mall_storage (id, `key`, `name`,
+      `type`, `size`, url, add_time,
       update_time, deleted)
-    values (#{id,jdbcType=INTEGER}, #{key,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
-      #{type,jdbcType=VARCHAR}, #{size,jdbcType=INTEGER}, #{url,jdbcType=VARCHAR}, #{addTime,jdbcType=TIMESTAMP}, 
+    values (#{id,jdbcType=INTEGER}, #{key,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR},
+      #{type,jdbcType=VARCHAR}, #{size,jdbcType=INTEGER}, #{url,jdbcType=VARCHAR}, #{addTime,jdbcType=TIMESTAMP},
       #{updateTime,jdbcType=TIMESTAMP}, #{deleted,jdbcType=BIT})
   </insert>
   <insert id="insertSelective" parameterType="com.springmall.bean.Storage">
@@ -225,6 +225,20 @@
       size = #{record.size,jdbcType=INTEGER},
       url = #{record.url,jdbcType=VARCHAR},
       add_time = #{record.addTime,jdbcType=TIMESTAMP},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      deleted = #{record.deleted,jdbcType=BIT}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleDetail" parameterType="map">
+    update cskaoyan_mall_storage
+    set
+      `key` = #{record.key,jdbcType=VARCHAR},
+      `name` = #{record.name,jdbcType=VARCHAR},
+      `type` = #{record.type,jdbcType=VARCHAR},
+      `size` = #{record.size,jdbcType=INTEGER},
+      url = #{record.url,jdbcType=VARCHAR},
       update_time = #{record.updateTime,jdbcType=TIMESTAMP},
       deleted = #{record.deleted,jdbcType=BIT}
     <if test="_parameter != null">

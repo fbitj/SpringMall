@@ -5,6 +5,7 @@ import com.github.pagehelper.PageInfo;
 import com.springmall.bean.*;
 import com.springmall.mapper.CouponMapper;
 import com.springmall.mapper.Coupon_userMapper;
+import com.springmall.utils.RandomUtil;
 import com.springmall.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -66,6 +67,11 @@ public class CouponServiceImpl implements CouponService{
         //更新时间
         coupon.setAddTime(date);
         coupon.setUpdateTime(date);
+        //判断优惠券是否为兑换码类型
+        if (coupon.getType() == 2) {
+            String code = RandomUtil.randomCode();
+            coupon.setCode(code);
+        }
         couponMapper.insertSelective(coupon);
         return coupon;
     }
@@ -111,6 +117,11 @@ public class CouponServiceImpl implements CouponService{
      */
     @Override
     public Coupon updateListUser(Coupon coupon) {
+        //判断优惠券是否为兑换码类型
+        if (coupon.getType() == 2) {
+            String code = RandomUtil.randomCode();
+            coupon.setCode(code);
+        }
         Date date = new Date();
         coupon.setUpdateTime(date);
         couponMapper.updateByPrimaryKeySelective(coupon);

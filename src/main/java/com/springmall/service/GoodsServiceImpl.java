@@ -22,6 +22,16 @@ public class GoodsServiceImpl implements GoodsService {
         return goodsMapper.updateByPrimaryKeySelective(goods);
     }
 
+    /**
+     * 根据id获取对象
+     * @param goodsId
+     * @return
+     */
+    @Override
+    public Goods selectGoodsById(Integer goodsId) {
+        return goodsMapper.selectByPrimaryKey(goodsId);
+    }
+
     @Override
     public List<Goods> queryGoodsByPage(String page, String limit, String goodsSn, String name, String sortField, String order) {
         PageHelper.startPage(Integer.parseInt(page), Integer.parseInt(limit));

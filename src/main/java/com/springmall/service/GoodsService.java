@@ -8,4 +8,6 @@ public interface GoodsService {
     List<Goods> queryGoodsByPage(String page, String limit,String goodsSn,String name, String sortField, String order);
 
     int deleteGoods(Goods goods);
+
+    Goods selectGoodsById(Integer goodsId);
 }

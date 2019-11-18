@@ -6,7 +6,6 @@ import com.springmall.bean.Coupon_user;
 import com.springmall.bean.DataForPage;
 
 import java.util.List;
-import java.util.Map;
 
 public interface CouponService {
     List<Coupon> totalCoupons(PageRequest request);

@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -54,7 +55,7 @@ public class GrouponServiceImpl implements GrouponService {
     }
 
     /**
-     * 显示
+     * 显示团购活动
      * @param request
      * @return
      */
@@ -63,11 +64,36 @@ public class GrouponServiceImpl implements GrouponService {
         PageHelper.startPage(request.getPage(), request.getLimit());
 
         List<GrouponResult> result = grouponMapper.selectWholesale(request);
-        //sub暂定
+        /*//sub暂定
         for (GrouponResult grouponResult : result) {
             grouponResult.setSubGroupons(new ArrayList());
-        }
+        }*/
         PageInfo<GrouponResult> info = new PageInfo<>(result);
         return new DataForPage(info.getTotal(), result);
+    }
+
+    /**
+     * 创建团购
+     * @param rules
+     * @return
+     */
+    @Override
+    public Groupon_rules create(Groupon_rules rules) {
+        Date date = new Date();
+        rules.setAddTime(date);
+        rules.setUpdateTime(date);
+        grouponRulesMapper.insertSelective(rules);
+        return rules;
+    }
+
+    /**
+     * 更新团购
+     * @param rules
+     * @return
+     */
+    @Override
+    public int update(Groupon_rules rules) {
+        rules.setUpdateTime(new Date());
+        return grouponRulesMapper.updateByPrimaryKeySelective(rules);
     }
 }

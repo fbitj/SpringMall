@@ -10,12 +10,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("admin/groupon")
-public class GrouponRulesController {
+public class GrouponController {
 
     @Autowired
     GrouponService grouponService;
-
-
 
 
     /**
@@ -24,9 +22,20 @@ public class GrouponRulesController {
      * @return
      */
     @RequestMapping("list")
-    public BaseReqVo showWholesaleRulesByPage(AdRequest request) {
+    public BaseReqVo showWholesaleRulesByPage(PageRequest request) {
         DataForPage<Groupon_rules> result = grouponService.showWholesaleByPage(request);
         return ResultUtil.success(result);
+    }
+
+    /**
+     * 删除团购信息
+     * @param rules
+     * @return
+     */
+    @RequestMapping("delete")
+    public BaseReqVo deleteWholesaleRulesById(@RequestBody Groupon_rules rules) {
+        grouponService.deleteRulesById(rules);
+        return ResultUtil.success(null);
     }
 
     /*@RequestMapping("create")
@@ -39,8 +48,9 @@ public class GrouponRulesController {
      * @param request
      * @return
      */
-    /*@RequestMapping("listRecord")
-    public BaseReqVo showWholesaleByPage(AdRequest request) {
-
-    }*/
+    @RequestMapping("listRecord")
+    public BaseReqVo showWholesaleByPage(PageRequest request) {
+        DataForPage result = grouponService.showWholesale(request);
+        return ResultUtil.success(result);
+    }
 }

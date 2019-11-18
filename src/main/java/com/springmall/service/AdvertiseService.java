@@ -1,12 +1,11 @@
 package com.springmall.service;
 
 import com.springmall.bean.Ad;
-import com.springmall.bean.AdRequest;
-
-import java.util.Map;
+import com.springmall.bean.PageRequest;
+import com.springmall.bean.DataForPage;
 
 public interface AdvertiseService {
-    Map<String,Object> totalAdvertise(AdRequest adRequest);
+    DataForPage<Ad> totalAdvertise(PageRequest adRequest);
 
     Ad update(Ad advertise);
 

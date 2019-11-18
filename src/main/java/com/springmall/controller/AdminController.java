@@ -511,6 +511,4 @@ public class AdminController {
         baseReqVo.setErrno(0);
         return baseReqVo;
     }
-
-
 }

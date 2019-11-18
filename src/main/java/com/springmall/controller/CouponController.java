@@ -4,11 +4,13 @@ import com.github.pagehelper.PageInfo;
 import com.springmall.bean.*;
 import com.springmall.service.CouponService;
 import com.springmall.utils.ResultUtil;
+import com.springmall.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,7 +28,7 @@ public class CouponController {
      * @return
      */
     @RequestMapping("list")
-    public BaseReqVo<Map<String,Object>> couponlistByPage(AdRequest request) {
+    public BaseReqVo<Map<String,Object>> couponlistByPage(PageRequest request) {
         List<Coupon> coupons = couponService.totalCoupons(request);
         PageInfo<Coupon> pageInfo = new PageInfo<>(coupons);
         long total = pageInfo.getTotal();
@@ -44,6 +46,10 @@ public class CouponController {
      */
     @RequestMapping("create")
     public BaseReqVo<Coupon> addCoupon(@RequestBody Coupon coupon) {
+        String illegal = isIllegal(coupon);
+        if (illegal != null) {
+            return ResultUtil.fail(402, illegal);
+        }
         Coupon result = couponService.addCoupon(coupon);
         return ResultUtil.success(result);
     }
@@ -65,19 +71,61 @@ public class CouponController {
      * @return
      */
     @RequestMapping("listuser")
-    public BaseReqVo showListUserByPage(AdRequest request) {
+    public BaseReqVo showListUserByPage(PageRequest request) {
         DataForPage<Coupon_user> couponUsers = couponService.showListUserByPage(request);
         return ResultUtil.success(couponUsers);
     }
 
     /**
      * 更新优惠券信息
-     * @param couponUser
+     * @param coupon
      * @return
      */
     @RequestMapping("update")
-    public BaseReqVo updateListUser(@RequestBody Coupon couponUser) {
-        Coupon result = couponService.updateListUser(couponUser);
+    public BaseReqVo updateListUser(@RequestBody Coupon coupon) {
+        String illegal = isIllegal(coupon);
+        if (illegal == null) {
+            return ResultUtil.fail(402, illegal);
+        }
+        Coupon result = couponService.updateListUser(coupon);
         return ResultUtil.success(result);
+    }
+
+    /**
+     * 删除优惠券信息
+     * @param coupon
+     * @return
+     */
+    @RequestMapping("delete")
+    public BaseReqVo deleteCoupon(@RequestBody Coupon coupon) {
+        couponService.deleteCoupon(coupon);
+        return ResultUtil.success(null);
+    }
+
+    /**
+     * 限制传入参数
+     * @param coupon
+     * @return
+     */
+    private String isIllegal(Coupon coupon) {
+        if (StringUtils.isEmpty(coupon.getName())) {
+            return "优惠券名称不能为空";
+        }
+        if (coupon.getMin() == null || coupon.getMin().compareTo(BigDecimal.ZERO) == -1) {
+            return "最低消费金额必须大于等于0";
+        }
+        if (coupon.getDiscount() == null || coupon.getDiscount().compareTo(BigDecimal.ZERO) != 1) {
+            return "满减金额必须大于0";
+        }
+        if (coupon.getLimit() == null || coupon.getLimit() < 0) {
+            return "限领数量必须大于等于0";
+        }
+        if (coupon.getTotal() == null || coupon.getTotal() < 0) {
+            return "优惠券数量必须大于等于0";
+        }
+        if (coupon.getTimeType() == 0 && (coupon.getDays() == null || coupon.getDays() <= 0)) {
+            return "相对天数必须大于0";
+        }
+        return null;
     }
 }

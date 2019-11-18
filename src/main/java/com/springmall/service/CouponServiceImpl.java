@@ -8,6 +8,7 @@ import com.springmall.mapper.Coupon_userMapper;
 import com.springmall.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -29,7 +30,7 @@ public class CouponServiceImpl implements CouponService{
      * @return
      */
     @Override
-    public List<Coupon> totalCoupons(AdRequest request) {
+    public List<Coupon> totalCoupons(PageRequest request) {
         //分页
         PageHelper.startPage(request.getPage(), request.getLimit());
 
@@ -37,16 +38,18 @@ public class CouponServiceImpl implements CouponService{
         Short status = request.getStatus();
 
         CouponExample couponExample = new CouponExample();
+        CouponExample.Criteria criteria = couponExample.createCriteria();
         //判空，若不为空则添加条件
         if (!StringUtils.isEmpty(request.getName())) {
-            couponExample.createCriteria().andNameLike("%" + request.getName() + "%");
+            criteria.andNameLike("%" + request.getName() + "%");
         }
         if (type != null) {
-            couponExample.createCriteria().andGoodsTypeEqualTo(type);
+            criteria.andGoodsTypeEqualTo(type);
         }
         if (status != null) {
-            couponExample.createCriteria().andStatusEqualTo(status);
+            criteria.andStatusEqualTo(status);
         }
+        criteria.andDeletedEqualTo(false);
         List<Coupon> coupons = couponMapper.selectByExample(couponExample);
 
         return coupons;
@@ -83,7 +86,7 @@ public class CouponServiceImpl implements CouponService{
      * @return
      */
     @Override
-    public DataForPage<Coupon_user> showListUserByPage(AdRequest request) {
+    public DataForPage<Coupon_user> showListUserByPage(PageRequest request) {
         PageHelper.startPage(request.getPage(), request.getLimit());
 
         Coupon_userExample example = new Coupon_userExample();
@@ -112,5 +115,21 @@ public class CouponServiceImpl implements CouponService{
         coupon.setUpdateTime(date);
         couponMapper.updateByPrimaryKeySelective(coupon);
         return coupon;
+    }
+
+    /**
+     * 删除优惠券信息
+     * 同时更新优惠券使用者信息
+     * @param coupon
+     * @return
+     */
+    @Override
+    @Transactional
+    public int deleteCoupon(Coupon coupon) {
+        //删除优惠券
+        Integer id = coupon.getId();
+        int i = couponMapper.deleteById(id);
+        i = coupon_userMapper.deleteByCouponId(id);
+        return i;
     }
 }

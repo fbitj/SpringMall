@@ -28,4 +28,6 @@ public interface Groupon_rulesMapper {
     int updateByPrimaryKeySelective(Groupon_rules record);
 
     int updateByPrimaryKey(Groupon_rules record);
+
+    int deleteById(Integer id);
 }

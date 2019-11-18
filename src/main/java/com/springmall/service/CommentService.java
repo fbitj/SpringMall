@@ -21,4 +21,12 @@ public interface CommentService {
      * @return
      */
     int deleteCommentById(Integer id);
+
+    /**
+     * 回复商品评论
+     * @param commentId 评论id
+     * @param content 回复内容
+     * @return 1：回复成功，0：回复失败（该评论已经回复）
+     */
+    int replay(int commentId, String content);
 }

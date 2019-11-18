@@ -69,7 +69,7 @@ public class CategoryServiceImpl implements CategoryService {
             CategoryResp categoryResp = new CategoryResp();
             categoryResp.setId(category.getId());
             categoryResp.setName(category.getName());
-            categoryResp .setKeywords(category.getKeywords());
+            categoryResp.setKeywords(category.getKeywords());
             categoryResp.setDesc(category.getDesc());
             categoryResp.setIconUrl(category.getIconUrl());
             categoryResp.setPicUrl(category.getPicUrl());

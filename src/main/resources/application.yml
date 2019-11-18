@@ -3,10 +3,7 @@ server:
   port: 8080
   servlet:
     context-path: /
-#  mvc:
-#    static-path-pattern: /**
-#    static-locations:
-#      file: /H:\MySpring\GithubMall\wx\storage\fetch\
+
 
 
 

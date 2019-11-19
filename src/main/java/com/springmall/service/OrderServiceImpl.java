@@ -1,5 +1,5 @@
 package com.springmall.service;
-import java.util.ArrayList;
+import java.util.*;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -9,10 +9,6 @@ import com.springmall.mapper.Order_goodsMapper;
 import com.springmall.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -162,5 +158,20 @@ public class OrderServiceImpl implements OrderService {
             shorts.add(orderStatusArray[i]);
         }
         return shorts;
+    }
+
+    @Override
+    public List<Order> queryOrdersByType(int showType, int page, int size) {
+
+        return null;
+    }
+
+    @Override
+    public int updateOrderStatusById(int orderId, int status) {
+        Order order = new Order();
+        order.setId(orderId);
+        order.setOrderStatus((short) status);
+        order.setUpdateTime(new Date());
+        return orderMapper.updateByPrimaryKeySelective(order);
     }
 }

@@ -39,24 +39,27 @@ public class GoodsServiceImpl implements GoodsService {
         goodsMapper.updateByPrimaryKeySelective(goods);
         //1.删除
         Integer id = goods.getId();
-        Goods_specificationExample specificationExample = new Goods_specificationExample();
-        specificationExample.createCriteria().andGoodsIdEqualTo(id);
-        goodsSpecificationMapper.deleteByExample(specificationExample);
-        goodsSpecificationMapper.insertSpecificationsSelective(specifications);
-
-        Goods_productExample productExample = new Goods_productExample();
-        productExample.createCriteria().andGoodsIdEqualTo(id);
-        productMapper.deleteByExample(productExample);
-        for (Goods_product product : products) {
-            product.setGoodsId(goods.getId());
+        if (specifications.size() != 0) {
+            Goods_specificationExample specificationExample = new Goods_specificationExample();
+            specificationExample.createCriteria().andGoodsIdEqualTo(id);
+            goodsSpecificationMapper.deleteByExample(specificationExample);
+            goodsSpecificationMapper.insertSpecificationsSelective(specifications);
         }
-        productMapper.insertProductsSelective(products);
-
-        AttributeExample attributeExample = new AttributeExample();
-        attributeExample.createCriteria().andGoodsIdEqualTo(id);
-        attributeMapper.deleteByExample(attributeExample);
-        attributeMapper.insertAttributesSelective(attributes);
-
+        if (products.size() !=0) {
+            Goods_productExample productExample = new Goods_productExample();
+            productExample.createCriteria().andGoodsIdEqualTo(id);
+            productMapper.deleteByExample(productExample);
+            for (Goods_product product : products) {
+                product.setGoodsId(goods.getId());
+            }
+            productMapper.insertProductsSelective(products);
+        }
+        if (attributes.size() != 0) {
+            AttributeExample attributeExample = new AttributeExample();
+            attributeExample.createCriteria().andGoodsIdEqualTo(id);
+            attributeMapper.deleteByExample(attributeExample);
+            attributeMapper.insertAttributesSelective(attributes);
+        }
 
         /*goodsMapper.updateByPrimaryKeySelective(goods);
         *//*productMapper.updateProductsByPrimaryKeySelective(products);

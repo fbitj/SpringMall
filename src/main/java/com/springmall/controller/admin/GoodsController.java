@@ -1,4 +1,4 @@
-package com.springmall.controller;
+package com.springmall.controller.admin;
 
 import com.github.pagehelper.PageInfo;
 import com.springmall.bean.*;
@@ -116,8 +116,12 @@ public class GoodsController {
      */
     @RequestMapping("create")
     public BaseReqVo createGoods(@RequestBody CreateGoods createGoods){
-        BaseReqVo baseReqVo = new BaseReqVo();
+        boolean b = checkGoods(createGoods.getGoods());
+        if (b){
+            return BaseReqVo.faild("输入参数不正确");
+        }
         int res = goodsService.createGoods(createGoods.getGoods(),createGoods.getSpecifications(),createGoods.getProducts(),createGoods.getAttributes());
+        BaseReqVo baseReqVo = new BaseReqVo();
         if (res == 1){
             baseReqVo.setErrmsg("成功");
             baseReqVo.setErrno(0);
@@ -128,8 +132,27 @@ public class GoodsController {
         return baseReqVo;
     }
 
+    /**
+     * 校验商品参数
+     * @param goods
+     * @return
+     */
+    private boolean checkGoods(Goods goods) {
+        if (goods.getGoodsSn() == null || goods.getName() == null){
+            return true;
+        }
+        if (goods.getCounterPrice().intValue() <= 0 || goods.getRetailPrice().intValue() <= 0){
+            return true;
+        }
+        return false;
+    }
+
     @RequestMapping("update")
     public BaseReqVo updateGoods(@RequestBody CreateGoods createGoods){
+        boolean b = checkGoods(createGoods.getGoods());
+        if (b){
+            return BaseReqVo.faild("输入参数不正确");
+        }
         goodsService.updateGoodsInfo(createGoods.getGoods(),createGoods.getSpecifications(),createGoods.getProducts(),createGoods.getAttributes());
         BaseReqVo baseReqVo = new BaseReqVo();
         baseReqVo.setErrmsg("成功");

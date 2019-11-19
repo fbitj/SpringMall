@@ -1,4 +1,4 @@
-package com.springmall.controller;
+package com.springmall.controller.admin;
 
 import com.springmall.bean.*;
 import com.springmall.service.CategoryService;

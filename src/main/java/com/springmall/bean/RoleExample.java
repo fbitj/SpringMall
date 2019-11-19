@@ -500,6 +500,11 @@ public class RoleExample {
             return (Criteria) this;
         }
 
+        public Criteria andDeletedEqualToInt(Integer value) {
+            addCriterion("deleted =", value, "deleted");
+            return (Criteria) this;
+        }
+
         public Criteria andDeletedNotEqualTo(Boolean value) {
             addCriterion("deleted <>", value, "deleted");
             return (Criteria) this;

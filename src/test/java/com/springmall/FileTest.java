@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.io.File;
+import java.util.HashMap;
 
 /**
  * @author Cats-Fish
@@ -16,8 +17,13 @@ public class FileTest {
 
     @Test
     public void test(){
-        File file = new File("C:/SpringMallImage/" + "29d5854bac9946a6a898d88375e497b8.jpg");
-        file.delete();
+        /*File file = new File("C:/SpringMallImage/" + "29d5854bac9946a6a898d88375e497b8.jpg");
+        file.delete();*/
+        HashMap<Object, Object> map = new HashMap<>();
+        map.put(1,"a");
+        map.put(2,"a");
+        System.out.println(map.size());
+
 
     }
 }

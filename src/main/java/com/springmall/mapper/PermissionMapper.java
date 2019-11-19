@@ -1,7 +1,7 @@
 package com.springmall.mapper;
 
-import com.springmall.bean.Permission;
-import com.springmall.bean.PermissionExample;
+import com.springmall.bean.*;
+
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
@@ -12,13 +12,19 @@ public interface PermissionMapper {
 
     int deleteByPrimaryKey(Integer id);
 
+    int deleteByRoleId(Integer id);
+
     int insert(Permission record);
+
+    int insert4(Permission4 record);
 
     int insertSelective(Permission record);
 
     List<Permission> selectByExample(PermissionExample example);
 
     Permission selectByPrimaryKey(Integer id);
+
+    List<Permission> selectByRoleId(Integer id);
 
     int updateByExampleSelective(@Param("record") Permission record, @Param("example") PermissionExample example);
 
@@ -27,4 +33,10 @@ public interface PermissionMapper {
     int updateByPrimaryKeySelective(Permission record);
 
     int updateByPrimaryKey(Permission record);
+
+    List<Permission1> selectAllP1();
+
+    List<Permission2> selectAllP2();
+
+    List<Permission3> selectAllP3();
 }

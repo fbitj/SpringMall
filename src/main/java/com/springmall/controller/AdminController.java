@@ -10,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.lang.System;
 import java.util.*;
 
 /**
@@ -24,6 +25,7 @@ public class AdminController {
     @Autowired
     AdminService adminService;
 
+    //显示管理员信息
     /**
      * 显示管理员信息
      * @param page      当前页数
@@ -43,6 +45,7 @@ public class AdminController {
         return baseReqVo;
     }
 
+    //显示管理员权限信息
     /**
      * 显示管理员权限信息
      * {response
@@ -68,6 +71,7 @@ public class AdminController {
         return baseReqVo;
     }
 
+    //提交管理员头像   图片上传
     /**
      * 提交管理员头像
      * @param request
@@ -92,6 +96,7 @@ public class AdminController {
         return baseReqVo;
     }
 
+    //添加管理员
     /**
      * 添加管理员
      * request
@@ -118,7 +123,6 @@ public class AdminController {
      * @return
      */
     @RequestMapping("admin/create")
-    @ResponseBody
     public BaseReqVo adminCreate(@RequestBody Admin2 admin, HttpServletRequest request) {
         BaseReqVo<Object> baseReqVo = new BaseReqVo<>();
         Admin admin2 = new Admin();
@@ -140,6 +144,7 @@ public class AdminController {
         }
     }
 
+    //更改管理员信息
     /**
      * 更改管理员信息
      * request
@@ -182,6 +187,7 @@ public class AdminController {
         return boaseReqVo;
     }
 
+    //删除管理员，并级联删除关联
     /**
      *  request
      *  {
@@ -203,6 +209,7 @@ public class AdminController {
         return baseReqVo;
     }
 
+    //显示所有角色信息
     /**
      * 显示所有角色信息
      * request
@@ -239,6 +246,7 @@ public class AdminController {
         return baseReqVo;
     }
 
+    //更新角色信息
     /**
      * 更新角色
      * {
@@ -261,6 +269,7 @@ public class AdminController {
         return baseReqVo;
     }
 
+    //添加角色
     /**
      * 添加角色
      * request
@@ -296,8 +305,7 @@ public class AdminController {
         }
     }
 
-//
-
+    //授权信息
     /**
      * 授权信息
      * request          admin/role/permissions?roleId=73
@@ -325,16 +333,38 @@ public class AdminController {
      * @param roleId
      * @return
      */
-    @RequestMapping("role/permissions")
-    public BaseReqVo rolePermissions(int roleId){
+    @RequestMapping(value = "role/permissions",method = RequestMethod.GET)
+    public BaseReqVo rolePermissionsUpdate(int roleId){
         BaseReqVo<Object> baseReqVo = new BaseReqVo<>();
-        Map map = adminService.rolePermissions(roleId);
-        baseReqVo.setData(map);
+        Map map1 = adminService.rolePermissions(roleId);
+        baseReqVo.setData(map1);
         baseReqVo.setErrmsg("成功");
         baseReqVo.setErrno(0);
         return baseReqVo;
     }
 
+    //授权保存
+    /**
+     * request
+     * {
+     * 	"roleId": 138,
+     * 	"permissions": ["admin:collect:list", "admin:feedback:list", "admin:user:list", "admin:footprint:list", "admin:history:list", "admin:address:list", "index:permission:read"]
+     * }
+     * response     {"errno":0,"errmsg":"成功"}
+     * @return
+     */
+    @RequestMapping(value = "role/permissions",method = RequestMethod.POST)
+    public BaseReqVo rolePermissionsUpdate(@RequestBody RolePermission rolePermission){
+        BaseReqVo<Object> baseReqVo = new BaseReqVo<>();
+        int roleId = rolePermission.getRoleId();
+        List<String> permissions1 = rolePermission.getPermissions();
+        adminService.insertIntoOrUpdatePermission(roleId,permissions1);
+        baseReqVo.setErrmsg("成功");
+        baseReqVo.setErrno(0);
+        return baseReqVo;
+    }
+
+    //删除角色
     /**
      * 删除角色
      * response
@@ -355,7 +385,7 @@ public class AdminController {
     public BaseReqVo roleDelete(@RequestBody Role role){
         BaseReqVo baseReqVo = new BaseReqVo();
         int i = adminService.roleDelete(role);
-        if(i != -1) {
+        if(i == 1) {
             baseReqVo.setErrmsg("成功");
             baseReqVo.setErrno(0);
             return baseReqVo;
@@ -366,6 +396,7 @@ public class AdminController {
         }
     }
 
+    //登陆日志
     /**
      * 登陆日志
      * request
@@ -403,6 +434,7 @@ public class AdminController {
         return baseReqVo;
     }
 
+    //对象存储列表
     /**
      * 对象存储
      * request
@@ -443,6 +475,7 @@ public class AdminController {
         return baseReqVo;
     }
 
+    //修改图片名字
     /**
      * 修改图片信息
      * request
@@ -485,6 +518,7 @@ public class AdminController {
         return baseReqVo;
     }
 
+    //删除图片信息
     /**
      * 删除图片信息
      * request
@@ -506,10 +540,16 @@ public class AdminController {
     @RequestMapping("storage/delete")
     public BaseReqVo storageDelete(@RequestBody Storage storage){
         BaseReqVo<Object> baseReqVo = new BaseReqVo<>();
-        adminService.storageDelete(storage);
-        baseReqVo.setErrmsg("成功");
-        baseReqVo.setErrno(0);
-        return baseReqVo;
+        int i = adminService.storageDelete(storage);
+        if(i == 1) {
+            baseReqVo.setErrmsg("成功");
+            baseReqVo.setErrno(0);
+            return baseReqVo;
+        }else {
+            baseReqVo.setErrmsg("网络异常，请重试");
+            baseReqVo.setErrno(-1);
+            return baseReqVo;
+        }
     }
 
 

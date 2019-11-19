@@ -4,7 +4,10 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.springmall.bean.Keyword;
 import com.springmall.bean.KeywordExample;
+import com.springmall.bean.Search_history;
+import com.springmall.bean.Search_historyExample;
 import com.springmall.mapper.KeywordMapper;
+import com.springmall.mapper.Search_historyMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +19,8 @@ import java.util.Map;
 public class KeywordServiceImpl implements KeywordService {
     @Autowired
     KeywordMapper keywordMapper;
+    @Autowired
+    Search_historyMapper search_historyMapper;
 
     @Override
     public Map<String, Object> queryIssues(Integer page, Integer limit, String keyword, String url) {
@@ -24,13 +29,13 @@ public class KeywordServiceImpl implements KeywordService {
         //查询
         KeywordExample keywordExample = new KeywordExample();
         keywordExample.createCriteria().andDeletedEqualTo(false);
-        if(keyword != null && url != null) {
+        if (keyword != null && url != null) {
             keywordExample.createCriteria().andKeywordLike("%" + keyword + "%").andUrlLike("%" + url + "%");
         }
         if (keyword != null) {
             keywordExample.createCriteria().andKeywordLike("%" + keyword + "%");
         }
-        if(url != null) {
+        if (url != null) {
             keywordExample.createCriteria().andUrlLike("%" + url + "%");
         }
         List<Keyword> keywords = keywordMapper.selectByExample(keywordExample);
@@ -44,6 +49,7 @@ public class KeywordServiceImpl implements KeywordService {
 
     /**
      * 添加关键字
+     *
      * @param keyword
      * @return
      */
@@ -60,6 +66,7 @@ public class KeywordServiceImpl implements KeywordService {
 
     /**
      * 编辑
+     *
      * @param keyword
      * @return
      */
@@ -74,6 +81,7 @@ public class KeywordServiceImpl implements KeywordService {
 
     /**
      * 删除
+     *
      * @param keyword
      * @return
      */
@@ -86,5 +94,41 @@ public class KeywordServiceImpl implements KeywordService {
         int delete = keywordMapper.updateByPrimaryKeySelective(keyword);
         //int delete = keywordMapper.deleteByPrimaryKey(keyword.getId());
         return delete;
+    }
+
+    /**
+     * 微信端搜索关键字
+     *
+     * @return keywordList
+     */
+    public List<Keyword> queryKeyWordList() {
+        KeywordExample keywordExample = new KeywordExample();
+        List<Keyword> keywordList = keywordMapper.selectByExample(keywordExample);
+        return keywordList;
+    }
+
+    /**
+     * 前端搜索历史记录
+     *
+     * @return searchHistoryList
+     */
+    public List<Search_history> querySearchHistoryList() {
+        Search_historyExample search_historyExample = new Search_historyExample();
+        List<Search_history> searchHistoryList = search_historyMapper.selectByExample(search_historyExample);
+        return searchHistoryList;
+    }
+
+    /**
+     * 搜索帮助
+     *search/helper
+     *@param keyword
+     * @return List<Keyword>
+     */
+    @Override
+    public List<Keyword> queryKeyWordList(String keyword) {
+        KeywordExample keywordExample = new KeywordExample();
+        keywordExample.createCriteria().andKeywordLike("%" + keyword + "%");
+        List<Keyword> keywordList = keywordMapper.selectByExample(keywordExample);
+        return keywordList;
     }
 }

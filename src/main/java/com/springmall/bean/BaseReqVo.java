@@ -1,12 +1,14 @@
 package com.springmall.bean;
 
 import lombok.Data;
+import org.omg.CORBA.OBJECT_NOT_EXIST;
 
 @Data
 public class BaseReqVo<T> {
     T data;
     String errmsg;
     int errno;
+
 
     public static BaseReqVo ok(){
         BaseReqVo baseReqVo = new BaseReqVo();
@@ -19,10 +21,11 @@ public class BaseReqVo<T> {
         baseReqVo.setData(data);
         return baseReqVo;
     }
-    public static BaseReqVo fail(){
+
+    public static BaseReqVo error(int errno, String errmsg) {
         BaseReqVo baseReqVo = new BaseReqVo();
-        baseReqVo.setErrmsg("失败");
-        baseReqVo.setErrno(500);
+        baseReqVo.setErrno(errno);
+        baseReqVo.setErrmsg(errmsg);
         return baseReqVo;
     }
 }

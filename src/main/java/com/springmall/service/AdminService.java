@@ -54,5 +54,4 @@ public interface AdminService {
     Storage storageUpdate(Storage storage);
 
     int storageDelete(Storage storage);
-
 }

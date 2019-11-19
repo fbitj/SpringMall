@@ -159,22 +159,6 @@ public class Myaspect {
         }
         //封装数据到javabean，然后转存到数据库
 
-
-        Log2 log = new Log2();
-        log.setId(null);
-        log.setAdmin(username);
-        log.setIp(IP);
-        log.setType(type);
-        log.setAction(action);
-        log.setStatus(status);
-        log.setResult(result);
-        log.setComment("");
-        Date addTime = new Date();
-        log.setAddTime(addTime);
-        log.setUpdateTime(addTime);
-        log.setDeleted(0);
-        System.out.println(log);
-
         if (response != null) {
             //获取状态码
             status = response.getStatus();
@@ -193,6 +177,22 @@ public class Myaspect {
             }
         }
 
+        Log2 log = new Log2();
+        log.setId(null);
+        log.setAdmin(username);
+        log.setIp(IP);
+        log.setType(type);
+        log.setAction(action);
+        log.setStatus(status);
+        log.setResult(result);
+        log.setComment("");
+        Date addTime = new Date();
+        log.setAddTime(addTime);
+        log.setUpdateTime(addTime);
+        log.setDeleted(0);
+        System.out.println(log);
+
+        //logMapper.insertDetail(log);
         /*if(request != null) {
             org.apache.log4j.MDC.put("admin", username);
             org.apache.log4j.MDC.put("ip", IP);
@@ -206,7 +206,7 @@ public class Myaspect {
             org.apache.log4j.MDC.put("update_time", addTime1);
             org.apache.log4j.MDC.put("deleted", 0);
         }*/
-        logger.fatal(pjp);
+//        logger.fatal(pjp);
 
 
         /*if(request != null) {

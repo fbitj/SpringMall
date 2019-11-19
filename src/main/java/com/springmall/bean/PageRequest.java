@@ -3,7 +3,7 @@ package com.springmall.bean;
 import lombok.Data;
 
 @Data
-public class AdRequest {
+public class PageRequest {
     private Integer page;
     private Integer limit;
     private String name;

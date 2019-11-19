@@ -2,9 +2,11 @@ package com.springmall;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.File;
 import java.util.HashMap;
+
 
 /**
  * @author Cats-Fish
@@ -23,7 +25,6 @@ public class FileTest {
         map.put(1,"a");
         map.put(2,"a");
         System.out.println(map.size());
-
 
     }
 }

@@ -6,4 +6,6 @@ import java.util.List;
 
 public interface UserService {
     List<User> queryUserList(String username,String mobile);
+
+    int userLogin(User user);
 }

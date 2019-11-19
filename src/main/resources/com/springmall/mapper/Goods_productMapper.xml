@@ -272,4 +272,41 @@
       deleted = #{deleted,jdbcType=BIT}
     where id = #{id,jdbcType=INTEGER}
   </update>
+  <insert id="insertProductsSelective">
+    insert into cskaoyan_mall_goods_product(
+        goods_id,
+        specifications,
+        price,
+        `number`,
+        url,
+        add_time,
+        update_time,
+        deleted)
+    <foreach collection="products" item="product" separator="," open="values" >
+      <trim prefix=" (" suffix=")" suffixOverrides=",">
+          #{product.goodsId,jdbcType=INTEGER},
+          #{product.specifications,jdbcType=VARCHAR},
+          #{product.price,jdbcType=DECIMAL},
+          #{product.number,jdbcType=INTEGER},
+          #{product.url,jdbcType=VARCHAR},
+        <choose>
+          <when test="product.addTime != null">
+            #{product.addTime,jdbcType=INTEGER},
+          </when>
+          <otherwise>
+            now(),
+          </otherwise>
+        </choose>
+        <choose>
+          <when test="product.updateTime != null">
+            #{product.updateTime,jdbcType=INTEGER},
+          </when>
+          <otherwise>
+            now(),
+          </otherwise>
+        </choose>
+          0,
+      </trim>
+    </foreach>
+  </insert>
 </mapper>

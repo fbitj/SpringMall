@@ -27,4 +27,9 @@ public interface Goods_attributeMapper {
     int updateByPrimaryKeySelective(Goods_attribute record);
 
     int updateByPrimaryKey(Goods_attribute record);
+    /**
+     * 插入多条attribute，插入字段值为空则该字段为空
+     * @param attributes
+     */
+    void insertAttributesSelective(@Param("attributes") List<Goods_attribute> attributes);
 }

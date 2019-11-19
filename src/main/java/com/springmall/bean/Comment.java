@@ -1,7 +1,10 @@
 package com.springmall.bean;
 
+import lombok.Data;
+
 import java.util.Date;
 
+@Data
 public class Comment {
     private Integer id;
 
@@ -15,7 +18,7 @@ public class Comment {
 
     private Boolean hasPicture;
 
-    private String picUrls;
+    private String[] picUrls;
 
     private Short star;
 
@@ -73,13 +76,7 @@ public class Comment {
         this.hasPicture = hasPicture;
     }
 
-    public String getPicUrls() {
-        return picUrls;
-    }
 
-    public void setPicUrls(String picUrls) {
-        this.picUrls = picUrls == null ? null : picUrls.trim();
-    }
 
     public Short getStar() {
         return star;

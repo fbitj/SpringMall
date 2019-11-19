@@ -35,4 +35,14 @@ public class UserServiceImpl implements UserService {
         return users;
     }
 
+    @Override
+    public int userLogin(User user) {
+        UserExample userExample = new UserExample();
+        userExample.createCriteria().andUsernameEqualTo(user.getUsername()).andPasswordEqualTo(user.getPassword());
+        List<User> users = userMapper.selectByExample(userExample);
+        if (users.size() == 0)
+            return 2;
+        return 1;
+    }
+
 }

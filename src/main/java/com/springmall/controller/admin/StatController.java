@@ -1,4 +1,4 @@
-package com.springmall.controller;
+package com.springmall.controller.admin;
 
 import com.alibaba.druid.support.spring.stat.annotation.Stat;
 import com.springmall.bean.*;

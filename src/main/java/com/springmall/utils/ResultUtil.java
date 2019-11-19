@@ -26,7 +26,7 @@ public class ResultUtil {
     public static BaseReqVo fail(int status, String message) {
         BaseReqVo reqVo = new BaseReqVo();
         reqVo.setErrno(status);
-        reqVo.setErrmsg("参数值不对");
+        reqVo.setErrmsg(message);
         return reqVo;
     }
 }

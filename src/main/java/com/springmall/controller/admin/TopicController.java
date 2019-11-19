@@ -1,18 +1,15 @@
-package com.springmall.controller;
+package com.springmall.controller.admin;
 
-import com.springmall.bean.AdRequest;
-import com.springmall.bean.BaseReqVo;
-import com.springmall.bean.DataForPage;
-import com.springmall.bean.Topic;
+import com.springmall.bean.*;
 import com.springmall.service.TopicService;
 import com.springmall.utils.ResultUtil;
-import com.springmall.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.math.BigDecimal;
+
 
 @RestController
 @RequestMapping("admin/topic")
@@ -27,7 +24,7 @@ public class TopicController {
      * @return
      */
     @RequestMapping("list")
-    public BaseReqVo showTopicByPage(AdRequest request) {
+    public BaseReqVo showTopicByPage(PageRequest request) {
         DataForPage<Topic> result = topicService.showListUserByPage(request);
         return ResultUtil.success(result);
     }
@@ -39,8 +36,8 @@ public class TopicController {
      */
     @RequestMapping("create")
     public BaseReqVo addTopic(@RequestBody Topic topic) {
-        //底价不能为null
-        if (topic.getPrice() == null) return ResultUtil.fail(402, "参数不对");
+        //底价不能为null且必须大于等于0
+        if (isIllegal(topic.getPrice())) return ResultUtil.fail(402, "底价必须大于等于0");
         Topic result = topicService.addTopic(topic);
         return ResultUtil.success(result);
     }
@@ -52,8 +49,26 @@ public class TopicController {
      */
     @RequestMapping("update")
     public BaseReqVo updateTopicById(@RequestBody Topic topic) {
-        if (topic.getPrice() == null) return ResultUtil.fail(402, "参数不对");
+        if (isIllegal(topic.getPrice())) return ResultUtil.fail(402, "底价必须大于等于0");
         Topic result = topicService.updatedTopic(topic);
         return ResultUtil.success(result);
+    }
+
+    /**
+     * 删除某条专题信息
+     * @param topic
+     * @return
+     */
+    @RequestMapping("delete")
+    public BaseReqVo deleteTopicById(@RequestBody Topic topic) {
+        topicService.deleteTopicById(topic);
+        return ResultUtil.success(null);
+    }
+
+    private boolean isIllegal(BigDecimal price) {
+        if (price == null || price.compareTo(BigDecimal.ZERO) == -1) {
+            return true;
+        }
+        return false;
     }
 }

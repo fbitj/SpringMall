@@ -21,6 +21,8 @@ public interface Order_goodsMapper {
 
     Order_goods selectByPrimaryKey(Integer id);
 
+    Order_goods selectByPrimaryKey2(Integer orderId);
+
     int updateByExampleSelective(@Param("record") Order_goods record, @Param("example") Order_goodsExample example);
 
     int updateByExample(@Param("record") Order_goods record, @Param("example") Order_goodsExample example);
@@ -28,7 +30,7 @@ public interface Order_goodsMapper {
     int updateByPrimaryKeySelective(Order_goods record);
 
     int updateByPrimaryKey(Order_goods record);
-
     // 获取订单与商品的统计数据
     List<GoodsStat> selectGoodsStat();
 }
+

@@ -1,4 +1,4 @@
-package com.springmall.controller;
+package com.springmall.controller.admin;
 
 import com.springmall.bean.Admin;
 import com.springmall.bean.BaseReqVo;
@@ -6,10 +6,10 @@ import com.springmall.bean.InfoData;
 import com.springmall.service.AdminService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 
 
@@ -24,12 +24,13 @@ public class AuthController {
     AdminService adminService;
 
     @RequestMapping("login")
-    public BaseReqVo<String> login(@RequestBody Admin admin) {
+    public BaseReqVo<String> login(@RequestBody Admin admin, HttpSession session) {
         BaseReqVo<String> baseReqVo = new BaseReqVo<>();
         if (adminService.login(admin) == 1) {
             baseReqVo.setErrno(0);
             baseReqVo.setData("6d182056-3821-4a75-ac59-1724a0707524");
             baseReqVo.setErrmsg("成功");
+            session.setAttribute("username", admin.getUsername()); // 把用户名添加进Session中
         } else {
             baseReqVo.setErrno(605);
             baseReqVo.setErrmsg("用户账号或密码不正确");
@@ -55,5 +56,7 @@ public class AuthController {
         baseReqVo.setErrno(0);
         return baseReqVo;
     }
+
+
 }
 

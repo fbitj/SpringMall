@@ -2,7 +2,7 @@ package com.springmall.service;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.springmall.bean.AdRequest;
+import com.springmall.bean.PageRequest;
 import com.springmall.bean.DataForPage;
 import com.springmall.bean.Topic;
 import com.springmall.bean.TopicExample;
@@ -21,24 +21,26 @@ public class TopicServiceImpl implements TopicService {
     TopicMapper topicMapper;
 
     @Override
-    public DataForPage<Topic> showListUserByPage(AdRequest request) {
+    public DataForPage<Topic> showListUserByPage(PageRequest request) {
         PageHelper.startPage(request.getPage(), request.getLimit());
 
         TopicExample example = new TopicExample();
+        TopicExample.Criteria criteria = example.createCriteria();
         if (!StringUtils.isEmpty(request.getTitle())) {
-            example.createCriteria().andTitleLike("%" + request.getTitle() + "%");
+            criteria.andTitleLike("%" + request.getTitle() + "%");
         }
 
         if (!StringUtils.isEmpty(request.getSubtitle())) {
-            example.createCriteria().andSubtitleLike("%" + request.getSubtitle() + "%");
+            criteria.andSubtitleLike("%" + request.getSubtitle() + "%");
         }
 
-        List<Topic> topics = topicMapper.selectByExample(example);
+        criteria.andDeletedEqualTo(false);
+        List<Topic> topics = topicMapper.selectByExampleWithBLOBs(example);
 
         //获取总数
         PageInfo<Topic> pageInfo = new PageInfo<>(topics);
         long total = pageInfo.getTotal();
-        return new DataForPage<Topic>(total,topics);
+        return new DataForPage<>(total,topics);
     }
 
     /**
@@ -68,5 +70,15 @@ public class TopicServiceImpl implements TopicService {
         topic.setUpdateTime(new Date());
         topicMapper.updateByPrimaryKeySelective(topic);
         return topic;
+    }
+
+    /**
+     * 删除某条专题信息
+     * @param topic
+     * @return
+     */
+    @Override
+    public int deleteTopicById(Topic topic) {
+        return topicMapper.deleteById(topic.getId());
     }
 }

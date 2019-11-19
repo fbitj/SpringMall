@@ -15,12 +15,12 @@ public class ResExceptionHandler {
      * @param exception
      * @return
      */
-    @ExceptionHandler(HttpMessageNotReadableException.class)
+    /*@ExceptionHandler(HttpMessageNotReadableException.class)
     public BaseReqVo handleCustomException(HttpMessageNotReadableException exception){
         BaseReqVo baseReqVo = new BaseReqVo();
         baseReqVo.setErrno(402);
         baseReqVo.setErrmsg("参数值不对");
         return baseReqVo;
-    }
+    }*/
 
 }

@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.springmall.mapper.Coupon_userMapper">
+
+  <update id="deleteByCouponId">
+    update cskaoyan_mall_coupon_user set status = 3 where coupon_id = #{id}
+  </update>
+
   <resultMap id="BaseResultMap" type="com.springmall.bean.Coupon_user">
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="user_id" jdbcType="INTEGER" property="userId" />

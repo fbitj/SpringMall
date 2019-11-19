@@ -74,7 +74,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, name, keywords, `desc`, pid, icon_url, pic_url, level, sort_order, add_time, update_time,
+    id, `name`, keywords, `desc`, pid, icon_url, pic_url, `level`, sort_order, add_time, update_time,
     deleted
   </sql>
   <select id="selectByExample" parameterType="com.springmall.bean.CategoryExample" resultMap="BaseResultMap">
@@ -108,9 +108,9 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.springmall.bean.Category">
-    insert into cskaoyan_mall_category (id, name, keywords,
+    insert into cskaoyan_mall_category (id, name, keywords, 
       `desc`, pid, icon_url,
-      pic_url, level, sort_order,
+      pic_url, `level`, sort_order,
       add_time, update_time, deleted
       )
     values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{keywords,jdbcType=VARCHAR},
@@ -144,7 +144,7 @@
         pic_url,
       </if>
       <if test="level != null">
-        level,
+        `level`,
       </if>
       <if test="sortOrder != null">
         sort_order,
@@ -229,7 +229,7 @@
         pic_url = #{record.picUrl,jdbcType=VARCHAR},
       </if>
       <if test="record.level != null">
-        level = #{record.level,jdbcType=VARCHAR},
+        `level` = #{record.level,jdbcType=VARCHAR},
       </if>
       <if test="record.sortOrder != null">
         sort_order = #{record.sortOrder,jdbcType=TINYINT},
@@ -288,7 +288,7 @@
         pic_url = #{picUrl,jdbcType=VARCHAR},
       </if>
       <if test="level != null">
-        level = #{level,jdbcType=VARCHAR},
+        `level` = #{level,jdbcType=VARCHAR},
       </if>
       <if test="sortOrder != null">
         sort_order = #{sortOrder,jdbcType=TINYINT},
@@ -313,11 +313,12 @@
       pid = #{pid,jdbcType=INTEGER},
       icon_url = #{iconUrl,jdbcType=VARCHAR},
       pic_url = #{picUrl,jdbcType=VARCHAR},
-      level = #{level,jdbcType=VARCHAR},
+      `level` = #{level,jdbcType=VARCHAR},
       sort_order = #{sortOrder,jdbcType=TINYINT},
       add_time = #{addTime,jdbcType=TIMESTAMP},
       update_time = #{updateTime,jdbcType=TIMESTAMP},
       deleted = #{deleted,jdbcType=BIT}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
 </mapper>

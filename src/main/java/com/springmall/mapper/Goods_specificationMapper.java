@@ -27,4 +27,10 @@ public interface Goods_specificationMapper {
     int updateByPrimaryKeySelective(Goods_specification record);
 
     int updateByPrimaryKey(Goods_specification record);
+
+    /**
+     * 插入多条specifications
+     * @param specifications
+     */
+    void insertSpecificationsSelective(@Param("specifications") List<Goods_specification> specifications);
 }

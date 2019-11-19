@@ -123,7 +123,7 @@
         specification,
       </if>
       <if test="value != null">
-        value,
+        `value`,
       </if>
       <if test="picUrl != null">
         pic_url,
@@ -255,4 +255,65 @@
       deleted = #{deleted,jdbcType=BIT}
     where id = #{id,jdbcType=INTEGER}
   </update>
+  <insert id="insertSpecificationsSelective">
+    insert into cskaoyan_mall_goods_specification
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+        id,
+        goods_id,
+        specification,
+        `value`,
+        pic_url,
+        add_time,
+        update_time,
+        deleted,
+    </trim>
+      <foreach open="values " collection="specifications" item="specification" separator=",">
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+          <choose>
+            <when test="specification.id != null">
+              #{specification.id,jdbcType=INTEGER},
+            </when>
+            <otherwise>
+              null,
+            </otherwise>
+          </choose>
+          <if test="specification.goodsId != null">
+            #{specification.goodsId,jdbcType=INTEGER},
+          </if>
+          <if test="specification.specification != null">
+            #{specification.specification,jdbcType=VARCHAR},
+          </if>
+          <if test="specification.value != null">
+            #{specification.value,jdbcType=VARCHAR},
+          </if>
+          <if test="specification.picUrl != null">
+            #{specification.picUrl,jdbcType=VARCHAR},
+          </if>
+          <choose>
+            <when test="specification.addTime != null">
+              #{specification.addTime,jdbcType=INTEGER},
+            </when>
+            <otherwise>
+              now(),
+            </otherwise>
+          </choose>
+          <choose>
+            <when test="specification.updateTime != null">
+              #{specification.updateTime,jdbcType=INTEGER},
+            </when>
+            <otherwise>
+              now(),
+            </otherwise>
+          </choose>
+          <choose>
+            <when test="specification.deleted != null">
+              #{specification.deleted,jdbcType=INTEGER},
+            </when>
+            <otherwise>
+              0,
+            </otherwise>
+          </choose>
+        </trim>
+      </foreach>
+  </insert>
 </mapper>

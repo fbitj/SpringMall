@@ -1,6 +1,130 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.springmall.mapper.GrouponMapper">
+
+  <resultMap id="wholesale" type="com.springmall.bean.GrouponResult">
+    <collection property="groupon" ofType="com.springmall.bean.Groupon">
+      <result column = "id" property = "id"/>
+      <result column = "order_id" property = "orderId"/>
+      <result column = "groupon_id" property = "grouponId"/>
+      <result column = "rules_id" property = "rulesId"/>
+      <result column = "user_id" property = "userId"/>
+      <result column = "creator_user_id" property = "creatorUserId"/>
+      <result column = "gro_add" property = "addTime"/>
+      <result column = "gro_update" property = "updateTime"/>
+      <result column = "gro_share" property = "shareUrl"/>
+      <result column = "payed" property = "payed"/>
+      <result column = "grodel" property = "deleted"/>
+    </collection>
+    <collection property="rules" ofType="com.springmall.bean.Groupon_rules">
+      <result column = "rid" property = "id"/>
+      <result column = "goods_id" property = "goodsId"/>
+      <result column = "goods_name" property = "goodsName"/>
+      <result column = "rul_pic" property = "picUrl"/>
+      <result column = "discount" property = "discount"/>
+      <result column = "discount_member" property = "discountMember"/>
+      <result column = "rul_add" property = "addTime"/>
+      <result column = "rul_update" property = "updateTime"/>
+      <result column = "expire_time" property = "expireTime"/>
+      <result column = "rul_del" property = "deleted"/>
+    </collection>
+    <collection property="goods" ofType="com.springmall.bean.Goods">
+      <result column = "gid" property = "id"/>
+      <result column = "goods_sn" property = "goodsSn"/>
+      <result column = "name" property = "name"/>
+      <result column = "category_id" property = "categoryId"/>
+      <result column = "brand_id" property = "brandId"/>
+      <result column = "gallery" property = "gallery"/>
+      <result column = "keywords" property = "keywords"/>
+      <result column = "brief" property = "brief"/>
+      <result column = "is_on_sale" property = "isOnSale"/>
+      <result column = "sort_order" property = "sortOrder"/>
+      <result column = "good_pic" property = "picUrl"/>
+      <result column = "good_share" property = "shareUrl"/>
+      <result column = "is_new" property = "isNew"/>
+      <result column = "is_hot" property = "isHot"/>
+      <result column = "unit" property = "unit"/>
+      <result column = "counter_price" property = "counterPrice"/>
+      <result column = "retail_price" property = "retailPrice"/>
+      <result column = "detail" property = "detail"/>
+      <result column = "good_add" property = "addTime"/>
+      <result column = "good_update" property = "updateTime"/>
+      <result column = "good_del" property = "deleted"/>
+    </collection>
+    <collection property="subGroupons" column="groupon_id" select="com.springmall.mapper.GrouponMapper.selectGrouponByGid"/>
+  </resultMap>
+
+  <select id="selectWholesale" resultMap="wholesale">
+    select
+    gro.id,
+    gro.order_id,
+    gro.groupon_id,
+    gro.rules_id,
+    gro.user_id,
+    gro.creator_user_id,
+    gro.add_time as gro_add,
+    gro.update_time as gro_update,
+    gro.share_url as gro_share,
+    gro.payed,
+    gro.deleted as grodel,
+    r.id as rid,
+    r.goods_id,
+    r.goods_name,
+    r.pic_url as rul_pic,
+    r.discount,
+    r.discount_member,
+    r.add_time as rul_add,
+    r.update_time as rul_update,
+    r.expire_time,
+    r.deleted as rul_del,
+    g.id as gid,
+    g.goods_sn,
+    g.name,
+    g.category_id,
+    g.brand_id,
+    g.gallery,
+    g.keywords,
+    g.brief,
+    g.is_on_sale,
+    g.sort_order,
+    g.pic_url as good_pic,
+    g.share_url as good_share,
+    g.is_new,
+    g.is_hot,
+    g.unit,
+    g.counter_price,
+    g.retail_price,
+    g.detail,
+    g.add_time as good_add,
+    g.update_time as good_update,
+    g.deleted as good_del
+    from cskaoyan_mall_groupon as gro
+    LEFT JOIN cskaoyan_mall_groupon_rules as r ON gro.rules_id = r.id
+    LEFT JOIN cskaoyan_mall_goods as g on r.goods_id = g.id
+    <where>
+      gro.deleted = false and gro.id = gro.groupon_id
+      <if test="goodsId != null">
+        and goods_id = #{goodsId}
+      </if>
+    </where>
+  </select>
+
+  <select id="selectGrouponByGid" resultType="com.springmall.bean.Groupon">
+    select
+    id,
+    order_id as orderId,
+    groupon_id as grouponId,
+    rules_id as rulesId,
+    user_id as userId,
+    creator_user_id as creatorUserId,
+    add_time as addTime,
+    update_time as updateTime,
+    share_url as shareUrl,
+    payed,
+    deleted
+    from cskaoyan_mall_groupon where groupon_id = #{groupon_id}
+  </select>
+
   <resultMap id="BaseResultMap" type="com.springmall.bean.Groupon">
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="order_id" jdbcType="INTEGER" property="orderId" />

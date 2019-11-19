@@ -1,14 +1,18 @@
 package com.springmall.bean;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.Data;
+
 import java.math.BigDecimal;
 import java.util.Date;
 
+@Data
 public class Goods_product {
     private Integer id;
 
     private Integer goodsId;
 
-    private String specifications;
+    private String[] specifications;
 
     private BigDecimal price;
 
@@ -16,8 +20,10 @@ public class Goods_product {
 
     private String url;
 
+    @JsonFormat(pattern = "yyyy-MM-dd hh:mm:ss")
     private Date addTime;
 
+    @JsonFormat(pattern = "yyyy-MM-dd hh:mm:ss")
     private Date updateTime;
 
     private Boolean deleted;
@@ -38,13 +44,7 @@ public class Goods_product {
         this.goodsId = goodsId;
     }
 
-    public String getSpecifications() {
-        return specifications;
-    }
 
-    public void setSpecifications(String specifications) {
-        this.specifications = specifications == null ? null : specifications.trim();
-    }
 
     public BigDecimal getPrice() {
         return price;

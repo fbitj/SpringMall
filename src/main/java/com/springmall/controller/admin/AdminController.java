@@ -1,4 +1,4 @@
-package com.springmall.controller;
+package com.springmall.controller.admin;
 import java.io.IOException;
 
 
@@ -551,6 +551,4 @@ public class AdminController {
             return baseReqVo;
         }
     }
-
-
 }

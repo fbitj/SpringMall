@@ -1,8 +1,9 @@
-package com.springmall.controller;
+package com.springmall.controller.admin;
 
 import com.springmall.bean.Ad;
-import com.springmall.bean.AdRequest;
+import com.springmall.bean.PageRequest;
 import com.springmall.bean.BaseReqVo;
+import com.springmall.bean.DataForPage;
 import com.springmall.service.AdvertiseService;
 import com.springmall.utils.ResultUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,8 +26,8 @@ public class AdvertiseController {
      * @return
      */
     @RequestMapping("list")
-    public BaseReqVo<Map<String,Object>> advertiseList(AdRequest adRequest) {
-        Map<String,Object> advertises = advertiseService.totalAdvertise(adRequest);
+    public BaseReqVo advertiseList(PageRequest adRequest) {
+        DataForPage<Ad> advertises = advertiseService.totalAdvertise(adRequest);
 
         BaseReqVo reqVo = ResultUtil.success(advertises);
 

@@ -7,12 +7,52 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+
 @Service
 public class CategoryServiceImpl implements CategoryService {
     @Autowired
     CategoryMapper categoryMapper;
 
+    @Override
+    public List<CatAndBrandReqVo> queryAllCategoryByLevel() {
+        // 查询所有未删除的类目
+        CategoryExample categoryExample = new CategoryExample();
+        categoryExample.setOrderByClause("`level` asc");
+        categoryExample.createCriteria().andDeletedNotEqualTo(true);
+        List<Category> categories = categoryMapper.selectByExample(categoryExample);
+        // catAndBrandReqVos用于保存一级类目并返回
+        ArrayList<CatAndBrandReqVo> catAndBrandReqVos = new ArrayList<>();
+        // categoryHashMap用于保存一级类目
+        HashMap<Integer, CatAndBrandReqVo> categoryHashMap = new HashMap<>();
+        for (Category category : categories) {
+            CatAndBrandReqVo catAndBrandReqVo = new CatAndBrandReqVo();
+            if (category.getPid() == 0) {// 等于0表示是一级类目
+                Integer id = category.getId();
+                catAndBrandReqVo.setValue(id);
+                catAndBrandReqVo.setLabel(category.getName());
+                categoryHashMap.put(id, catAndBrandReqVo);// 放入到map中
+                catAndBrandReqVos.add(catAndBrandReqVo);
+                continue;
+            }
+            // 不等于0表示是二级类目
+            Integer pid = category.getPid();
+            catAndBrandReqVo.setValue(category.getId());
+            catAndBrandReqVo.setLabel(category.getName());
+            // 根据父类目id查找父类目，并将子类目放入到父类目下
+            CatAndBrandReqVo parentCategory = categoryHashMap.get(pid);
+            if (parentCategory != null) {
+                List<CatAndBrandReqVo> children = parentCategory.getChildren();
+                if (children == null) {
+                    parentCategory.setChildren(new ArrayList<>());
+                }
+                parentCategory.getChildren().add(catAndBrandReqVo);
+            }
+        }
+
+        return catAndBrandReqVos;
+    }
     /**
      * list接口
      * 显示全部商品信息。一级类目里嵌套二级类目
@@ -21,7 +61,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public List<CategoryResp> queryCategory() {
         CategoryExample categoryExample = new CategoryExample();
-        categoryExample.createCriteria().andLevelEqualTo("L1");
+        categoryExample.createCriteria().andLevelEqualTo("L1").andDeletedEqualTo(false);
         List<Category> categories = categoryMapper.selectByExample(categoryExample);
         ArrayList<CategoryResp> categoryResps = new ArrayList<>();
         for (Category category : categories) {
@@ -29,7 +69,7 @@ public class CategoryServiceImpl implements CategoryService {
             CategoryResp categoryResp = new CategoryResp();
             categoryResp.setId(category.getId());
             categoryResp.setName(category.getName());
-            categoryResp .setKeywords(category.getKeywords());
+            categoryResp.setKeywords(category.getKeywords());
             categoryResp.setDesc(category.getDesc());
             categoryResp.setIconUrl(category.getIconUrl());
             categoryResp.setPicUrl(category.getPicUrl());
@@ -50,7 +90,7 @@ public class CategoryServiceImpl implements CategoryService {
      */
     public List<CategoryChildren> queryCategoryChildren(Category category) {
         CategoryExample categoryExample = new CategoryExample();
-        categoryExample.createCriteria().andPidEqualTo(category.getId()).andLevelEqualTo("L2");
+        categoryExample.createCriteria().andPidEqualTo(category.getId()).andLevelEqualTo("L2").andDeletedEqualTo(false);
         List<Category> children = categoryMapper.selectByExample(categoryExample);
         ArrayList<CategoryChildren> categoryChildren = new ArrayList<>();
         for (Category child : children) {
@@ -88,9 +128,9 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     /**
-     * 根据商品id删除商品
-     * 如果level==L1 删除其本身，将其下所有商品deleteed属性标记为1
-     * 如果level==L2，删除其本身
+     * 根据商品id删除商品（逻辑删除，将deleteed属性标记为1）
+     * 如果level==L1 先删除其下所有的二级商品，再删除
+     * 如果level==L2，直接删除
      * @param categoryResp
      * @return
      */
@@ -98,6 +138,23 @@ public class CategoryServiceImpl implements CategoryService {
     public int deleteCategory(CategoryResp categoryResp) {
         CategoryExample categoryExample = new CategoryExample();
         String level = categoryResp.getLevel();
+        if("L1".equals(level) && categoryResp.getChildren() != null) {
+            List<CategoryChildren> children = categoryResp.getChildren();
+            for (CategoryChildren child : children) {
+                Category category = new Category();
+                category.setId(child.getId());
+                category.setDeleted(true);
+                Date date = new Date();
+                category.setUpdateTime(date);
+                int deleteChild = categoryMapper.updateByPrimaryKeySelective(category);
+            }
+        }
+        Category category = new Category();
+        category.setId(categoryResp.getId());
+        category.setDeleted(true);
+        Date date = new Date();
+        category.setUpdateTime(date);
+        int delete = categoryMapper.updateByPrimaryKeySelective(category);
        /* if("L1".equals(level)) {
             categoryExample.createCriteria().andPidEqualTo(categoryResp.getId()).andLevelEqualTo("L2");
             int i = categoryMapper.deleteByExample(categoryExample);
@@ -115,7 +172,8 @@ public class CategoryServiceImpl implements CategoryService {
            delete = categoryMapper.deleteByExample(categoryExample);
        }*/
         categoryExample.createCriteria().andIdEqualTo(categoryResp.getId());
-        int delete = categoryMapper.deleteByExample(categoryExample);
+      // int delete = categoryMapper.deleteByExample(categoryExample);
+      //  return delete;
         return delete;
     }
 

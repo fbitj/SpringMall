@@ -21,7 +21,7 @@
     <result column="retail_price" jdbcType="DECIMAL" property="retailPrice" />
     <result column="add_time" jdbcType="TIMESTAMP" property="addTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
-    <result column="deleted" jdbcType="BIT" property="deleted" />
+    <result column="deleted" jdbcType="BIT" property="deleted"/>
   </resultMap>
   <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.springmall.bean.Goods">
     <result column="detail" jdbcType="LONGVARCHAR" property="detail" />
@@ -157,6 +157,9 @@
       #{deleted,jdbcType=BIT}, #{detail,jdbcType=LONGVARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.springmall.bean.Goods">
+    <selectKey order="AFTER" keyColumn="id" keyProperty="id" resultType="int">
+      select LAST_INSERT_ID()
+    </selectKey>
     insert into cskaoyan_mall_goods
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -166,7 +169,7 @@
         goods_sn,
       </if>
       <if test="name != null">
-        name,
+        `name`,
       </if>
       <if test="categoryId != null">
         category_id,
@@ -210,9 +213,7 @@
       <if test="retailPrice != null">
         retail_price,
       </if>
-      <if test="addTime != null">
         add_time,
-      </if>
       <if test="updateTime != null">
         update_time,
       </if>
@@ -275,12 +276,22 @@
       <if test="retailPrice != null">
         #{retailPrice,jdbcType=DECIMAL},
       </if>
-      <if test="addTime != null">
-        #{addTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="updateTime != null">
-        #{updateTime,jdbcType=TIMESTAMP},
-      </if>
+      <choose>
+        <when test="addTime != null">
+          #{addTime,jdbcType=TIMESTAMP},
+        </when>
+        <otherwise>
+          now(),
+        </otherwise>
+      </choose>
+      <choose>
+        <when test="updateTime != null">
+          #{updateTime,jdbcType=TIMESTAMP},
+        </when>
+        <otherwise>
+          now(),
+        </otherwise>
+      </choose>
       <if test="deleted != null">
         #{deleted,jdbcType=BIT},
       </if>
@@ -473,9 +484,14 @@
       <if test="addTime != null">
         add_time = #{addTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="updateTime != null">
-        update_time = #{updateTime,jdbcType=TIMESTAMP},
-      </if>
+      <choose>
+        <when test="updateTime != null">
+          update_time = #{updateTime,jdbcType=TIMESTAMP},
+        </when>
+        <otherwise>
+          update_time = now(),
+        </otherwise>
+      </choose>
       <if test="deleted != null">
         deleted = #{deleted,jdbcType=BIT},
       </if>

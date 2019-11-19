@@ -11,7 +11,7 @@
       <result column = "user_id" property = "userId"/>
       <result column = "creator_user_id" property = "creatorUserId"/>
       <result column = "gro_add" property = "addTime"/>
-      <result column = "gro_updat " property = "updateTime"/>
+      <result column = "gro_update" property = "updateTime"/>
       <result column = "gro_share" property = "shareUrl"/>
       <result column = "payed" property = "payed"/>
       <result column = "grodel" property = "deleted"/>
@@ -51,6 +51,7 @@
       <result column = "good_update" property = "updateTime"/>
       <result column = "good_del" property = "deleted"/>
     </collection>
+    <collection property="subGroupons" column="groupon_id" select="com.springmall.mapper.GrouponMapper.selectGrouponByGid"/>
   </resultMap>
 
   <select id="selectWholesale" resultMap="wholesale">
@@ -106,6 +107,22 @@
         and goods_id = #{goodsId}
       </if>
     </where>
+  </select>
+
+  <select id="selectGrouponByGid" resultType="com.springmall.bean.Groupon">
+    select
+    id,
+    order_id as orderId,
+    groupon_id as grouponId,
+    rules_id as rulesId,
+    user_id as userId,
+    creator_user_id as creatorUserId,
+    add_time as addTime,
+    update_time as updateTime,
+    share_url as shareUrl,
+    payed,
+    deleted
+    from cskaoyan_mall_groupon where groupon_id = #{groupon_id}
   </select>
 
   <resultMap id="BaseResultMap" type="com.springmall.bean.Groupon">

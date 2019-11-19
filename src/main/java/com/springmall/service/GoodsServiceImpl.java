@@ -151,6 +151,16 @@ public class GoodsServiceImpl implements GoodsService {
     }
 
     /**
+     * 根据id获取对象
+     * @param goodsId
+     * @return
+     */
+    @Override
+    public Goods selectGoodsById(Integer goodsId) {
+        return goodsMapper.selectByPrimaryKey(goodsId);
+    }
+
+    /**
      * 分页查询商品
      * @param page 当前页
      * @param limit 每页显示数量

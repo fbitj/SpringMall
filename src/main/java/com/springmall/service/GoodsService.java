@@ -24,6 +24,8 @@ public interface GoodsService {
      */
     int deleteGoods(Goods goods);
 
+    Goods selectGoodsById(Integer goodsId);
+
     /**
      * 查询商品商品信息
      * @param id 商品id
@@ -49,4 +51,5 @@ public interface GoodsService {
      * @param attributes
      */
     void updateGoodsInfo(Goods goods, List<Goods_specification> specifications, List<Goods_product> products, List<Goods_attribute> attributes);
+
 }

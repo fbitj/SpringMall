@@ -2,8 +2,10 @@ package com.springmall;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.File;
+import java.util.UUID;
 
 /**
  * @author Cats-Fish

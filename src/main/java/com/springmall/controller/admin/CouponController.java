@@ -84,7 +84,7 @@ public class CouponController {
     @RequestMapping("update")
     public BaseReqVo updateListUser(@RequestBody Coupon coupon) {
         String illegal = isIllegal(coupon);
-        if (illegal == null) {
+        if (illegal != null) {
             return ResultUtil.fail(402, illegal);
         }
         Coupon result = couponService.updateListUser(coupon);
@@ -125,6 +125,9 @@ public class CouponController {
         }
         if (coupon.getTimeType() == 0 && (coupon.getDays() == null || coupon.getDays() <= 0)) {
             return "相对天数必须大于0";
+        }
+        if (coupon.getTimeType() == 1 && (coupon.getEndTime().before(coupon.getStartTime()))) {
+            return "日期选择有误";
         }
         return null;
     }

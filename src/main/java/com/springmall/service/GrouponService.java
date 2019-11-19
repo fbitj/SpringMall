@@ -1,5 +1,6 @@
 package com.springmall.service;
 
+import com.springmall.bean.Goods;
 import com.springmall.bean.PageRequest;
 import com.springmall.bean.DataForPage;
 import com.springmall.bean.Groupon_rules;
@@ -10,4 +11,8 @@ public interface GrouponService {
     int deleteRulesById(Groupon_rules rules);
 
     DataForPage showWholesale(PageRequest request);
+
+    Groupon_rules create(Groupon_rules rules);
+
+    int update(Groupon_rules rules);
 }

@@ -26,14 +26,14 @@ public class AuthController {
     @RequestMapping("login")
     public BaseReqVo<String> login(@RequestBody Admin admin) {
         BaseReqVo<String> baseReqVo = new BaseReqVo<>();
-        if (adminService.login(admin) == 1) {
+//        if (adminService.login(admin) == 1) {
             baseReqVo.setErrno(0);
             baseReqVo.setData("6d182056-3821-4a75-ac59-1724a0707524");
             baseReqVo.setErrmsg("成功");
-        } else {
+        /*} else {
             baseReqVo.setErrno(605);
             baseReqVo.setErrmsg("用户账号或密码不正确");
-        }
+        }*/
         return  baseReqVo;
     }
 

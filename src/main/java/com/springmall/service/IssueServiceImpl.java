@@ -22,6 +22,7 @@ public class IssueServiceImpl implements IssueService {
         PageHelper.startPage(page, limit);
         //查询
         IssueExample issueExample = new IssueExample();
+        issueExample.createCriteria().andDeletedEqualTo(false);
         if(question != null) {//条件搜索
             issueExample.createCriteria().andQuestionLike("%" + question + "%");
         }
@@ -72,7 +73,12 @@ public class IssueServiceImpl implements IssueService {
      */
     @Override
     public int deleteIssue(Issue issue) {
-        int delete = issueMapper.deleteByPrimaryKey(issue.getId());
+        //逻辑删除
+        issue.setDeleted(true);
+        Date date = new Date();
+        issue.setUpdateTime(date);
+        int delete = issueMapper.updateByPrimaryKeySelective(issue);
+        // int delete = issueMapper.deleteByPrimaryKey(issue.getId());
         return delete;
     }
 }

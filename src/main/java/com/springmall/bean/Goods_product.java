@@ -1,14 +1,17 @@
 package com.springmall.bean;
 
+import lombok.Data;
+
 import java.math.BigDecimal;
 import java.util.Date;
 
+@Data
 public class Goods_product {
     private Integer id;
 
     private Integer goodsId;
 
-    private String specifications;
+    private String[] specifications;
 
     private BigDecimal price;
 
@@ -38,13 +41,7 @@ public class Goods_product {
         this.goodsId = goodsId;
     }
 
-    public String getSpecifications() {
-        return specifications;
-    }
 
-    public void setSpecifications(String specifications) {
-        this.specifications = specifications == null ? null : specifications.trim();
-    }
 
     public BigDecimal getPrice() {
         return price;

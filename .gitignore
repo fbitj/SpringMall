@@ -31,7 +31,8 @@ build/
 ### VS Code ###
 .vscode/
 
-aaa.txt
+src/main/resources/application-db.yml
+
 ###liaohao's Role###
 *.yml
 *application-db.yml

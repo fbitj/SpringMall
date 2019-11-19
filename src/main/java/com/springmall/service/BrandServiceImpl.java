@@ -8,15 +8,27 @@ import com.springmall.mapper.BrandMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+
 
 @Service
 public class BrandServiceImpl implements BrandService {
     @Autowired
     BrandMapper brandMapper;
+    @Override
+    public List queryAllBrandSimpleInfo() {
+        BrandExample brandExample = new BrandExample();
+        brandExample.createCriteria().andDeletedEqualTo(false);
+        List<Brand> brands = brandMapper.selectByExample(brandExample);
+        ArrayList<Object> simpleBrands = new ArrayList<>();
+        for (Brand brand : brands) {
+            HashMap<String, Object> map = new HashMap<>();
+            map.put("value", brand.getId());
+            map.put("label", brand.getName());
+            simpleBrands.add(map);
+        }
+        return simpleBrands;
+    }
 
     /**
      * 显示全部品牌，将page数目和brandList封装成map返回
@@ -30,6 +42,7 @@ public class BrandServiceImpl implements BrandService {
         PageHelper.startPage(page, limit);
         //查询
         BrandExample brandExample = new BrandExample();
+        brandExample.createCriteria().andDeletedEqualTo(false);
         List<Brand> brands = brandMapper.selectByExample(brandExample);
         //获取总页数
         PageInfo<Brand> brandPageInfo = new PageInfo<>(brands);
@@ -83,7 +96,12 @@ public class BrandServiceImpl implements BrandService {
      */
     @Override
     public int deleteBrand(Brand brand) {
-        int delete = brandMapper.deleteByPrimaryKey(brand.getId());
+        //逻辑删除
+        brand.setDeleted(true);
+        Date date = new Date();
+        brand.setUpdateTime(date);
+        int delete = brandMapper.updateByPrimaryKeySelective(brand);
+       // int delete = brandMapper.deleteByPrimaryKey(brand.getId());
         return delete;
     }
 
@@ -121,6 +139,8 @@ public class BrandServiceImpl implements BrandService {
         map.put("items", brands);
         return map;
     }
+
+
 
     public Brand selectBrandByName(String name) {
         Brand brand = brandMapper.selectByName(name);

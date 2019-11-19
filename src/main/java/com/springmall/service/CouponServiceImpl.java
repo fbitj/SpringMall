@@ -121,10 +121,12 @@ public class CouponServiceImpl implements CouponService{
         if (coupon.getType() == 2) {
             String code = RandomUtil.randomCode();
             coupon.setCode(code);
+        } else {
+            coupon.setCode(null);
         }
         Date date = new Date();
         coupon.setUpdateTime(date);
-        couponMapper.updateByPrimaryKeySelective(coupon);
+        couponMapper.updateByPrimaryKey(coupon);
         return coupon;
     }
 

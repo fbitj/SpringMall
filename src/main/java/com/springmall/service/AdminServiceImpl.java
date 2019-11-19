@@ -44,7 +44,7 @@ public class AdminServiceImpl implements AdminService{
     public int login(Admin admin) {
         AdminExample adminExample = new AdminExample();
         adminExample.createCriteria().andUsernameEqualTo(admin.getUsername())
-                .andPasswordEqualTo(PasswordUtil.string2Stringint(admin.getPassword()));
+                .andPasswordEqualTo(/*PasswordUtil.string2Stringint(*/admin.getPassword()/*)*/);
         List<Admin> admins = adminMapper.selectByExample(adminExample);
         if (admins.size() == 0) return 0;
         return 1;

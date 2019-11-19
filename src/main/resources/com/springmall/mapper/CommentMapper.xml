@@ -8,7 +8,7 @@
     <result column="content" jdbcType="VARCHAR" property="content" />
     <result column="user_id" jdbcType="INTEGER" property="userId" />
     <result column="has_picture" jdbcType="BIT" property="hasPicture" />
-    <result column="pic_urls" jdbcType="VARCHAR" property="picUrls" />
+    <result column="pic_urls" jdbcType="VARCHAR" property="picUrls" typeHandler="com.springmall.handler.String2ArraysTypeHandler"/>
     <result column="star" jdbcType="SMALLINT" property="star" />
     <result column="add_time" jdbcType="TIMESTAMP" property="addTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
@@ -73,7 +73,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, value_id, type, content, user_id, has_picture, pic_urls, star, add_time, update_time, 
+    id, value_id, `type`, content, user_id, has_picture, pic_urls, star, add_time, update_time,
     deleted
   </sql>
   <select id="selectByExample" parameterType="com.springmall.bean.CommentExample" resultMap="BaseResultMap">
@@ -107,7 +107,7 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.springmall.bean.Comment">
-    insert into cskaoyan_mall_comment (id, value_id, type, 
+    insert into cskaoyan_mall_comment (id, value_id, `type`,
       content, user_id, has_picture, 
       pic_urls, star, add_time, 
       update_time, deleted)
@@ -126,7 +126,7 @@
         value_id,
       </if>
       <if test="type != null">
-        type,
+        `type`,
       </if>
       <if test="content != null">
         content,
@@ -240,7 +240,7 @@
     update cskaoyan_mall_comment
     set id = #{record.id,jdbcType=INTEGER},
       value_id = #{record.valueId,jdbcType=INTEGER},
-      type = #{record.type,jdbcType=TINYINT},
+      `type` = #{record.type,jdbcType=TINYINT},
       content = #{record.content,jdbcType=VARCHAR},
       user_id = #{record.userId,jdbcType=INTEGER},
       has_picture = #{record.hasPicture,jdbcType=BIT},
@@ -260,7 +260,7 @@
         value_id = #{valueId,jdbcType=INTEGER},
       </if>
       <if test="type != null">
-        type = #{type,jdbcType=TINYINT},
+        `type` = #{type,jdbcType=TINYINT},
       </if>
       <if test="content != null">
         content = #{content,jdbcType=VARCHAR},
@@ -292,7 +292,7 @@
   <update id="updateByPrimaryKey" parameterType="com.springmall.bean.Comment">
     update cskaoyan_mall_comment
     set value_id = #{valueId,jdbcType=INTEGER},
-      type = #{type,jdbcType=TINYINT},
+      `type` = #{type,jdbcType=TINYINT},
       content = #{content,jdbcType=VARCHAR},
       user_id = #{userId,jdbcType=INTEGER},
       has_picture = #{hasPicture,jdbcType=BIT},

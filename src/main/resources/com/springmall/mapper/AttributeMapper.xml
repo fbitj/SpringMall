@@ -240,4 +240,50 @@
       deleted = #{deleted,jdbcType=BIT}
     where id = #{id,jdbcType=INTEGER}
   </update>
+    <insert id="insertAttributesSelective">
+      insert into cskaoyan_mall_goods_attribute(
+          goods_id,
+          attribute,
+          `value`,
+          add_time,
+          update_time,
+          deleted)
+      <foreach collection="attributes" item="attribute" open="values " separator=",">
+        <trim prefix=" (" suffix=")" suffixOverrides=",">
+          <if test="attribute.goodsId != null">
+            #{attribute.goodsId,jdbcType=INTEGER},
+          </if>
+          <if test="attribute.attribute != null">
+            #{attribute.attribute,jdbcType=VARCHAR},
+          </if>
+          <if test="attribute.value != null">
+            #{attribute.value,jdbcType=VARCHAR},
+          </if>
+          <choose>
+            <when test="attribute.addTime != null">
+              #{attribute.addTime,jdbcType=TIMESTAMP},
+            </when>
+            <otherwise>
+              now(),
+            </otherwise>
+          </choose>
+          <choose>
+            <when test="attribute.updateTime != null">
+              #{attribute.updateTime,jdbcType=TIMESTAMP},
+            </when>
+            <otherwise>
+              now(),
+            </otherwise>
+          </choose>
+          <choose>
+            <when test="attribute.deleted != null">
+              #{attribute.deleted,jdbcType=BIT},
+            </when>
+            <otherwise>
+              0,
+            </otherwise>
+          </choose>
+        </trim>
+      </foreach>
+    </insert>
 </mapper>

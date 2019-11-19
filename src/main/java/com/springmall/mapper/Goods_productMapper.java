@@ -3,6 +3,8 @@ package com.springmall.mapper;
 import com.springmall.bean.Goods_product;
 import com.springmall.bean.Goods_productExample;
 import java.util.List;
+
+import com.springmall.bean.Product;
 import org.apache.ibatis.annotations.Param;
 
 public interface Goods_productMapper {
@@ -27,4 +29,11 @@ public interface Goods_productMapper {
     int updateByPrimaryKeySelective(Goods_product record);
 
     int updateByPrimaryKey(Goods_product record);
+
+    /**
+     * 根据是否有值添加商品
+     * @param products
+     */
+    void insertProductsSelective(@Param("products") List<Goods_product> products);
+
 }

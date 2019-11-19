@@ -124,7 +124,7 @@ public class GrouponController {
         if (discountMember == null || discountMember < 0) {
             return "团购人数必须大于0";
         }
-        if (expireTime.before(new Date())) {
+        if (expireTime == null || expireTime.before(new Date())) {
             return "过期时间必须在当前之后";
         }
         return null;

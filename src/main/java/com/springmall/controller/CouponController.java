@@ -126,7 +126,7 @@ public class CouponController {
         if (coupon.getTimeType() == 0 && (coupon.getDays() == null || coupon.getDays() <= 0)) {
             return "相对天数必须大于0";
         }
-        if ((coupon.getEndTime().before(coupon.getStartTime())) && coupon.getTimeType() == 1) {
+        if (coupon.getTimeType() == 1 && (coupon.getEndTime().before(coupon.getStartTime()))) {
             return "日期选择有误";
         }
         return null;

@@ -213,9 +213,7 @@
       <if test="retailPrice != null">
         retail_price,
       </if>
-      <if test="addTime != null">
         add_time,
-      </if>
       <if test="updateTime != null">
         update_time,
       </if>
@@ -278,12 +276,22 @@
       <if test="retailPrice != null">
         #{retailPrice,jdbcType=DECIMAL},
       </if>
-      <if test="addTime != null">
-        #{addTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="updateTime != null">
-        #{updateTime,jdbcType=TIMESTAMP},
-      </if>
+      <choose>
+        <when test="addTime != null">
+          #{addTime,jdbcType=TIMESTAMP},
+        </when>
+        <otherwise>
+          now(),
+        </otherwise>
+      </choose>
+      <choose>
+        <when test="updateTime != null">
+          #{updateTime,jdbcType=TIMESTAMP},
+        </when>
+        <otherwise>
+          now(),
+        </otherwise>
+      </choose>
       <if test="deleted != null">
         #{deleted,jdbcType=BIT},
       </if>
@@ -481,10 +489,9 @@
           update_time = #{updateTime,jdbcType=TIMESTAMP},
         </when>
         <otherwise>
-          now(),
+          update_time = now(),
         </otherwise>
       </choose>
-
       <if test="deleted != null">
         deleted = #{deleted,jdbcType=BIT},
       </if>

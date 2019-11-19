@@ -289,8 +289,22 @@
           #{product.price,jdbcType=DECIMAL},
           #{product.number,jdbcType=INTEGER},
           #{product.url,jdbcType=VARCHAR},
-          now(),
-          now(),
+        <choose>
+          <when test="product.addTime != null">
+            #{product.addTime,jdbcType=INTEGER},
+          </when>
+          <otherwise>
+            now(),
+          </otherwise>
+        </choose>
+        <choose>
+          <when test="product.updateTime != null">
+            #{product.updateTime,jdbcType=INTEGER},
+          </when>
+          <otherwise>
+            now(),
+          </otherwise>
+        </choose>
           0,
       </trim>
     </foreach>

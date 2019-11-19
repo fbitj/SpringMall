@@ -1,5 +1,6 @@
 package com.springmall.bean;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -19,8 +20,10 @@ public class Goods_product {
 
     private String url;
 
+    @JsonFormat(pattern = "yyyy-MM-dd hh:mm:ss")
     private Date addTime;
 
+    @JsonFormat(pattern = "yyyy-MM-dd hh:mm:ss")
     private Date updateTime;
 
     private Boolean deleted;

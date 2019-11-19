@@ -7,12 +7,12 @@ import java.util.List;
 public interface GoodsService {
     /**
      * 分页查询商品
-     * @param page
-     * @param limit
-     * @param goodsSn
-     * @param name
-     * @param sortField
-     * @param order
+     * @param page 当前页
+     * @param limit 每页显示数量
+     * @param goodsSn 商品编号
+     * @param name 商品名
+     * @param sortField 排序字段
+     * @param order 排序规则
      * @return
      */
     List<Goods> queryGoodsByPage(String page, String limit,String goodsSn,String name, String sortField, String order);
@@ -43,6 +43,13 @@ public interface GoodsService {
      */
     int createGoods(Goods goods, List<Goods_specification> specifications, List<Goods_product> products, List<Goods_attribute> attributes);
 
+    /**
+     * 更新商品信息
+     * @param goods
+     * @param specifications
+     * @param products
+     * @param attributes
+     */
     void updateGoodsInfo(Goods goods, List<Goods_specification> specifications, List<Goods_product> products, List<Goods_attribute> attributes);
 
 }

@@ -3,7 +3,9 @@ package com.springmall.service;
 import com.github.pagehelper.PageHelper;
 import com.springmall.bean.Comment;
 import com.springmall.bean.CommentExample;
+import com.springmall.bean.CommentReplay;
 import com.springmall.mapper.CommentMapper;
+import com.springmall.mapper.CommentReplayMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +15,20 @@ import java.util.List;
 public class CommentServiceImpl implements CommentService {
     @Autowired
     CommentMapper commentMapper;
+    @Autowired
+    CommentReplayMapper commentReplayMapper;
+
+    @Override
+    public int replay(int commentId, String content) {
+        // 查看评论是否回复
+        List<CommentReplay> commentReplays = commentReplayMapper.queryReplayByCommentId(commentId);
+        if (commentReplays.size() != 0){// 代表已经回复
+            return 0;
+        }
+        // 没有回复，添加回复
+        commentReplayMapper.insertReplay(commentId, content);
+        return 1;
+    }
 
     @Override
     public int deleteCommentById(Integer id) {

@@ -20,15 +20,12 @@ public class BaseReqVo<T> {
 
     public static BaseReqVo ok() {
         BaseReqVo baseReqVo = new BaseReqVo();
-        baseReqVo.setErrno(0);
         baseReqVo.setErrmsg("成功");
+        baseReqVo.setErrno(0);
         return baseReqVo;
     }
-
-    public static BaseReqVo ok(Object data) {
-        BaseReqVo baseReqVo = new BaseReqVo();
-        baseReqVo.setErrno(0);
-        baseReqVo.setErrmsg("成功");
+    public static BaseReqVo ok(Object data){
+        BaseReqVo baseReqVo = BaseReqVo.ok();
         baseReqVo.setData(data);
         return baseReqVo;
     }

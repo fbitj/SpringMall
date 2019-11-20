@@ -8,6 +8,8 @@ import java.util.Date;
 public class Order {
     private Integer id;
 
+    private Integer orderId;
+
     private Integer userId;
 
     private String orderSn;
@@ -38,16 +40,20 @@ public class Order {
 
     private String payId;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date payTime;
 
     private String shipSn;
 
     private String shipChannel;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date shipTime;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date confirmTime;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Short comments;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
@@ -267,5 +273,13 @@ public class Order {
 
     public void setDeleted(Boolean deleted) {
         this.deleted = deleted;
+    }
+
+    public Integer getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(Integer orderId) {
+        this.orderId = orderId;
     }
 }

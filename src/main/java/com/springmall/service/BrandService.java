@@ -2,6 +2,7 @@ package com.springmall.service;
 
 
 import com.springmall.bean.Brand;
+import com.springmall.bean.PageRequest;
 
 import java.util.List;
 import java.util.Map;
@@ -27,4 +28,8 @@ public interface BrandService {
     //根据name模糊查找
     Map<String, Object> queryBrands(Integer page, Integer limit, Integer id, String name);
 
+    Brand queryBrandById(Integer id);
+
+
+    Map queryAllBrandByPage(PageRequest pageRequest);
 }

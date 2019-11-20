@@ -302,4 +302,7 @@
       role_ids = #{roleIds,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
+  <select id="selectAdminByUsername" resultType="com.springmall.bean.Admin">
+    select id,username,password,avatar,role_ids from cskaoyan_mall_admin where username=#{username}
+  </select>
 </mapper>

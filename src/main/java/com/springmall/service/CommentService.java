@@ -42,4 +42,6 @@ public interface CommentService {
      * @return 1：已提交，0：未提交
      */
     int commentSubmit(int userId, Integer orderGoodsId, String content, boolean hasPicture, short star, String[] picUrls);
+
+    List queryCommentsByGoodsId(Integer id);
 }

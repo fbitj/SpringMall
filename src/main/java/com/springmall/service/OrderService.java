@@ -1,16 +1,20 @@
 package com.springmall.service;
 
 
+import com.springmall.bean.Order;
 import com.springmall.bean.OrderRespVo;
 import com.springmall.bean.Order_goods;
 
 import java.util.ArrayList;
 import java.util.Map;
 
+
 public interface OrderService {
     Map<String, Object> queryOrders(Integer page, Integer limit);
     Map<String, Object> queryOrders(Integer page, Integer limit, Integer userId, String orderSn, Short[] orderStatusArray);
     Map<String, Object> viewOrderDetail(Integer id);
+    int shipGoods(Order orgitder);
+    int refund(Map<String, Object> map);
 
     /**
      * 更改指定订单的状态

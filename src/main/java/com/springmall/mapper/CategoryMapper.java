@@ -3,6 +3,8 @@ package com.springmall.mapper;
 import com.springmall.bean.Category;
 import com.springmall.bean.CategoryExample;
 import java.util.List;
+
+import com.springmall.bean.HomePageData;
 import org.apache.ibatis.annotations.Param;
 
 public interface CategoryMapper {
@@ -27,4 +29,6 @@ public interface CategoryMapper {
     int updateByPrimaryKeySelective(Category record);
 
     int updateByPrimaryKey(Category record);
+
+    List<Category> selectChannelCatagory();
 }

@@ -214,4 +214,38 @@ public class CategoryServiceImpl implements CategoryService {
         int update = categoryMapper.updateByPrimaryKeySelective(category);
         return update;
     }
+
+    @Override
+    public List<Category> getChannelCatagory() {
+        return categoryMapper.selectChannelCatagory();
+    }
+
+    @Override
+    public List<Category> getCategoryByLevel(String level) {
+        CategoryExample categoryExample = new CategoryExample();
+        categoryExample.createCriteria().andLevelEqualTo(level);
+        List<Category> categoryList = categoryMapper.selectByExample(categoryExample);
+        return categoryList;
+    }
+
+    @Override
+    public List<Category> getSubCategoryByPid(Integer id) {
+        CategoryExample categoryExample = new CategoryExample();
+        categoryExample.createCriteria().andPidEqualTo(id);
+        List<Category> categoryList = categoryMapper.selectByExample(categoryExample);
+        return categoryList;
+    }
+
+    @Override
+    public Category getCategoryById(Integer id) {
+        CategoryExample categoryExample = new CategoryExample();
+        categoryExample.createCriteria().andIdEqualTo(id);
+        List<Category> categoryList = categoryMapper.selectByExample(categoryExample);
+        if (categoryList.size() == 0) {
+            return null;
+        }
+        return categoryList.get(0);
+    }
+
+
 }

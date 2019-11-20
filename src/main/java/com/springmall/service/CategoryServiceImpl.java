@@ -248,7 +248,7 @@ public class CategoryServiceImpl implements CategoryService {
         CategoryExample example = new CategoryExample();
         CategoryExample.Criteria criteria = example.createCriteria();
         criteria.andLevelEqualTo("L2");
-        if (categoryId != null) {
+        if (categoryId != null && categoryId.size() > 0) {
             criteria.andIdIn(categoryId);
         }
         return categoryMapper.selectByExample(example);

@@ -34,4 +34,13 @@ public class SearchHistoryServiceImpl implements SearchHistoryService {
         }
         return searchHistoryList;
     }
+
+    /**
+     * 刪除搜索的歷史記錄
+     */
+    @Override
+    public void deleteSearchHistory() {
+        Search_historyExample search_historyExample = new Search_historyExample();
+        int i = search_historyMapper.deleteByExample(search_historyExample);
+    }
 }

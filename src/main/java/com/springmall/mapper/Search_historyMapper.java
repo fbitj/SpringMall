@@ -27,4 +27,6 @@ public interface Search_historyMapper {
     int updateByPrimaryKeySelective(Search_history record);
 
     int updateByPrimaryKey(Search_history record);
+
+    void deleteByExample();
 }

@@ -3,7 +3,11 @@
 <mapper namespace="com.springmall.mapper.GoodsMapper">
 
   <select id="selectGoodsInSameCategory" resultMap="BaseResultMap">
-    select <include refid="Base_Column_List"/> from cskaoyan_mall_goods g
+    select
+    g.id, g.goods_sn, g.name, g.category_id, g.brand_id, g.gallery, g.keywords, g.brief, g.is_on_sale, g.
+    sort_order, g.pic_url, g.share_url, g.is_new, g.is_hot, g.unit, g.counter_price, g.retail_price, g.
+    add_time, g.update_time, g.deleted
+    from cskaoyan_mall_goods g
     left join cskaoyan_mall_category c on c.id = g.category_id
     where g.id = #{id} and g.deleted = false
   </select>

@@ -177,8 +177,11 @@ public class GoodsServiceImpl implements GoodsService {
         //查看用户是否收藏该商品
         Subject subject = SecurityUtils.getSubject();
         User principal = (User) subject.getPrincipal();
-        Integer userId = principal.getId();
-        boolean isCollect = collectService.queryGoodCollect(userId, id);
+        Boolean isCollect = null;
+        if (principal != null) {
+            Integer userId = principal.getId();
+            isCollect = collectService.queryGoodCollect(userId, id);
+        }
 
         //封装规格
         List<Map<String,Object>> specList = new ArrayList<>(); //规格结果集

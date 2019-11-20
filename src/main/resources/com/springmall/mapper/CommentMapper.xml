@@ -3,7 +3,10 @@
 <mapper namespace="com.springmall.mapper.CommentMapper">
 
   <select id="queryCommentsByGoodsId" resultType="com.springmall.bean.Comment">
-    select <include refid="Base_Column_List"/> from cskaoyan_mall_order_goods od
+    select
+    c.id, c.value_id, c.`type`, c.content, c.user_id, c.has_picture, c.pic_urls, c.star, c.add_time, c.update_time,
+    c.deleted
+    from cskaoyan_mall_order_goods od
     left join cskaoyan_mall_comment c on c.id = od.comment
     where od.goods_id = #{id} and c.deleted = false
   </select>

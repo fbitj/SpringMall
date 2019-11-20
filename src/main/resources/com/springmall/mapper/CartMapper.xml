@@ -350,4 +350,9 @@
       deleted = #{deleted,jdbcType=BIT}
     where id = #{id,jdbcType=INTEGER}
   </update>
+    <update id="logicDeleteCartById">
+      update cskaoyan_mall_cart
+      set deleted = true, update_time = now()
+      where id = #{id}
+    </update>
 </mapper>

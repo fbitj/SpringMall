@@ -118,7 +118,7 @@ public class GoodsController {
     public BaseReqVo createGoods(@RequestBody CreateGoods createGoods){
         boolean b = checkGoods(createGoods.getGoods());
         if (b){
-            return BaseReqVo.faild("输入参数不正确");
+            return BaseReqVo.error(500,"输入参数不正确");
         }
         int res = goodsService.createGoods(createGoods.getGoods(),createGoods.getSpecifications(),createGoods.getProducts(),createGoods.getAttributes());
         BaseReqVo baseReqVo = new BaseReqVo();
@@ -151,7 +151,7 @@ public class GoodsController {
     public BaseReqVo updateGoods(@RequestBody CreateGoods createGoods){
         boolean b = checkGoods(createGoods.getGoods());
         if (b){
-            return BaseReqVo.faild("输入参数不正确");
+            return BaseReqVo.error(500,"输入参数不正确");
         }
         goodsService.updateGoodsInfo(createGoods.getGoods(),createGoods.getSpecifications(),createGoods.getProducts(),createGoods.getAttributes());
         BaseReqVo baseReqVo = new BaseReqVo();

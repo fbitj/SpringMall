@@ -1,11 +1,20 @@
 package com.springmall.controller.weixin;
 
+import com.github.pagehelper.PageInfo;
 import com.springmall.bean.BaseReqVo;
+import com.springmall.bean.OrderGoodsCommentReqVo;
+import com.springmall.bean.OrderRespVo;
+import com.springmall.bean.Order_goods;
+import com.springmall.service.CommentService;
 import com.springmall.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("wx/order")
@@ -23,20 +32,174 @@ public class WxOrderController {
      */
     @RequestMapping("list")
     public BaseReqVo orderList(int showType,int page, int size){
-        BaseReqVo baseReqVo = new BaseReqVo();
-        /*baseReqVo.setData();
-        baseReqVo.setErrmsg();
-        baseReqVo.setErrno();*/
-        return baseReqVo;
+        // 获取用户信息
+        int userId = 1;
+        ArrayList<OrderRespVo> orderRespVo = orderService.queryUserOrders(userId,showType,page,size);
+       if (orderRespVo.size() == 0){
+           return BaseReqVo.ok();
+       }else {
+           HashMap<String, Object> map = new HashMap<>();
+           PageInfo<OrderRespVo> goodsInfo = new PageInfo<>(orderRespVo);
+           long total = goodsInfo.getTotal();
+           int pages = goodsInfo.getPages();
+           map.put("data",orderRespVo);
+           map.put("count",total);
+           map.put("totalPages",pages);
+           return BaseReqVo.ok(map);
+       }
+
+    }
+
+
+
+    /**
+     * 通过订单id查询订单详情
+     * @param orderId
+     * @return
+     */
+    @RequestMapping("detail")
+    public BaseReqVo orderDetail(int orderId){
+        Map<String, Object> res = orderService.queryOrderInfo(orderId);
+        return BaseReqVo.ok(res);
+    }
+
+    /**
+     * 取消订单
+     * 考虑：取消定单后要将商品的库存还原
+     * @param order
+     * @return
+     */
+    @RequestMapping("cancel")
+    public BaseReqVo cancelOrder(@RequestBody Map order){
+        // 商品库存归还到product表=================
+        orderService.updateOrderStatusById((Integer) order.get("orderId"),102);
+        return BaseReqVo.ok();
+    }
+    /**
+     * 退款取消订单
+     * 考虑：退款取消定单后要将商品的库存还原
+     * @param order
+     * @return
+     */
+    @RequestMapping("refund")
+    public BaseReqVo orderRefund(@RequestBody Map order){
+        // 商品库存归还到product表=================
+        //1.获取订单中的各个商品的数量，
+        orderService.updateOrderStatusById((Integer) order.get("orderId"),202);
+        return BaseReqVo.ok();
+    }
+    /**
+     * 逻辑删除订单
+     * 考虑：如果订单用户未支付，要不要真实删除？
+     * 这里使用一刀切，都是用逻辑删除
+     * @param order
+     * @return
+     */
+    @RequestMapping("delete")
+    public BaseReqVo orderDelete(@RequestBody Map order){
+        int res = orderService.deleteOrderById((Integer) order.get("orderId"));
+        if (res == 1){
+            return BaseReqVo.ok();
+        } else {
+            return BaseReqVo.error(500,"删除失败！");
+        }
+    }
+
+    /**
+     * 确认收货
+     * @param order
+     * @return
+     */
+    @RequestMapping("confirm")
+    public BaseReqVo orderConfirm(@RequestBody Map order){
+        // 商品库存归还到product表=================
+        //1.获取订单中的各个商品的数量，
+        orderService.updateOrderStatusById((Integer) order.get("orderId"),401);
+        return BaseReqVo.ok();
+    }
+
+
+    /**
+     * 查询订单中指定商品
+     * @param orderId 订单id
+     * @param goodsId 商品id
+     * @return 订单商品信息
+     */
+    @RequestMapping("goods")
+    public BaseReqVo orderGoods(int orderId,int goodsId){
+        Order_goods orderGoods = orderService.queryOrderGoodsByOrderIdAndGoodsId(orderId,goodsId);
+        return BaseReqVo.ok(orderGoods);
+    }
+
+    @Autowired
+    CommentService commentService;
+
+    /**
+     * 评论订单商品
+     * @param orderGoodsCommentReqVo
+     * @return
+     */
+    @RequestMapping("comment")
+    public BaseReqVo OrderComment(@RequestBody OrderGoodsCommentReqVo orderGoodsCommentReqVo){
+        int userId = 1;
+        int res = commentService.commentSubmit(userId,
+                orderGoodsCommentReqVo.getOrderGoodsId(),
+                orderGoodsCommentReqVo.getContent(),
+                orderGoodsCommentReqVo.isHasPicture(),
+                orderGoodsCommentReqVo.getStar(),
+                orderGoodsCommentReqVo.getPicUrls());
+        if (res == 1){
+            return BaseReqVo.error(577,"订单已评价！");
+        } else if (res == 0){
+            return BaseReqVo.ok();
+        } else {
+            return BaseReqVo.error(577,"超期不能评论！");
+        }
+    }
+
+    /**
+     * 提交订单
+     * @return
+     */
+    @RequestMapping("submit")
+    public BaseReqVo orderSubmit(@RequestBody Map map){
+        int cartId = (int) map.get("cartId");
+        int addressId = (int) map.get("addressId");
+        int couponId = (int) map.get("couponId");// 优惠id
+        String message = (String) map.get("message");
+        // 团购规则预留
+        int grouponRulesId = (int) map.get("grouponRulesId");
+        int grouponLinkId = (int) map.get("grouponLinkId");
+        // 固定的userid
+        int userid = 1;
+        int res = orderService.submitOrder(userid,cartId,addressId,couponId,message,grouponRulesId,grouponLinkId);
+
+        if (res == 1){
+            return BaseReqVo.ok();
+        } else {
+            return BaseReqVo.error(500, "服务器繁忙，请稍后再试!");
+        }
+
     }
 
     /**
      * 订单支付
+     * @param map
+     * @return
+     */
+    @RequestMapping("prepay")
+    public BaseReqVo orderPrepay(@RequestBody Map<String,Integer> map){
+        Integer orderId = map.get("orderId");
+        orderService.orderPay(orderId);
+        return BaseReqVo.ok();
+    }
+    /**
+     * 用户订单支付
      * {"errno":724,"errmsg":"订单不能支付"}
      * @param orderId
      * @return
      */
-    @RequestMapping("prepay")
+    /*@RequestMapping("prepay")
     public BaseReqVo prepay(@RequestBody int orderId){
         BaseReqVo baseReqVo = new BaseReqVo();
         int res = orderService.updateOrderStatusById(orderId,101);
@@ -48,5 +211,5 @@ public class WxOrderController {
             baseReqVo.setErrno(724);
         }
         return baseReqVo;
-    }
+    }*/
 }

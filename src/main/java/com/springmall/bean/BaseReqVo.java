@@ -18,12 +18,6 @@ public class BaseReqVo<T> {
         this.errno = errno;
     }
 
-    public static BaseReqVo faild(String errmsg) {
-        BaseReqVo baseRespVo = new BaseReqVo();
-        baseRespVo.setErrmsg(errmsg);
-        baseRespVo.setErrno(500);
-        return baseRespVo;
-    }
     public static BaseReqVo ok() {
         BaseReqVo baseReqVo = new BaseReqVo();
         baseReqVo.setErrno(0);

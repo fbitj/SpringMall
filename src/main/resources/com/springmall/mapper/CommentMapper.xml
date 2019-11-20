@@ -117,6 +117,9 @@
       #{updateTime,jdbcType=TIMESTAMP}, #{deleted,jdbcType=BIT})
   </insert>
   <insert id="insertSelective" parameterType="com.springmall.bean.Comment">
+    <selectKey resultType="int" keyColumn="id" keyProperty="id" order="AFTER">
+      select LAST_INSERT_ID()
+    </selectKey>
     insert into cskaoyan_mall_comment
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">

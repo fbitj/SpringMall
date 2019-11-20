@@ -5,22 +5,25 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class OrderRespVo {
-    private Integer id;
-
-    private String orderStatusText;
-
-    private boolean visGroupin;
-
-    private String orderSn;
+public class OrderRespVo extends Order {
 
     private List<Order_goods> goodsList;
 
+    private boolean isGroupin;
+
+    private String orderStatusText;
+
     private HandleOption handleOption;
+
+
+    public void setHandleOption(int orderStatus) {
+        this.handleOption = new HandleOption(orderStatus);
+    }
 
     /**
      * 订单用户允许的操作
      */
+    @Data
     private class HandleOption {
         private boolean cancel;
 
@@ -37,18 +40,37 @@ public class OrderRespVo {
         private boolean rebuy;
 
         public HandleOption(int orderStatus) {
-            if (orderStatus == 1){ // 未付款
-                cancel = true;
-                pay = true;
-            } else if (orderStatus ==2){// 代发货
-                refund = true;
-            }else if (orderStatus ==3){// 待收货
-                confirm = true;
-                refund = true;
-            }else if (orderStatus == 4){// 待评价
+            switch (orderStatus){
+                case 101://待付款
+                    cancel = true;
+                    pay = true;
+                    break;
+                case 102://用户取消
+                    delete = true;
+                    break;
+                case 103://系统取消
+                    delete = true;
+                    break;
+                case 201://已付款
+                    confirm = true;
+                    refund = true;
+                    break;
+                case 202://申请退款
+                    break;
+                case 203://已发货
+                    confirm = true;
+                    refund = true;
+                    break;
+                case 301:
+                    confirm = true;
+                    refund = true;
+                    break;
+                case 401://用户收货
+                case 402://系统收货
                 delete = true;
                 rebuy = true;
                 comment = true;
+                    break;
             }
         }
     }

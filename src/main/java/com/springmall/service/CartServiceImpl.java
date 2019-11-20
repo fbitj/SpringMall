@@ -1,9 +1,10 @@
 package com.springmall.service;
 
-import com.github.pagehelper.PageInfo;
-import com.springmall.bean.Cart;
-import com.springmall.bean.CartExample;
+
+import com.springmall.bean.*;
 import com.springmall.mapper.CartMapper;
+import com.springmall.mapper.GoodsMapper;
+import com.springmall.mapper.Goods_productMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +18,10 @@ import java.util.Map;
 public class CartServiceImpl implements CartService {
     @Autowired
     CartMapper cartMapper;
+    @Autowired
+    GoodsMapper goodsMapper;
+    @Autowired
+    Goods_productMapper goods_productMapper;
 
     @Override
     public Map<String, Object> cartTotal() {
@@ -134,6 +139,32 @@ public class CartServiceImpl implements CartService {
             goodsCount += goodsnumber.intValue();
         }
         return goodsCount;
+    }
+
+    /**
+     * 添加商品到购物车
+     * @param cart
+     * @return购物车中商品总数
+     */
+    @Override
+    public int addCart(Cart cart) {
+        //查询goods表，获取goodsSn, goodsName,
+        //查询goods_product表， 获取productId, price, specifications, pic_url
+        //默认checked=true
+        Goods goods = goodsMapper.selectByPrimaryKey(cart.getGoodsId());
+        Goods_product goods_product = goods_productMapper.selectByPrimaryKey(cart.getProductId());
+        cart.setGoodsSn(goods.getGoodsSn());
+        cart.setGoodsName(goods.getName());
+        cart.setPrice(goods_product.getPrice());
+        cart.setSpecifications(goods_product.getSpecifications().toString());
+        cart.setPicUrl(goods_product.getUrl());
+        cart.setChecked(true);
+        Date date = new Date();
+        cart.setAddTime(date);
+        cart.setUpdateTime(date);
+        int insert = cartMapper.insertSelective(cart);
+        int goodsCountCart = goodsCountCart();
+        return goodsCountCart;
     }
 
     /**

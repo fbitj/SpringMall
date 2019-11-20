@@ -1,5 +1,5 @@
 package com.springmall.service;
-import java.util.ArrayList;
+import java.util.*;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -9,10 +9,6 @@ import com.springmall.mapper.Order_goodsMapper;
 import com.springmall.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -126,6 +122,43 @@ public class OrderServiceImpl implements OrderService {
     }
 
     /**
+     * 发货：改变订单状态。order_status = 301
+     * @param order
+     * @return
+     */
+    @Override
+    public int shipGoods(Order order) {
+        Order toShipOrder = orderMapper.selectByPrimaryKey(order.getOrderId());
+        toShipOrder.setShipSn(order.getShipSn());
+        toShipOrder.setShipChannel(order.getShipChannel());
+        toShipOrder.setOrderStatus((short) 301);
+        Date date = new Date();
+        toShipOrder.setUpdateTime(date);
+        int shiped = orderMapper.updateByPrimaryKeySelective(toShipOrder);
+        return shiped;
+    }
+
+    /**
+     * 退款，order_status = 203
+     * @param map
+     * @return
+     */
+    @Override
+    public int refund(Map<String, Object> map) {
+        int orderId = (int) map.get("orderId");
+        Order order = orderMapper.selectByPrimaryKey(orderId);
+        Object refundMoney = map.get("refundMoney");
+        if (refundMoney == order.getActualPrice()) {
+            order.setOrderStatus((short) 203);
+            Date date = new Date();
+            order.setUpdateTime(date);
+            int refunded = orderMapper.updateByPrimaryKeySelective(order);
+            return refunded;
+        }
+        return 0;
+    }
+
+    /**
      * 将order封装到orderResp
      * 刨除了几个前端不需要接收的成员变量
      * @param order
@@ -153,6 +186,9 @@ public class OrderServiceImpl implements OrderService {
         orderResp.setAddTime(order.getAddTime());
         orderResp.setUpdateTime(order.getUpdateTime());
         orderResp.setDeleted(order.getDeleted());
+        orderResp.setPayTime(order.getPayTime());
+        orderResp.setShipSn(order.getShipSn());
+        orderResp.setShipChannel(order.getShipChannel());
         return orderResp;
     }
 

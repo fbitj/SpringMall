@@ -26,9 +26,9 @@ public class CartController {
 
     // 添加商品到购物车
     @RequestMapping("add")
-    public BaseReqVo addCart() {
-
-        return null;
+    public BaseReqVo addCart(@RequestBody Cart cart) {
+        int goodsCount = cartService.addCart(cart);
+        return BaseReqVo.ok(goodsCount);
     }
 
     // 删除购物车的商品

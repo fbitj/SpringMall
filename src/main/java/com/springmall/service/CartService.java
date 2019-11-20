@@ -16,5 +16,7 @@ public interface CartService {
     int updateCart(Cart cart);
     //获取购物车商品件数（所有商品的总number）
     int goodsCountCart();
+    //添加商品到购物车
+    int addCart(Cart cart);
 
 }

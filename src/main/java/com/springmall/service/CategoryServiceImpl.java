@@ -5,10 +5,7 @@ import com.springmall.mapper.CategoryMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class CategoryServiceImpl implements CategoryService {
@@ -213,6 +210,48 @@ public class CategoryServiceImpl implements CategoryService {
         category.setUpdateTime(date);
         int update = categoryMapper.updateByPrimaryKeySelective(category);
         return update;
+    }
+
+    /**
+     * 根据id查询该类以及父类和兄弟类的信息
+     * @param id
+     * @return
+     */
+    @Override
+    public Map<String, Object> queryCategoryById(Integer id) {
+        //查询当前类的信息
+        Category current = categoryMapper.selectByPrimaryKey(id);
+        Integer pid = current.getPid();
+
+        //查询与该类同属一个父类的类目信息
+        CategoryExample example = new CategoryExample();
+        example.createCriteria().andPidEqualTo(pid).andDeletedEqualTo(false);
+        List<Category> categories = categoryMapper.selectByExample(example);
+
+        //查询父类信息
+        Category parent = categoryMapper.selectByPrimaryKey(pid);
+
+        //封装信息
+        Map<String,Object> map = new HashMap<>();
+        map.put("currentCategory", current);
+        map.put("brotherCategory", categories);
+        map.put("parentCategory", parent);
+        return map;
+    }
+
+    /**
+     * 查询二级类目
+     * @return
+     */
+    @Override
+    public List<Category> queryCategoryByL2(List categoryId) {
+        CategoryExample example = new CategoryExample();
+        CategoryExample.Criteria criteria = example.createCriteria();
+        criteria.andLevelEqualTo("L2");
+        if (categoryId != null && categoryId.size() > 0) {
+            criteria.andIdIn(categoryId);
+        }
+        return categoryMapper.selectByExample(example);
     }
 
     @Override

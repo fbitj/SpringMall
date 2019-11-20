@@ -101,4 +101,15 @@ public class GrouponServiceImpl implements GrouponService {
     public List<GrouponInfo> getGrouponInfo() {
         return grouponRulesMapper.getGrouponInfo();
     }
+    /**
+     * 根据商品id查询该商品参加的团购
+     * @param id
+     * @return
+     */
+    @Override
+    public List selectRulesByGoodsId(Integer id) {
+        Groupon_rulesExample example = new Groupon_rulesExample();
+        example.createCriteria().andGoodsIdEqualTo(id).andDeletedEqualTo(false);
+        return grouponRulesMapper.selectByExample(example);
+    }
 }

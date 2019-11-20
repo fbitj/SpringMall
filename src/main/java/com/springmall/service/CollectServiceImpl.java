@@ -35,4 +35,23 @@ public class CollectServiceImpl implements CollectService {
         }
         return collects;
     }
+
+    /**
+     * 判断用户是否收藏该商品
+     * @param userId
+     * @param id
+     * @return
+     */
+    @Override
+    public boolean queryGoodCollect(Integer userId, Integer id) {
+        CollectExample example = new CollectExample();
+        Byte type = 0;
+        example.createCriteria().andUserIdEqualTo(userId).andTypeEqualTo(type).andValueIdEqualTo(id);
+        List<Collect> collects = collectMapper.selectByExample(example);
+        int size = collects.size();
+        if (size == 0) {
+            return false;
+        }
+        return true;
+    }
 }

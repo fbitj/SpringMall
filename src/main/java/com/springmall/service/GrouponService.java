@@ -4,6 +4,8 @@ import com.springmall.bean.*;
 
 import java.util.List;
 
+import java.util.List;
+
 public interface GrouponService {
     DataForPage<Groupon_rules> showWholesaleByPage(PageRequest request);
 
@@ -17,4 +19,5 @@ public interface GrouponService {
 
     List<GrouponInfo> getGrouponInfo();
 
+    List selectRulesByGoodsId(Integer id);
 }

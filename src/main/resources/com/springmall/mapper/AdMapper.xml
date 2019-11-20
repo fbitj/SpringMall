@@ -9,7 +9,7 @@
   <select id="selectAllWithParm" resultMap="BaseResultMap">
     select <include refid="Base_Column_List"/> from cskaoyan_mall_ad
     <where>
-      deleted = 0
+      deleted = false
       <if test="name != null">
         and name like concat('%', #{name}, '%')
       </if>

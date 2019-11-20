@@ -192,7 +192,7 @@ public class Myaspect {
         log.setDeleted(0);
         System.out.println(log);
 
-        //logMapper.insertDetail(log);
+//        logMapper.insertDetail(log);
         /*if(request != null) {
             org.apache.log4j.MDC.put("admin", username);
             org.apache.log4j.MDC.put("ip", IP);

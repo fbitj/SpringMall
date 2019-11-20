@@ -3,10 +3,12 @@ import java.lang.System;
 import java.util.Date;
 
 
+import com.aliyun.oss.OSSClient;
 import com.springmall.bean.*;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 
+import com.springmall.component.AliyunComponent;
 import com.springmall.mapper.*;
 import com.springmall.utils.PasswordUtil;
 import com.springmall.utils.StringUtil;
@@ -40,6 +42,8 @@ public class AdminServiceImpl implements AdminService{
     LogMapper logMapper;
     @Autowired
     PermissionMapper permissionMapper;
+    @Autowired
+    AliyunComponent aliyunComponent;
 
 
     @Override
@@ -65,29 +69,36 @@ public class AdminServiceImpl implements AdminService{
     @Override
     public Storage storageCreate(HttpServletRequest request, HttpServletResponse response, MultipartFile file) throws IOException {
         Storage storage = new Storage();
-        if(file.getSize() > 1048576){
+        if(file.getSize() > 120971520){//上传图片最大大小20MB
             storage.setSize(-1);
             return storage;
         }
         storage.setId(null);
         UUID uuid = UUID.randomUUID();
         StringBuffer requestURL = new StringBuffer();
-        requestURL.append("http://localhost:8080/wx/storage/fetch/");
+//        requestURL.append("http://localhost:8080/wx/storage/fetch/");
+        requestURL.append("http://cskaoyan.oss-cn-beijing.aliyuncs.com/");
         String filename = file.getOriginalFilename();
         String type = filename.substring(filename.indexOf("."),filename.length());
         String s = uuid.toString();
         s = s.replaceAll("-","") + type;           //拼接key值
+        //上传到老师的阿里云服务器上
+        if(aliyunComponent.getOssClient() != null) {
+            OSSClient ossClient = aliyunComponent.getOssClient();
+            ossClient.putObject(aliyunComponent.getOss().getBucket(), s, file.getInputStream());
+        }
         //本地创建文件夹保存
-        File files = new File("C:/SpringMallImage/" + s);
+        /*File files = new File("C:/SpringMallImage/" + s);
         if(!files.exists()){
             files.mkdirs();
         }
-        file.transferTo(files);
-        /*String str = "H:/MySpring/GithubMall/SpringMall/src/main/resources/static/wx/storage/fetch/" + s;
+        file.transferTo(files);*/
+        /*  yml格式
+        String str = "H:/MySpring/GithubMall/SpringMall/src/main/resources/static/wx/storage/fetch/" + s;
         file.transferTo(new File(str));*/
         response.setContentType("image/jpeg");
-
         requestURL.append(s);
+
         storage.setKey(s);
         storage.setName(filename);
         storage.setType("image/jpeg");

@@ -1,9 +1,14 @@
 package com.springmall.controller.weixin;
 
 import com.springmall.bean.BaseReqVo;
+import com.springmall.bean.User;
+import org.apache.catalina.security.SecurityUtil;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.Serializable;
 import java.util.Map;
 
 /**
@@ -56,10 +61,15 @@ public class WxUserController {
      */
     @RequestMapping("collect/addrodelete")
     public BaseReqVo collectAddrodelete(Map map){
+        Subject subject = SecurityUtils.getSubject();
+        User user = (User) subject.getPrincipal();
+        String username = user.getUsername();
+        Integer id = user.getId();
+        //获取sessionId
+//        Serializable id1 = subject.getSession().getId();
         BaseReqVo<Object> baseReqVo = new BaseReqVo<>();
         int type = (int) map.get("type");
         int valueId = (int) map.get("valueId");
-
         baseReqVo.setData("hello");
         baseReqVo.setErrmsg("成功");
         baseReqVo.setErrno(0);

@@ -24,10 +24,10 @@ public class Log2 {
 
     private String comment;
 
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd HH-mm-ss", timezone = "GTM + 8")
     private Date addTime;
 
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd HH-mm-ss", timezone = "GTM + 8")
     private Date updateTime;
 
     private Integer deleted;

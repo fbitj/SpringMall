@@ -86,7 +86,7 @@ public class AdminController {
         Storage storage = adminService.storageCreate(request, response, file);
         response.setContentType("image/jpeg");
         if(storage.getSize() == -1) {
-            baseReqVo.setErrmsg("最大上传图片大小为1048576字节(1MB)");
+            baseReqVo.setErrmsg("最大上传图片大小为(20MB)");
             baseReqVo.setErrno(500);
         }else {
             baseReqVo.setData(storage);

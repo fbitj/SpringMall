@@ -27,4 +27,6 @@ public interface FootprintMapper {
     int updateByPrimaryKeySelective(Footprint record);
 
     int updateByPrimaryKey(Footprint record);
+
+    List queryUserFootPrintByPage(Integer userId);
 }

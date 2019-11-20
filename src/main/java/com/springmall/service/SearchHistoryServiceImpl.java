@@ -43,4 +43,19 @@ public class SearchHistoryServiceImpl implements SearchHistoryService {
         Search_historyExample search_historyExample = new Search_historyExample();
         int i = search_historyMapper.deleteByExample(search_historyExample);
     }
+
+    /**
+     * 添加用户搜索历史
+     * @param userId
+     * @param keyword
+     * @return
+     */
+    @Override
+    public int addUserSearchHistory(Integer userId, String keyword) {
+        Search_history history = new Search_history();
+        history.setUserId(userId);
+        history.setKeyword(keyword);
+        history.setFrom("wx");
+        return search_historyMapper.insertSelective(history);
+    }
 }

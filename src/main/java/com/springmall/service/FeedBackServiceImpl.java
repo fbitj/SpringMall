@@ -61,7 +61,8 @@ public class FeedBackServiceImpl implements FeedBackService {
         if (principal != null) {
             feedback.setUserId(principal.getId());
             feedback.setUsername(principal.getUsername());
+            return feedbackMapper.insertSelective(feedback);
         }
-        return feedbackMapper.insertSelective(feedback);
+        return 0;
     }
 }

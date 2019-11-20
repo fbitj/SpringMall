@@ -341,4 +341,10 @@
       deleted = #{deleted,jdbcType=BIT}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+<!--  查询未被删除、允许显示、指定数目的广告-->
+  <select id="selectAvailAdvertise" resultType="com.springmall.bean.Ad">
+    select add_time addTime,content,deleted,enabled,id,link,name,position,update_time updateTime,url
+    from cskaoyan_mall_ad where deleted=false and enabled=true limit #{amountLimit} offset 0
+  </select>
 </mapper>

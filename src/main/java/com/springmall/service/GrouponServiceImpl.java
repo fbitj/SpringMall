@@ -96,4 +96,9 @@ public class GrouponServiceImpl implements GrouponService {
         rules.setUpdateTime(new Date());
         return grouponRulesMapper.updateByPrimaryKeySelective(rules);
     }
+
+    @Override
+    public List<GrouponInfo> getGrouponInfo() {
+        return grouponRulesMapper.getGrouponInfo();
+    }
 }

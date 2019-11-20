@@ -1,6 +1,6 @@
-package com.springmall.controller;
+package com.springmall.controller.admincontroller;
 
-import com.springmall.bean.BaseReqVo;
+import com.springmall.bean.BaseRespVo;
 import com.springmall.bean.RegionProvince;
 import com.springmall.service.RegionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,14 +15,14 @@ public class RegionController {
     @Autowired
     RegionService regionService;
     @RequestMapping("list")
-    public BaseReqVo regionList() {
-        BaseReqVo baseReqVo = new BaseReqVo();
+    public BaseRespVo regionList() {
+        BaseRespVo BaseRespVo = new BaseRespVo();
         List<RegionProvince> regionResps = regionService.queryRegion();
         if(regionResps != null) {
-            baseReqVo.setErrno(0);
-            baseReqVo.setData(regionResps);
-            baseReqVo.setErrmsg("成功");
+            BaseRespVo.setErrno(0);
+            BaseRespVo.setData(regionResps);
+            BaseRespVo.setErrmsg("成功");
         }
-        return baseReqVo;
+        return BaseRespVo;
     }
 }

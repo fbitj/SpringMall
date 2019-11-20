@@ -1,6 +1,6 @@
 package com.springmall.utils;
 
-import com.springmall.bean.BaseReqVo;
+import com.springmall.bean.BaseRespVo;
 
 public class ResultUtil {
 
@@ -9,8 +9,8 @@ public class ResultUtil {
      * @param data
      * @return
      */
-    public static BaseReqVo success(Object data) {
-        BaseReqVo reqVo = new BaseReqVo();
+    public static BaseRespVo success(Object data) {
+        BaseRespVo reqVo = new BaseRespVo();
         reqVo.setErrmsg("成功");
         reqVo.setErrno(0);
         reqVo.setData(data);
@@ -23,8 +23,8 @@ public class ResultUtil {
      * @param message
      * @return
      */
-    public static BaseReqVo fail(int status, String message) {
-        BaseReqVo reqVo = new BaseReqVo();
+    public static BaseRespVo fail(int status, String message) {
+        BaseRespVo reqVo = new BaseRespVo();
         reqVo.setErrno(status);
         reqVo.setErrmsg(message);
         return reqVo;

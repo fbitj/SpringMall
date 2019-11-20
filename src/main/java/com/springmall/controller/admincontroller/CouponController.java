@@ -1,4 +1,4 @@
-package com.springmall.controller;
+package com.springmall.controller.admincontroller;
 
 import com.github.pagehelper.PageInfo;
 import com.springmall.bean.*;
@@ -28,14 +28,14 @@ public class CouponController {
      * @return
      */
     @RequestMapping("list")
-    public BaseReqVo<Map<String,Object>> couponlistByPage(PageRequest request) {
+    public BaseRespVo<Map<String,Object>> couponlistByPage(PageRequest request) {
         List<Coupon> coupons = couponService.totalCoupons(request);
         PageInfo<Coupon> pageInfo = new PageInfo<>(coupons);
         long total = pageInfo.getTotal();
         Map<String,Object> map = new HashMap<>();
         map.put("items", coupons);
         map.put("total", total);
-        BaseReqVo success = ResultUtil.success(map);
+        BaseRespVo success = ResultUtil.success(map);
         return success;
     }
 
@@ -45,7 +45,7 @@ public class CouponController {
      * @return
      */
     @RequestMapping("create")
-    public BaseReqVo<Coupon> addCoupon(@RequestBody Coupon coupon) {
+    public BaseRespVo<Coupon> addCoupon(@RequestBody Coupon coupon) {
         String illegal = isIllegal(coupon);
         if (illegal != null) {
             return ResultUtil.fail(402, illegal);
@@ -60,7 +60,7 @@ public class CouponController {
      * @return
      */
     @RequestMapping("read")
-    public BaseReqVo<Coupon> showInfo(Integer id) {
+    public BaseRespVo<Coupon> showInfo(Integer id) {
         Coupon coupon = couponService.showInfo(id);
         return ResultUtil.success(coupon);
     }
@@ -71,7 +71,7 @@ public class CouponController {
      * @return
      */
     @RequestMapping("listuser")
-    public BaseReqVo showListUserByPage(PageRequest request) {
+    public BaseRespVo showListUserByPage(PageRequest request) {
         DataForPage<Coupon_user> couponUsers = couponService.showListUserByPage(request);
         return ResultUtil.success(couponUsers);
     }
@@ -82,7 +82,7 @@ public class CouponController {
      * @return
      */
     @RequestMapping("update")
-    public BaseReqVo updateListUser(@RequestBody Coupon coupon) {
+    public BaseRespVo updateListUser(@RequestBody Coupon coupon) {
         String illegal = isIllegal(coupon);
         if (illegal == null) {
             return ResultUtil.fail(402, illegal);
@@ -97,7 +97,7 @@ public class CouponController {
      * @return
      */
     @RequestMapping("delete")
-    public BaseReqVo deleteCoupon(@RequestBody Coupon coupon) {
+    public BaseRespVo deleteCoupon(@RequestBody Coupon coupon) {
         couponService.deleteCoupon(coupon);
         return ResultUtil.success(null);
     }

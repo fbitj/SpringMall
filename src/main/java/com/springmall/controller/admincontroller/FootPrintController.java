@@ -1,8 +1,8 @@
-package com.springmall.controller;
+package com.springmall.controller.admincontroller;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.springmall.bean.BaseReqVo;
+import com.springmall.bean.BaseRespVo;
 import com.springmall.bean.Footprint;
 import com.springmall.service.FootPrintService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,8 +25,8 @@ public class FootPrintController {
 
     @RequestMapping("footprint/list")
     @ResponseBody
-    public BaseReqVo<Map<String, Object>> getFootPrintList(Integer page, Integer limit, String add_time, String order, Integer userId, Integer goodsId) {
-        BaseReqVo<Map<String, Object>> mapBaseReqVo = new BaseReqVo<>();
+    public BaseRespVo<Map<String, Object>> getFootPrintList(Integer page, Integer limit, String add_time, String order, Integer userId, Integer goodsId) {
+        BaseRespVo<Map<String, Object>> mapBaseRespVo = new BaseRespVo<>();
         HashMap<String, Object> map = new HashMap<>();
         PageHelper.startPage(page, limit);
         List<Footprint> footprintList = footPrintService.queryFootPrintList(userId, goodsId);
@@ -34,9 +34,9 @@ public class FootPrintController {
         PageInfo<Footprint> footprintPageInfo=new PageInfo<>(footprintList);
         map.put("total", footprintList.size());
         map.put("items", footprintList);
-        mapBaseReqVo.setErrno(0);
-        mapBaseReqVo.setData(map);
-        mapBaseReqVo.setErrmsg("成功");
-        return mapBaseReqVo;
+        mapBaseRespVo.setErrno(0);
+        mapBaseRespVo.setData(map);
+        mapBaseRespVo.setErrmsg("成功");
+        return mapBaseRespVo;
     }
 }

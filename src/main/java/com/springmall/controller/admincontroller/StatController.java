@@ -1,4 +1,4 @@
-package com.springmall.controller;
+package com.springmall.controller.admincontroller;
 
 import com.alibaba.druid.support.spring.stat.annotation.Stat;
 import com.springmall.bean.*;
@@ -27,9 +27,9 @@ public class StatController {
      */
     @RequestMapping("user")
     @ResponseBody
-    public BaseReqVo userStat() {
-        BaseReqVo baseReqVo = new BaseReqVo();
-        baseReqVo.setErrno(0);
+    public BaseRespVo userStat() {
+        BaseRespVo BaseRespVo = new BaseRespVo();
+        BaseRespVo.setErrno(0);
         StatInfo statInfo = new StatInfo();  // 统计返回的data类型为自定义的StatInfo类型
         List<String> columnList = new ArrayList<String>(); // 列数据
         columnList.add("day");
@@ -37,9 +37,9 @@ public class StatController {
         statInfo.setColumns(columnList); // 添加列数据
         List<UserStat> userStats = statService.userStat(); // 行数据
         statInfo.setRows(userStats); // 添加行数据
-        baseReqVo.setData(statInfo);
-        baseReqVo.setErrmsg("成功");
-        return baseReqVo;
+        BaseRespVo.setData(statInfo);
+        BaseRespVo.setErrmsg("成功");
+        return BaseRespVo;
     }
 
     /**
@@ -48,9 +48,9 @@ public class StatController {
      */
     @RequestMapping("order")
     @ResponseBody
-    public BaseReqVo userOrder() {
-        BaseReqVo baseReqVo = new BaseReqVo();
-        baseReqVo.setErrno(0);
+    public BaseRespVo userOrder() {
+        BaseRespVo BaseRespVo = new BaseRespVo();
+        BaseRespVo.setErrno(0);
         StatInfo statInfo = new StatInfo();  // 统计返回的data类型为自定义的StatInfo类型
         List<String> columnList = new ArrayList<String>(); // 列数据
         columnList.add("day");
@@ -61,9 +61,9 @@ public class StatController {
         statInfo.setColumns(columnList); // 添加列数据
         List<OrderStat> userStats = statService.OrderStat(); // 行数据
         statInfo.setRows(userStats); // 添加行数据
-        baseReqVo.setData(statInfo);
-        baseReqVo.setErrmsg("成功");
-        return baseReqVo;
+        BaseRespVo.setData(statInfo);
+        BaseRespVo.setErrmsg("成功");
+        return BaseRespVo;
     }
 
 
@@ -73,9 +73,9 @@ public class StatController {
      */
     @RequestMapping("goods")
     @ResponseBody
-    public BaseReqVo userGoods() {
-        BaseReqVo baseReqVo = new BaseReqVo();
-        baseReqVo.setErrno(0);
+    public BaseRespVo userGoods() {
+        BaseRespVo BaseRespVo = new BaseRespVo();
+        BaseRespVo.setErrno(0);
         StatInfo statInfo = new StatInfo();  // 统计返回的data类型为自定义的StatInfo类型
         List<String> columnList = new ArrayList<String>(); // 列数据
         columnList.add("day");
@@ -85,9 +85,9 @@ public class StatController {
         statInfo.setColumns(columnList); // 添加列数据
         List<GoodsStat> userStats = statService.GoodsStat(); // 行数据
         statInfo.setRows(userStats); // 添加行数据
-        baseReqVo.setData(statInfo);
-        baseReqVo.setErrmsg("成功");
-        return baseReqVo;
+        BaseRespVo.setData(statInfo);
+        BaseRespVo.setErrmsg("成功");
+        return BaseRespVo;
     }
 
 }

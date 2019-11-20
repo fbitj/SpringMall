@@ -1,8 +1,8 @@
-package com.springmall.controller;
+package com.springmall.controller.admincontroller;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.springmall.bean.BaseReqVo;
+import com.springmall.bean.BaseRespVo;
 import com.springmall.bean.Collect;
 import com.springmall.service.CollectService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,8 +23,8 @@ public class CollectController {
     CollectService collectService;
 
     @RequestMapping("collect/list")
-    public BaseReqVo<Map<String, Object>> getCollectList(Integer page, Integer limit, Integer userId, Integer valueId, String sort, String order) {
-        BaseReqVo<Map<String, Object>> mapBaseReqVo = new BaseReqVo<>();
+    public BaseRespVo<Map<String, Object>> getCollectList(Integer page, Integer limit, Integer userId, Integer valueId, String sort, String order) {
+        BaseRespVo<Map<String, Object>> mapBaseRespVo = new BaseRespVo<>();
         PageHelper.startPage(page, limit);
         HashMap<String, Object> map = new HashMap<>();
         List<Collect> collects = collectService.queryCollectList(userId, valueId);
@@ -32,9 +32,9 @@ public class CollectController {
         long total = collectPageInfo.getTotal();
         map.put("total", total);
         map.put("items", collects);
-        mapBaseReqVo.setErrno(0);
-        mapBaseReqVo.setData(map);
-        mapBaseReqVo.setErrmsg("成功");
-        return mapBaseReqVo;
+        mapBaseRespVo.setErrno(0);
+        mapBaseRespVo.setData(map);
+        mapBaseRespVo.setErrmsg("成功");
+        return mapBaseRespVo;
     }
 }

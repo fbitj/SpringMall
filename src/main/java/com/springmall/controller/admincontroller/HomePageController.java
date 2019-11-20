@@ -1,6 +1,6 @@
-package com.springmall.controller;
+package com.springmall.controller.admincontroller;
 
-import com.springmall.bean.BaseReqVo;
+import com.springmall.bean.BaseRespVo;
 import com.springmall.service.HomePageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,12 +17,12 @@ public class HomePageController {
      * @return
      */
     @RequestMapping("admin/dashboard")
-    public BaseReqVo homePage() {
-        BaseReqVo baseReqVo = new BaseReqVo();
+    public BaseRespVo homePage() {
+        BaseRespVo BaseRespVo = new BaseRespVo();
         Map<String, Long> map = homePageService.dataTotal();
-        baseReqVo.setData(map);
-        baseReqVo.setErrno(0);
-        baseReqVo.setErrmsg("成功");
-        return baseReqVo;
+        BaseRespVo.setData(map);
+        BaseRespVo.setErrno(0);
+        BaseRespVo.setErrmsg("成功");
+        return BaseRespVo;
     }
 }

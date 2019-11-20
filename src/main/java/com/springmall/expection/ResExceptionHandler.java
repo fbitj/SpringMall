@@ -1,6 +1,6 @@
 package com.springmall.expection;
 
-import com.springmall.bean.BaseReqVo;
+import com.springmall.bean.BaseRespVo;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -16,11 +16,11 @@ public class ResExceptionHandler {
      * @return
      */
     /*@ExceptionHandler(HttpMessageNotReadableException.class)
-    public BaseReqVo handleCustomException(HttpMessageNotReadableException exception){
-        BaseReqVo baseReqVo = new BaseReqVo();
-        baseReqVo.setErrno(402);
-        baseReqVo.setErrmsg("参数值不对");
-        return baseReqVo;
+    public BaseRespVo handleCustomException(HttpMessageNotReadableException exception){
+        BaseRespVo BaseRespVo = new BaseRespVo();
+        BaseRespVo.setErrno(402);
+        BaseRespVo.setErrmsg("参数值不对");
+        return BaseRespVo;
     }*/
 
 }

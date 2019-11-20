@@ -1,6 +1,6 @@
-package com.springmall.controller;
+package com.springmall.controller.admincontroller;
 
-import com.springmall.bean.BaseReqVo;
+import com.springmall.bean.BaseRespVo;
 import com.springmall.bean.Category;
 import com.springmall.bean.CategoryL1;
 import com.springmall.bean.CategoryResp;
@@ -23,23 +23,23 @@ public class CategoryController {
      * @return
      */
     @RequestMapping({"list"})
-    public BaseReqVo listCategory() {
-        BaseReqVo baseReqVo = new BaseReqVo();
+    public BaseRespVo listCategory() {
+        BaseRespVo BaseRespVo = new BaseRespVo();
         List<CategoryResp> categories = categoryService.queryCategory();
-        baseReqVo.setData(categories);
-        baseReqVo.setErrmsg("成功");
-        baseReqVo.setErrno(0);
-        return baseReqVo;
+        BaseRespVo.setData(categories);
+        BaseRespVo.setErrmsg("成功");
+        BaseRespVo.setErrno(0);
+        return BaseRespVo;
     }
 
     @RequestMapping({"l1"})
-    public BaseReqVo l1() {
-        BaseReqVo baseReqVo = new BaseReqVo();
+    public BaseRespVo l1() {
+        BaseRespVo BaseRespVo = new BaseRespVo();
         List<CategoryL1> categoryL1s = categoryService.ValueAndLabel();
-        baseReqVo.setData(categoryL1s);
-        baseReqVo.setErrmsg("成功");
-        baseReqVo.setErrno(0);
-        return baseReqVo;
+        BaseRespVo.setData(categoryL1s);
+        BaseRespVo.setErrmsg("成功");
+        BaseRespVo.setErrno(0);
+        return BaseRespVo;
     }
 
     /**
@@ -48,14 +48,14 @@ public class CategoryController {
      * @return
      */
    @RequestMapping("delete")
-    public BaseReqVo deleteCategory(@RequestBody CategoryResp categoryResp) {
-       BaseReqVo baseReqVo = new BaseReqVo();
+    public BaseRespVo deleteCategory(@RequestBody CategoryResp categoryResp) {
+       BaseRespVo BaseRespVo = new BaseRespVo();
        int deleteCategory = categoryService.deleteCategory(categoryResp);
        if(deleteCategory != 0) {
-           baseReqVo.setErrno(0);
-           baseReqVo.setErrmsg("成功");
+           BaseRespVo.setErrno(0);
+           BaseRespVo.setErrmsg("成功");
        }
-       return baseReqVo;
+       return BaseRespVo;
    }
 
     /**
@@ -64,26 +64,26 @@ public class CategoryController {
      * @return
      */
    @RequestMapping("create")
-    public BaseReqVo createCategory(@RequestBody Category category) {
-       BaseReqVo baseReqVo = new BaseReqVo();
+    public BaseRespVo createCategory(@RequestBody Category category) {
+       BaseRespVo BaseRespVo = new BaseRespVo();
        int newCategory = categoryService.addCategory(category);
         if (newCategory == 1) {
-            baseReqVo.setErrno(0);
+            BaseRespVo.setErrno(0);
             Category selectCategory = categoryService.selectCategory(category);
-            baseReqVo.setData(selectCategory);
-            baseReqVo.setErrmsg("成功");
+            BaseRespVo.setData(selectCategory);
+            BaseRespVo.setErrmsg("成功");
         }
-       return baseReqVo;
+       return BaseRespVo;
    }
    @RequestMapping("update")
-    public BaseReqVo updateCategory(@RequestBody Category category) {
-       BaseReqVo baseReqVo = new BaseReqVo();
+    public BaseRespVo updateCategory(@RequestBody Category category) {
+       BaseRespVo BaseRespVo = new BaseRespVo();
        int updateCategory = categoryService.updateCategory(category);
        if(updateCategory == 1) {
-           baseReqVo.setErrno(0);
-           baseReqVo.setErrmsg("成功");
+           BaseRespVo.setErrno(0);
+           BaseRespVo.setErrmsg("成功");
        }
-       return baseReqVo;
+       return BaseRespVo;
    }
 
 }

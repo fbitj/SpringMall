@@ -1,7 +1,7 @@
-package com.springmall.controller;
+package com.springmall.controller.admincontroller;
 
 import com.github.pagehelper.PageInfo;
-import com.springmall.bean.BaseReqVo;
+import com.springmall.bean.BaseRespVo;
 import com.springmall.bean.Comment;
 import com.springmall.bean.Goods;
 import com.springmall.service.CommentService;
@@ -30,8 +30,8 @@ public class CommentController {
      * @return
      */
     @RequestMapping("list")
-    public BaseReqVo queryComments(int page, int limit, String add_time, String order){
-        BaseReqVo baseReqVo = new BaseReqVo();
+    public BaseRespVo queryComments(int page, int limit, String add_time, String order){
+        BaseRespVo BaseRespVo = new BaseRespVo();
         List<Comment> comments = commentService.queryCommentsByPage(page, limit, add_time, order);
         PageInfo<Comment> goodsInfo = new PageInfo<>(comments);
         long total = goodsInfo.getTotal();
@@ -39,10 +39,10 @@ public class CommentController {
         HashMap<String, Object> goodsData = new HashMap<>();
         goodsData.put("total", total);
         goodsData.put("items", comments);
-        baseReqVo.setData(goodsData);
-        baseReqVo.setErrmsg("成功");
-        baseReqVo.setErrno(0);
-        return baseReqVo;
+        BaseRespVo.setData(goodsData);
+        BaseRespVo.setErrmsg("成功");
+        BaseRespVo.setErrno(0);
+        return BaseRespVo;
     }
 
     /**
@@ -51,11 +51,11 @@ public class CommentController {
      * @return
      */
     @RequestMapping("delete")
-    public BaseReqVo deleteComment(@RequestBody Comment comment){
+    public BaseRespVo deleteComment(@RequestBody Comment comment){
         int res = commentService.deleteCommentById(comment.getId());
-        BaseReqVo baseReqVo = new BaseReqVo();
-        baseReqVo.setErrmsg("成功");
-        baseReqVo.setErrno(0);
-        return baseReqVo;
+        BaseRespVo BaseRespVo = new BaseRespVo();
+        BaseRespVo.setErrmsg("成功");
+        BaseRespVo.setErrno(0);
+        return BaseRespVo;
     }
 }

@@ -1,4 +1,4 @@
-package com.springmall.controller;
+package com.springmall.controller.admincontroller;
 
 import com.github.pagehelper.PageInfo;
 import com.springmall.bean.*;
@@ -32,8 +32,8 @@ public class GoodsController {
      * @return 返回json
      */
     @RequestMapping("list")
-    public BaseReqVo showGoodsByPage(String page, String limit, String goodsSn, String name, String sort, String order) {
-        BaseReqVo baseReqVo = new BaseReqVo();
+    public BaseRespVo showGoodsByPage(String page, String limit, String goodsSn, String name, String sort, String order) {
+        BaseRespVo BaseRespVo = new BaseRespVo();
         //1、数据库查询（分页查询）
         List<Goods> goods = goodsService.queryGoodsByPage(page, limit, goodsSn, name, sort, order);
 //        List<Goods> goods = null;
@@ -44,10 +44,10 @@ public class GoodsController {
         goodsData.put("total", total);
         goodsData.put("items", goods);
 
-        baseReqVo.setData(goodsData);
-        baseReqVo.setErrmsg("成功");
-        baseReqVo.setErrno(0);
-        return baseReqVo;
+        BaseRespVo.setData(goodsData);
+        BaseRespVo.setErrmsg("成功");
+        BaseRespVo.setErrno(0);
+        return BaseRespVo;
     }
 
     /**
@@ -56,12 +56,12 @@ public class GoodsController {
      * @return
      */
     @RequestMapping("delete")
-    public BaseReqVo deleteGoods(@RequestBody Goods goods) {
-        BaseReqVo baseReqVo = new BaseReqVo();
+    public BaseRespVo deleteGoods(@RequestBody Goods goods) {
+        BaseRespVo BaseRespVo = new BaseRespVo();
         goodsService.deleteGoods(goods);
-        baseReqVo.setErrmsg("成功");
-        baseReqVo.setErrno(0);
-        return baseReqVo;
+        BaseRespVo.setErrmsg("成功");
+        BaseRespVo.setErrno(0);
+        return BaseRespVo;
     }
 
     /**
@@ -69,15 +69,15 @@ public class GoodsController {
      * @param id
      */
     @RequestMapping("detail")
-    public BaseReqVo goodsDetail(int id){
-        BaseReqVo baseReqVo = new BaseReqVo();
+    public BaseRespVo goodsDetail(int id){
+        BaseRespVo BaseRespVo = new BaseRespVo();
         // 根据商品id查询商品详情并返回
         GoodInfoData goodInfoData = goodsService.queryGoodsDetailByGoodsId(id);
 
-        baseReqVo.setData(goodInfoData);
-        baseReqVo.setErrmsg("成功");
-        baseReqVo.setErrno(0);
-        return baseReqVo;
+        BaseRespVo.setData(goodInfoData);
+        BaseRespVo.setErrmsg("成功");
+        BaseRespVo.setErrno(0);
+        return BaseRespVo;
     }
 
 
@@ -90,7 +90,7 @@ public class GoodsController {
      * @return
      */
     @RequestMapping("catAndBrand")
-    public BaseReqVo AllBrand(){
+    public BaseRespVo AllBrand(){
         // 1.查询商品一级的分类信息
         List<CatAndBrandReqVo> catAndBrandReqVos = categoryService.queryAllCategoryByLevel();
 
@@ -102,11 +102,11 @@ public class GoodsController {
         dateMap.put("categoryList",catAndBrandReqVos);
         dateMap.put("brandList",brands);
         // 封装返回数据
-        BaseReqVo baseReqVo = new BaseReqVo();
-        baseReqVo.setData(dateMap);
-        baseReqVo.setErrmsg("成功");
-        baseReqVo.setErrno(0);
-        return baseReqVo;
+        BaseRespVo BaseRespVo = new BaseRespVo();
+        BaseRespVo.setData(dateMap);
+        BaseRespVo.setErrmsg("成功");
+        BaseRespVo.setErrno(0);
+        return BaseRespVo;
     }
 
     /**
@@ -115,26 +115,26 @@ public class GoodsController {
      * @return
      */
     @RequestMapping("create")
-    public BaseReqVo createGoods(@RequestBody CreateGoods createGoods){
-        BaseReqVo baseReqVo = new BaseReqVo();
+    public BaseRespVo createGoods(@RequestBody CreateGoods createGoods){
+        BaseRespVo BaseRespVo = new BaseRespVo();
         int res = goodsService.createGoods(createGoods.getGoods(),createGoods.getSpecifications(),createGoods.getProducts(),createGoods.getAttributes());
         if (res == 1){
-            baseReqVo.setErrmsg("成功");
-            baseReqVo.setErrno(0);
+            BaseRespVo.setErrmsg("成功");
+            BaseRespVo.setErrno(0);
         }else {
-            baseReqVo.setErrmsg("失败");
-            baseReqVo.setErrno(605);
+            BaseRespVo.setErrmsg("失败");
+            BaseRespVo.setErrno(605);
         }
-        return baseReqVo;
+        return BaseRespVo;
     }
 
     @RequestMapping("update")
-    public BaseReqVo updateGoods(@RequestBody CreateGoods createGoods){
+    public BaseRespVo updateGoods(@RequestBody CreateGoods createGoods){
         goodsService.updateGoodsInfo(createGoods.getGoods(),createGoods.getSpecifications(),createGoods.getProducts(),createGoods.getAttributes());
-        BaseReqVo baseReqVo = new BaseReqVo();
-        baseReqVo.setErrmsg("成功");
-        baseReqVo.setErrno(0);
-        return baseReqVo;
+        BaseRespVo BaseRespVo = new BaseRespVo();
+        BaseRespVo.setErrmsg("成功");
+        BaseRespVo.setErrno(0);
+        return BaseRespVo;
     }
 
 }

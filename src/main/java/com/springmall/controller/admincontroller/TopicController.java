@@ -1,4 +1,4 @@
-package com.springmall.controller;
+package com.springmall.controller.admincontroller;
 
 import com.springmall.bean.*;
 import com.springmall.service.TopicService;
@@ -24,7 +24,7 @@ public class TopicController {
      * @return
      */
     @RequestMapping("list")
-    public BaseReqVo showTopicByPage(PageRequest request) {
+    public BaseRespVo showTopicByPage(PageRequest request) {
         DataForPage<Topic> result = topicService.showListUserByPage(request);
         return ResultUtil.success(result);
     }
@@ -35,7 +35,7 @@ public class TopicController {
      * @return
      */
     @RequestMapping("create")
-    public BaseReqVo addTopic(@RequestBody Topic topic) {
+    public BaseRespVo addTopic(@RequestBody Topic topic) {
         //底价不能为null且必须大于等于0
         if (isIllegal(topic.getPrice())) return ResultUtil.fail(402, "底价必须大于等于0");
         Topic result = topicService.addTopic(topic);
@@ -48,7 +48,7 @@ public class TopicController {
      * @return
      */
     @RequestMapping("update")
-    public BaseReqVo updateTopicById(@RequestBody Topic topic) {
+    public BaseRespVo updateTopicById(@RequestBody Topic topic) {
         if (isIllegal(topic.getPrice())) return ResultUtil.fail(402, "底价必须大于等于0");
         Topic result = topicService.updatedTopic(topic);
         return ResultUtil.success(result);
@@ -60,7 +60,7 @@ public class TopicController {
      * @return
      */
     @RequestMapping("delete")
-    public BaseReqVo deleteTopicById(@RequestBody Topic topic) {
+    public BaseRespVo deleteTopicById(@RequestBody Topic topic) {
         topicService.deleteTopicById(topic);
         return ResultUtil.success(null);
     }

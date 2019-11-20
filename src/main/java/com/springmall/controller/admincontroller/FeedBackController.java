@@ -1,7 +1,7 @@
-package com.springmall.controller;
+package com.springmall.controller.admincontroller;
 
 import com.github.pagehelper.PageInfo;
-import com.springmall.bean.BaseReqVo;
+import com.springmall.bean.BaseRespVo;
 import com.springmall.bean.Feedback;
 import com.springmall.service.FeedBackService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,17 +24,17 @@ public class FeedBackController {
 
     @RequestMapping("feedback/list")
     @ResponseBody
-    public BaseReqVo<Map<String, Object>> getFeedBackList(Integer page, Integer limit, String sort, String order, Integer id, String username) {
-        BaseReqVo<Map<String, Object>> mapBaseReqVo = new BaseReqVo<>();
+    public BaseRespVo<Map<String, Object>> getFeedBackList(Integer page, Integer limit, String sort, String order, Integer id, String username) {
+        BaseRespVo<Map<String, Object>> mapBaseRespVo = new BaseRespVo<>();
         HashMap<String, Object> map = new HashMap<>();
         List<Feedback> feedbackList = feedBackService.queryFeedBackList(id, username);
         PageInfo<Feedback> feedbackPageInfo = new PageInfo<>(feedbackList);
         long total = feedbackPageInfo.getTotal();
         map.put("total", total);
         map.put("items", feedbackList);
-        mapBaseReqVo.setErrno(0);
-        mapBaseReqVo.setData(map);
-        mapBaseReqVo.setErrmsg("成功");
-        return mapBaseReqVo;
+        mapBaseRespVo.setErrno(0);
+        mapBaseRespVo.setData(map);
+        mapBaseRespVo.setErrmsg("成功");
+        return mapBaseRespVo;
     }
 }

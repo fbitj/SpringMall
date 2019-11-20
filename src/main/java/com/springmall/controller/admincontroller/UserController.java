@@ -1,10 +1,10 @@
-package com.springmall.controller;
+package com.springmall.controller.admincontroller;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.springmall.bean.Address;
-import com.springmall.bean.BaseReqVo;
+import com.springmall.bean.BaseRespVo;
 import com.springmall.bean.User;
 import com.springmall.service.AddressService;
 import com.springmall.service.UserService;
@@ -31,8 +31,8 @@ public class UserController {
      */
     @RequestMapping("user/list")
     @ResponseBody
-    public BaseReqVo<Map<String, Object>> getUserList(Integer page, Integer limit, String sort, String order, String username, String mobile) {
-        BaseReqVo<Map<String, Object>> mapBaseReqVo = new BaseReqVo<>();
+    public BaseRespVo<Map<String, Object>> getUserList(Integer page, Integer limit, String sort, String order, String username, String mobile) {
+        BaseRespVo<Map<String, Object>> mapBaseRespVo = new BaseRespVo<>();
         HashMap<String, Object> map = new HashMap<>();
         PageHelper.startPage(page,limit);
         List<User> users = userService.queryUserList(username, mobile);
@@ -41,11 +41,11 @@ public class UserController {
         long total = userPageInfo.getTotal();
         map.put("total", total);
         map.put("items", users);
-        mapBaseReqVo.setErrno(0);
-        mapBaseReqVo.setData(map);
-        mapBaseReqVo.setErrmsg("成功");
+        mapBaseRespVo.setErrno(0);
+        mapBaseRespVo.setData(map);
+        mapBaseRespVo.setErrmsg("成功");
 
-        return mapBaseReqVo;
+        return mapBaseRespVo;
     }
 
     /**
@@ -54,19 +54,19 @@ public class UserController {
      */
     @RequestMapping("address/list")
     @ResponseBody
-    public BaseReqVo<Map<String, Object>> getAddressList(Integer page, Integer limit, String name, Integer userId, String sort, String order) {
-        BaseReqVo<Map<String, Object>> mapBaseReqVo = new BaseReqVo<>();
+    public BaseRespVo<Map<String, Object>> getAddressList(Integer page, Integer limit, String name, Integer userId, String sort, String order) {
+        BaseRespVo<Map<String, Object>> mapBaseRespVo = new BaseRespVo<>();
         HashMap<String, Object> map = new HashMap<>();
         PageHelper.startPage(page, limit);
         List<Address> addresses = addressService.queryAddressList(userId, name);
         //分頁
         PageInfo<Address> addressPageInfo=new PageInfo<>(addresses);
         long total = addressPageInfo.getTotal();
-        mapBaseReqVo.setErrno(0);
+        mapBaseRespVo.setErrno(0);
         map.put("total",total);
         map.put("items", addresses);
-        mapBaseReqVo.setData(map);
-        mapBaseReqVo.setErrmsg("成功");
-        return mapBaseReqVo;
+        mapBaseRespVo.setData(map);
+        mapBaseRespVo.setErrmsg("成功");
+        return mapBaseRespVo;
     }
 }

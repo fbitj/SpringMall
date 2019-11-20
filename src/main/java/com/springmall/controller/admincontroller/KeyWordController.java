@@ -1,6 +1,6 @@
-package com.springmall.controller;
+package com.springmall.controller.admincontroller;
 
-import com.springmall.bean.BaseReqVo;
+import com.springmall.bean.BaseRespVo;
 import com.springmall.bean.Keyword;
 import com.springmall.service.KeywordService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,8 +17,8 @@ public class KeyWordController {
     KeywordService keywordService;
 
     @RequestMapping("list")
-    public BaseReqVo keyWordList(Integer page, Integer limit, String keyword, String url) {
-        BaseReqVo baseReqVo = new BaseReqVo();
+    public BaseRespVo keyWordList(Integer page, Integer limit, String keyword, String url) {
+        BaseRespVo BaseRespVo = new BaseRespVo();
 //        Map<String, Object> map = null;
 //        if (keyword !=null || url != null) {
 //            map = keywordService.queryIssues(page, limit, keyword, url);
@@ -26,36 +26,36 @@ public class KeyWordController {
 //            map = keywordService.queryIssues(page, limit);
 //        }
         Map<String, Object> map = keywordService.queryIssues(page, limit, keyword, url);
-        baseReqVo.setData(map);
-        baseReqVo.setErrno(0);
-        baseReqVo.setErrmsg("成功");
-        return baseReqVo;
+        BaseRespVo.setData(map);
+        BaseRespVo.setErrno(0);
+        BaseRespVo.setErrmsg("成功");
+        return BaseRespVo;
     }
 
     @RequestMapping("create")
-    public BaseReqVo keyWordCreate(@RequestBody Keyword keyword) {
-        BaseReqVo baseReqVo = new BaseReqVo();
+    public BaseRespVo keyWordCreate(@RequestBody Keyword keyword) {
+        BaseRespVo BaseRespVo = new BaseRespVo();
         Keyword addKeyword = keywordService.addKeyword(keyword);
-        baseReqVo.setData(addKeyword);
-        baseReqVo.setErrno(0);
-        baseReqVo.setErrmsg("成功");
-        return baseReqVo;
+        BaseRespVo.setData(addKeyword);
+        BaseRespVo.setErrno(0);
+        BaseRespVo.setErrmsg("成功");
+        return BaseRespVo;
     }
     @RequestMapping("update")
-    public BaseReqVo keyWordUpdate(@RequestBody Keyword keyword) {
-        BaseReqVo baseReqVo = new BaseReqVo();
+    public BaseRespVo keyWordUpdate(@RequestBody Keyword keyword) {
+        BaseRespVo BaseRespVo = new BaseRespVo();
         Keyword updateKeyword = keywordService.updateKeyword(keyword);
-        baseReqVo.setData(updateKeyword);
-        baseReqVo.setErrno(0);
-        baseReqVo.setErrmsg("成功");
-        return baseReqVo;
+        BaseRespVo.setData(updateKeyword);
+        BaseRespVo.setErrno(0);
+        BaseRespVo.setErrmsg("成功");
+        return BaseRespVo;
     }
     @RequestMapping("delete")
-    public BaseReqVo keyWordDelete(@RequestBody Keyword keyword) {
-        BaseReqVo baseReqVo = new BaseReqVo();
+    public BaseRespVo keyWordDelete(@RequestBody Keyword keyword) {
+        BaseRespVo BaseRespVo = new BaseRespVo();
         int i = keywordService.deleteKeyword(keyword);
-        baseReqVo.setErrno(0);
-        baseReqVo.setErrmsg("成功");
-        return baseReqVo;
+        BaseRespVo.setErrno(0);
+        BaseRespVo.setErrmsg("成功");
+        return BaseRespVo;
     }
 }

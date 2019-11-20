@@ -1,6 +1,6 @@
-package com.springmall.controller;
+package com.springmall.controller.admincontroller;
 
-import com.springmall.bean.BaseReqVo;
+import com.springmall.bean.BaseRespVo;
 import com.springmall.service.CommentService;
 import com.springmall.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,46 +20,46 @@ public class OrderController {
 
     //显示订单
     @RequestMapping("list")
-    public BaseReqVo orderList(Integer page, Integer limit, Integer userId, String orderSn, Short[] orderStatusArray) {
-        BaseReqVo baseReqVo = new BaseReqVo();
+    public BaseRespVo orderList(Integer page, Integer limit, Integer userId, String orderSn, Short[] orderStatusArray) {
+        BaseRespVo BaseRespVo = new BaseRespVo();
         Map<String, Object> map = null;
         if(userId != null || orderSn != null || orderStatusArray != null) {
           map = orderService.queryOrders(page, limit, userId, orderSn, orderStatusArray);
         } else {
             map = orderService.queryOrders(page, limit);
         }
-        baseReqVo.setData(map);
-        baseReqVo.setErrno(0);
-        baseReqVo.setErrmsg("成功");
-        return baseReqVo;
+        BaseRespVo.setData(map);
+        BaseRespVo.setErrno(0);
+        BaseRespVo.setErrmsg("成功");
+        return BaseRespVo;
     }
 
     //详情
     @RequestMapping("detail")
-    public BaseReqVo orderDetail(Integer id) {
-        BaseReqVo baseReqVo = new BaseReqVo();
+    public BaseRespVo orderDetail(Integer id) {
+        BaseRespVo BaseRespVo = new BaseRespVo();
         Map<String, Object> map = orderService.viewOrderDetail(id);
-        baseReqVo.setData(map);
-        baseReqVo.setErrno(0);
-        baseReqVo.setErrmsg("成功");
-        return baseReqVo;
+        BaseRespVo.setData(map);
+        BaseRespVo.setErrno(0);
+        BaseRespVo.setErrmsg("成功");
+        return BaseRespVo;
     }
 
 
     @RequestMapping("reply")
-    public BaseReqVo replay(@RequestBody Map value){
+    public BaseRespVo replay(@RequestBody Map value){
         int commentId = (int) value.get("commentId");
         String content = (String) value.get("content");
         int isReplay = commentService.replay(commentId, content);
-        BaseReqVo baseReqVo = new BaseReqVo();
+        BaseRespVo BaseRespVo = new BaseRespVo();
         if (isReplay == 1) {
             //{"errno":622,"errmsg":"订单商品已回复！"}
-            baseReqVo.setErrmsg("订单商品回复成功！");
-            baseReqVo.setErrno(0);
+            BaseRespVo.setErrmsg("订单商品回复成功！");
+            BaseRespVo.setErrno(0);
         }else {
-            baseReqVo.setErrmsg("订单商品已回复！");
-            baseReqVo.setErrno(622);
+            BaseRespVo.setErrmsg("订单商品已回复！");
+            BaseRespVo.setErrno(622);
         }
-        return baseReqVo;
+        return BaseRespVo;
     }
 }

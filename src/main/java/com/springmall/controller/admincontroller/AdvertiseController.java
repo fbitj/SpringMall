@@ -1,8 +1,8 @@
-package com.springmall.controller;
+package com.springmall.controller.admincontroller;
 
 import com.springmall.bean.Ad;
 import com.springmall.bean.PageRequest;
-import com.springmall.bean.BaseReqVo;
+import com.springmall.bean.BaseRespVo;
 import com.springmall.bean.DataForPage;
 import com.springmall.service.AdvertiseService;
 import com.springmall.utils.ResultUtil;
@@ -26,12 +26,12 @@ public class AdvertiseController {
      * @return
      */
     @RequestMapping("list")
-    public BaseReqVo advertiseList(PageRequest adRequest) {
+    public BaseRespVo advertiseList(PageRequest adRequest) {
         DataForPage<Ad> advertises = advertiseService.totalAdvertise(adRequest);
 
-        BaseReqVo reqVo = ResultUtil.success(advertises);
+        BaseRespVo reqVo = ResultUtil.success(advertises);
 
-        /*BaseReqVo<Map<String,Object>> reqVo = new BaseReqVo<>();
+        /*BaseRespVo<Map<String,Object>> reqVo = new BaseRespVo<>();
         reqVo.setData(advertises);
         reqVo.setErrno(0);
         reqVo.setErrmsg("成功");*/
@@ -44,10 +44,10 @@ public class AdvertiseController {
      * @return
      */
     @RequestMapping("update")
-    public BaseReqVo<Ad> update(@RequestBody Ad advertise) {
+    public BaseRespVo<Ad> update(@RequestBody Ad advertise) {
         Ad result = advertiseService.update(advertise);
 
-        BaseReqVo reqVo = ResultUtil.success(result);
+        BaseRespVo reqVo = ResultUtil.success(result);
         return reqVo;
     }
 
@@ -57,9 +57,9 @@ public class AdvertiseController {
      * @return
      */
     @RequestMapping("create")
-    public BaseReqVo<Ad> createAd(@RequestBody Ad advertise) {
+    public BaseRespVo<Ad> createAd(@RequestBody Ad advertise) {
         Ad result = advertiseService.create(advertise);
-        BaseReqVo reqVo = ResultUtil.success(result);
+        BaseRespVo reqVo = ResultUtil.success(result);
         return reqVo;
     }
 
@@ -69,7 +69,7 @@ public class AdvertiseController {
      * @return
      */
     @RequestMapping("delete")
-    public BaseReqVo deleteById(@RequestBody Ad advertise) {
+    public BaseRespVo deleteById(@RequestBody Ad advertise) {
         //暂定仅删除单表中的数据
         advertiseService.delete(advertise.getId());
         return ResultUtil.success(null);

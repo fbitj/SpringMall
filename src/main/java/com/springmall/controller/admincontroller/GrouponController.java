@@ -1,4 +1,4 @@
-package com.springmall.controller;
+package com.springmall.controller.admincontroller;
 
 import com.springmall.bean.*;
 import com.springmall.service.GrouponService;
@@ -22,7 +22,7 @@ public class GrouponController {
      * @return
      */
     @RequestMapping("list")
-    public BaseReqVo showWholesaleRulesByPage(PageRequest request) {
+    public BaseRespVo showWholesaleRulesByPage(PageRequest request) {
         DataForPage<Groupon_rules> result = grouponService.showWholesaleByPage(request);
         return ResultUtil.success(result);
     }
@@ -33,13 +33,13 @@ public class GrouponController {
      * @return
      */
     @RequestMapping("delete")
-    public BaseReqVo deleteWholesaleRulesById(@RequestBody Groupon_rules rules) {
+    public BaseRespVo deleteWholesaleRulesById(@RequestBody Groupon_rules rules) {
         grouponService.deleteRulesById(rules);
         return ResultUtil.success(null);
     }
 
     /*@RequestMapping("create")
-    public BaseReqVo addWholesaleRules(@RequestBody Groupon_rules rules) {
+    public BaseRespVo addWholesaleRules(@RequestBody Groupon_rules rules) {
         //查看商品id是否存在
     }*/
 
@@ -49,7 +49,7 @@ public class GrouponController {
      * @return
      */
     @RequestMapping("listRecord")
-    public BaseReqVo showWholesaleByPage(PageRequest request) {
+    public BaseRespVo showWholesaleByPage(PageRequest request) {
         DataForPage result = grouponService.showWholesale(request);
         return ResultUtil.success(result);
     }

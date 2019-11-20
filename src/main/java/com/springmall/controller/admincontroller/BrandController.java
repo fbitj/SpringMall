@@ -1,6 +1,6 @@
-package com.springmall.controller;
+package com.springmall.controller.admincontroller;
 
-import com.springmall.bean.BaseReqVo;
+import com.springmall.bean.BaseRespVo;
 import com.springmall.bean.Brand;
 import com.springmall.service.BrandService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,8 +17,8 @@ public class BrandController {
     BrandService brandService;
     //显示全部品牌
     @RequestMapping("list")
-    public BaseReqVo brandList(Integer page, Integer limit, Integer id, String name) {
-        BaseReqVo baseReqVo = new BaseReqVo();
+    public BaseRespVo brandList(Integer page, Integer limit, Integer id, String name) {
+        BaseRespVo BaseRespVo = new BaseRespVo();
         //Map<String, Object> map = new HashMap<>();
         Map<String, Object> map = null;
         if (id !=null || name != null) {
@@ -26,54 +26,54 @@ public class BrandController {
         } else {
              map = brandService.queryBrands(page, limit);
         }
-            baseReqVo.setData(map);
-            baseReqVo.setErrno(0);
-            baseReqVo.setErrmsg("成功");
-        return baseReqVo;
+            BaseRespVo.setData(map);
+            BaseRespVo.setErrno(0);
+            BaseRespVo.setErrmsg("成功");
+        return BaseRespVo;
     }
     //添加
     @RequestMapping("create")
-    public BaseReqVo createBrand(@RequestBody Brand brand) {
-        BaseReqVo baseReqVo = new BaseReqVo();
+    public BaseRespVo createBrand(@RequestBody Brand brand) {
+        BaseRespVo BaseRespVo = new BaseRespVo();
         Brand newBrand = brandService.addBrand(brand);
         if(newBrand != null) {
-            baseReqVo.setData(newBrand);
-            baseReqVo.setErrno(0);
-            baseReqVo.setErrmsg("成功");
+            BaseRespVo.setData(newBrand);
+            BaseRespVo.setErrno(0);
+            BaseRespVo.setErrmsg("成功");
         }
-        return baseReqVo;
+        return BaseRespVo;
     }
     //编辑
     @RequestMapping("update")
-    public BaseReqVo updateBrand(@RequestBody Brand brand) {
-        BaseReqVo baseReqVo = new BaseReqVo();
+    public BaseRespVo updateBrand(@RequestBody Brand brand) {
+        BaseRespVo BaseRespVo = new BaseRespVo();
         Brand updateBrand = brandService.updateBrand(brand);
         if(updateBrand != null) {
-            baseReqVo.setData(updateBrand);
-            baseReqVo.setErrno(0);
-            baseReqVo.setErrmsg("成功");
+            BaseRespVo.setData(updateBrand);
+            BaseRespVo.setErrno(0);
+            BaseRespVo.setErrmsg("成功");
         }
-        return baseReqVo;
+        return BaseRespVo;
     }
     //删除
     @RequestMapping("delete")
-    public BaseReqVo deleteBrand(@RequestBody Brand brand) {
-        BaseReqVo baseReqVo = new BaseReqVo();
+    public BaseRespVo deleteBrand(@RequestBody Brand brand) {
+        BaseRespVo BaseRespVo = new BaseRespVo();
         int deleteBrand = brandService.deleteBrand(brand);
         if(deleteBrand ==1) {
-            baseReqVo.setErrno(0);
-            baseReqVo.setErrmsg("成功");
+            BaseRespVo.setErrno(0);
+            BaseRespVo.setErrmsg("成功");
         }
-        return baseReqVo;
+        return BaseRespVo;
     }
     //查询
 /*    @RequestMapping("list")
-    public BaseReqVo queryBrand(Integer page, Integer limit, Integer id, String name) {
-        BaseReqVo baseReqVo = new BaseReqVo();
+    public BaseRespVo queryBrand(Integer page, Integer limit, Integer id, String name) {
+        BaseRespVo BaseRespVo = new BaseRespVo();
         Map<String, Object> map = brandService.queryBrands(page, limit, id, name);
-        baseReqVo.setData(map);
-        baseReqVo.setErrno(0);
-        baseReqVo.setErrmsg("成功");
-        return baseReqVo;
+        BaseRespVo.setData(map);
+        BaseRespVo.setErrno(0);
+        BaseRespVo.setErrmsg("成功");
+        return BaseRespVo;
     }*/
 }

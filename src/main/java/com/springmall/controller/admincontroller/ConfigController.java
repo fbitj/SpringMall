@@ -1,4 +1,4 @@
-package com.springmall.controller;
+package com.springmall.controller.admincontroller;
 
 import com.springmall.bean.*;
 
@@ -43,13 +43,13 @@ public class ConfigController {
      * }
      */
     @RequestMapping(value = "mall", method = RequestMethod.GET)
-    public BaseReqVo queryMallConfig(){
-        BaseReqVo baseReqVo = new BaseReqVo();
+    public BaseRespVo queryMallConfig(){
+        BaseRespVo BaseRespVo = new BaseRespVo();
         MallConfig queryMallConfig = systemService.queryMallConfig();
-        baseReqVo.setErrno(0);
-        baseReqVo.setData(queryMallConfig);
-        baseReqVo.setErrmsg("获取商场配置信息成功！");
-        return baseReqVo;
+        BaseRespVo.setErrno(0);
+        BaseRespVo.setData(queryMallConfig);
+        BaseRespVo.setErrmsg("获取商场配置信息成功！");
+        return BaseRespVo;
     }
 
     /**
@@ -62,7 +62,7 @@ public class ConfigController {
      * }
      */
     @RequestMapping(value = "mall", method = RequestMethod.POST)
-    public BaseReqVo updateMallConfig(@RequestBody Map<String,String> requestMap){
+    public BaseRespVo updateMallConfig(@RequestBody Map<String,String> requestMap){
         Map<String,String> map1 = new HashMap<>();
         Map<String,String> map2 = new HashMap<>();
         Map<String,String> map3 = new HashMap<>();
@@ -80,20 +80,20 @@ public class ConfigController {
         paramMapList.add(map2);
         paramMapList.add(map3);
         paramMapList.add(map4);
-        BaseReqVo baseReqVo = new BaseReqVo();
+        BaseRespVo BaseRespVo = new BaseRespVo();
         int result = systemService.updateMallConfig(paramMapList);
         if(result==1){
-            baseReqVo.setErrno(0);
-            baseReqVo.setErrmsg("修改商场配置信息成功！");
-            return baseReqVo;
+            BaseRespVo.setErrno(0);
+            BaseRespVo.setErrmsg("修改商场配置信息成功！");
+            return BaseRespVo;
         }
-        baseReqVo.setErrno(605);
+        BaseRespVo.setErrno(605);
         if(result==2){
-            baseReqVo.setErrmsg("请输入完整的修改信息！");
-            return baseReqVo;
+            BaseRespVo.setErrmsg("请输入完整的修改信息！");
+            return BaseRespVo;
         }
-        baseReqVo.setErrmsg("修改商场配置信息失败！");
-        return baseReqVo;
+        BaseRespVo.setErrmsg("修改商场配置信息失败！");
+        return BaseRespVo;
     }
 
     /**
@@ -109,13 +109,13 @@ public class ConfigController {
      * }
      */
     @RequestMapping(value = "express", method = RequestMethod.GET)
-    public BaseReqVo queryExpressConfig() {
-        BaseReqVo baseReqVo = new BaseReqVo();
+    public BaseRespVo queryExpressConfig() {
+        BaseRespVo BaseRespVo = new BaseRespVo();
         ExpressConfig queryExpressConfig = systemService.queryExpressConfig();
-        baseReqVo.setErrno(0);
-        baseReqVo.setData(queryExpressConfig);
-        baseReqVo.setErrmsg("获取运费配置信息成功！");
-        return baseReqVo;
+        BaseRespVo.setErrno(0);
+        BaseRespVo.setData(queryExpressConfig);
+        BaseRespVo.setErrmsg("获取运费配置信息成功！");
+        return BaseRespVo;
     }
 
     /**
@@ -128,7 +128,7 @@ public class ConfigController {
      * }
      */
     @RequestMapping(value = "express", method = RequestMethod.POST)
-    public BaseReqVo updateExpressConfig(@RequestBody Map<String,String> requestMap) {
+    public BaseRespVo updateExpressConfig(@RequestBody Map<String,String> requestMap) {
         Map<String,String> map1 = new HashMap<>();
         Map<String,String> map2 = new HashMap<>();
         map1.put("paramName","cskaoyan_mall_express_freight_min");
@@ -138,28 +138,28 @@ public class ConfigController {
         List<Map<String,String>> paramMapList = new ArrayList<>();
         paramMapList.add(map1);
         paramMapList.add(map2);
-        BaseReqVo baseReqVo = new BaseReqVo();
+        BaseRespVo BaseRespVo = new BaseRespVo();
         int result = systemService.updateExpressConfig(paramMapList);
         if(result==1) {
-            baseReqVo.setErrno(0);
-            baseReqVo.setErrmsg("修改运费配置信息成功！");
-            return baseReqVo;
+            BaseRespVo.setErrno(0);
+            BaseRespVo.setErrmsg("修改运费配置信息成功！");
+            return BaseRespVo;
         }
-        baseReqVo.setErrno(605);
+        BaseRespVo.setErrno(605);
         if(result==2){
-            baseReqVo.setErrmsg("请输入完整的修改信息！");
-            return baseReqVo;
+            BaseRespVo.setErrmsg("请输入完整的修改信息！");
+            return BaseRespVo;
         }
         if(result==3){
-            baseReqVo.setErrmsg("参数需大于0！");
-            return baseReqVo;
+            BaseRespVo.setErrmsg("参数需大于0！");
+            return BaseRespVo;
         }
         if(result==4){
-            baseReqVo.setErrmsg("参数需输入数值！");
-            return baseReqVo;
+            BaseRespVo.setErrmsg("参数需输入数值！");
+            return BaseRespVo;
         }
-        baseReqVo.setErrmsg("修改运费配置信息失败！");
-        return baseReqVo;
+        BaseRespVo.setErrmsg("修改运费配置信息失败！");
+        return BaseRespVo;
     }
 
     /**
@@ -176,13 +176,13 @@ public class ConfigController {
      * }
      */
     @RequestMapping(value = "order", method = RequestMethod.GET)
-    public BaseReqVo queryOrderConfig() {
-        BaseReqVo baseReqVo = new BaseReqVo();
+    public BaseRespVo queryOrderConfig() {
+        BaseRespVo BaseRespVo = new BaseRespVo();
         OrderConfig queryOrderConfig = systemService.queryOrderConfig();
-        baseReqVo.setErrno(0);
-        baseReqVo.setData(queryOrderConfig);
-        baseReqVo.setErrmsg("获取订单配置信息成功！");
-        return baseReqVo;
+        BaseRespVo.setErrno(0);
+        BaseRespVo.setData(queryOrderConfig);
+        BaseRespVo.setErrmsg("获取订单配置信息成功！");
+        return BaseRespVo;
     }
 
     /**
@@ -195,7 +195,7 @@ public class ConfigController {
      * }
      */
     @RequestMapping(value = "order", method = RequestMethod.POST)
-    public BaseReqVo updateOrderConfig(@RequestBody Map<String,String> requestMap) {
+    public BaseRespVo updateOrderConfig(@RequestBody Map<String,String> requestMap) {
         Map<String,String> map1 = new HashMap<>();
         Map<String,String> map2 = new HashMap<>();
         Map<String,String> map3 = new HashMap<>();
@@ -209,28 +209,28 @@ public class ConfigController {
         paramMapList.add(map1);
         paramMapList.add(map2);
         paramMapList.add(map3);
-        BaseReqVo baseReqVo = new BaseReqVo();
+        BaseRespVo BaseRespVo = new BaseRespVo();
         int result = systemService.updateOrderConfig(paramMapList);
         if(result==1) {
-            baseReqVo.setErrno(0);
-            baseReqVo.setErrmsg("修改订单配置信息成功！");
-            return baseReqVo;
+            BaseRespVo.setErrno(0);
+            BaseRespVo.setErrmsg("修改订单配置信息成功！");
+            return BaseRespVo;
         }
-        baseReqVo.setErrno(605);
+        BaseRespVo.setErrno(605);
         if(result==2){
-            baseReqVo.setErrmsg("请输入完整的修改信息！");
-            return baseReqVo;
+            BaseRespVo.setErrmsg("请输入完整的修改信息！");
+            return BaseRespVo;
         }
         if(result==3){
-            baseReqVo.setErrmsg("参数需大于0！");
-            return baseReqVo;
+            BaseRespVo.setErrmsg("参数需大于0！");
+            return BaseRespVo;
         }
         if(result==4){
-            baseReqVo.setErrmsg("参数需输入正整数！");
-            return baseReqVo;
+            BaseRespVo.setErrmsg("参数需输入正整数！");
+            return BaseRespVo;
         }
-        baseReqVo.setErrmsg("修改订单配置信息失败！");
-        return baseReqVo;
+        BaseRespVo.setErrmsg("修改订单配置信息失败！");
+        return BaseRespVo;
     }
 
     /**
@@ -251,13 +251,13 @@ public class ConfigController {
      * }
      */
     @RequestMapping(value = "wx", method = RequestMethod.GET)
-    public BaseReqVo queryWxConfig() {
-        BaseReqVo baseReqVo = new BaseReqVo();
+    public BaseRespVo queryWxConfig() {
+        BaseRespVo BaseRespVo = new BaseRespVo();
         WxConfig queryWxConfig = systemService.queryWxConfig();
-        baseReqVo.setErrno(0);
-        baseReqVo.setData(queryWxConfig);
-        baseReqVo.setErrmsg("获取微信小程序配置信息成功！");
-        return baseReqVo;
+        BaseRespVo.setErrno(0);
+        BaseRespVo.setData(queryWxConfig);
+        BaseRespVo.setErrmsg("获取微信小程序配置信息成功！");
+        return BaseRespVo;
     }
 
     /**
@@ -270,7 +270,7 @@ public class ConfigController {
      * }
      */
     @RequestMapping(value = "wx", method = RequestMethod.POST)
-    public BaseReqVo updateWxConfig(@RequestBody Map<String,String> requestMap) {
+    public BaseRespVo updateWxConfig(@RequestBody Map<String,String> requestMap) {
         Map<String,String> map1 = new HashMap<>();
         Map<String,String> map2 = new HashMap<>();
         Map<String,String> map3 = new HashMap<>();
@@ -300,27 +300,27 @@ public class ConfigController {
         paramMapList.add(map5);
         paramMapList.add(map6);
         paramMapList.add(map7);
-        BaseReqVo baseReqVo = new BaseReqVo();
+        BaseRespVo BaseRespVo = new BaseRespVo();
         int result = systemService.updateWxConfig(paramMapList);
         if(result==1) {
-            baseReqVo.setErrno(0);
-            baseReqVo.setErrmsg("修改微信小程序配置信息成功！");
-            return baseReqVo;
+            BaseRespVo.setErrno(0);
+            BaseRespVo.setErrmsg("修改微信小程序配置信息成功！");
+            return BaseRespVo;
         }
-        baseReqVo.setErrno(605);
+        BaseRespVo.setErrno(605);
         if(result==2){
-            baseReqVo.setErrmsg("请输入完整的修改信息！");
-            return baseReqVo;
+            BaseRespVo.setErrmsg("请输入完整的修改信息！");
+            return BaseRespVo;
         }
         if(result==3){
-            baseReqVo.setErrmsg("参数需大于等于0！");
-            return baseReqVo;
+            BaseRespVo.setErrmsg("参数需大于等于0！");
+            return BaseRespVo;
         }
         if(result==4){
-            baseReqVo.setErrmsg("参数需输入非负整数！");
-            return baseReqVo;
+            BaseRespVo.setErrmsg("参数需输入非负整数！");
+            return BaseRespVo;
         }
-        baseReqVo.setErrmsg("修改微信小程序配置信息失败！");
-        return baseReqVo;
+        BaseRespVo.setErrmsg("修改微信小程序配置信息失败！");
+        return BaseRespVo;
     }
 }

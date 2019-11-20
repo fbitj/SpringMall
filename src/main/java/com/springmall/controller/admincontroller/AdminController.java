@@ -1,4 +1,4 @@
-package com.springmall.controller;
+package com.springmall.controller.admincontroller;
 import java.io.IOException;
 
 
@@ -34,13 +34,13 @@ public class AdminController {
      * @return
      */
     @RequestMapping("admin/list")
-    public BaseReqVo adminList(String page, int limit, String username, String sort, String order){
-        BaseReqVo<Object> baseReqVo = new BaseReqVo<>();
+    public BaseRespVo adminList(String page, int limit, String username, String sort, String order){
+        BaseRespVo<Object> BaseRespVo = new BaseRespVo<>();
         Map map = adminService.adminList(page, limit, username, sort, order);
-        baseReqVo.setData(map);
-        baseReqVo.setErrmsg("成功");
-        baseReqVo.setErrno(0);
-        return baseReqVo;
+        BaseRespVo.setData(map);
+        BaseRespVo.setErrmsg("成功");
+        BaseRespVo.setErrno(0);
+        return BaseRespVo;
     }
 
     /**
@@ -59,13 +59,13 @@ public class AdminController {
      * @return
      */
     @RequestMapping("role/options")
-    public BaseReqVo option(){
-        BaseReqVo<Object> baseReqVo = new BaseReqVo<>();
+    public BaseRespVo option(){
+        BaseRespVo<Object> BaseRespVo = new BaseRespVo<>();
         List list = adminService.roleOption();
-        baseReqVo.setData(list);
-        baseReqVo.setErrno(0);
-        baseReqVo.setErrmsg("成功");
-        return baseReqVo;
+        BaseRespVo.setData(list);
+        BaseRespVo.setErrno(0);
+        BaseRespVo.setErrmsg("成功");
+        return BaseRespVo;
     }
 
     /**
@@ -77,19 +77,19 @@ public class AdminController {
      * @throws IOException
      */
     @RequestMapping("storage/create")
-    public BaseReqVo storage(HttpServletRequest request, HttpServletResponse response, @RequestParam("file") MultipartFile file) throws IOException {
-        BaseReqVo<Object> baseReqVo = new BaseReqVo<>();
+    public BaseRespVo storage(HttpServletRequest request, HttpServletResponse response, @RequestParam("file") MultipartFile file) throws IOException {
+        BaseRespVo<Object> BaseRespVo = new BaseRespVo<>();
         Storage storage = adminService.storageCreate(request, response, file);
         response.setContentType("image/jpeg");
         if(storage.getSize() == -1) {
-            baseReqVo.setErrmsg("最大上传图片大小为1048576字节(1MB)");
-            baseReqVo.setErrno(500);
+            BaseRespVo.setErrmsg("最大上传图片大小为1048576字节(1MB)");
+            BaseRespVo.setErrno(500);
         }else {
-            baseReqVo.setData(storage);
-            baseReqVo.setErrmsg("成功");
-            baseReqVo.setErrno(0);
+            BaseRespVo.setData(storage);
+            BaseRespVo.setErrmsg("成功");
+            BaseRespVo.setErrno(0);
         }
-        return baseReqVo;
+        return BaseRespVo;
     }
 
     /**
@@ -119,8 +119,8 @@ public class AdminController {
      */
     @RequestMapping("admin/create")
     @ResponseBody
-    public BaseReqVo adminCreate(@RequestBody Admin2 admin, HttpServletRequest request) {
-        BaseReqVo<Object> baseReqVo = new BaseReqVo<>();
+    public BaseRespVo adminCreate(@RequestBody Admin2 admin, HttpServletRequest request) {
+        BaseRespVo<Object> BaseRespVo = new BaseRespVo<>();
         Admin admin2 = new Admin();
         admin2.setUsername(admin.getUsername());
         int i = adminService.sameToAdminName(admin2);
@@ -129,14 +129,14 @@ public class AdminController {
             admin2.setAvatar(admin.getAvatar());
             admin2.setRoleIds(Arrays.toString(admin.getRoleIds()));
             Map map = adminService.adminCreate(admin2, request);
-            baseReqVo.setData(map);
-            baseReqVo.setErrmsg("成功");
-            baseReqVo.setErrno(0);
-            return baseReqVo;
+            BaseRespVo.setData(map);
+            BaseRespVo.setErrmsg("成功");
+            BaseRespVo.setErrno(0);
+            return BaseRespVo;
         } else {
-            baseReqVo.setErrmsg("该管理员已经存在");
-            baseReqVo.setErrno(-1);
-            return baseReqVo;
+            BaseRespVo.setErrmsg("该管理员已经存在");
+            BaseRespVo.setErrno(-1);
+            return BaseRespVo;
         }
     }
 
@@ -165,9 +165,9 @@ public class AdminController {
      * @return
      */
     @RequestMapping("admin/update")
-    public BaseReqVo updateAdmin(@RequestBody Admin2 admin){
+    public BaseRespVo updateAdmin(@RequestBody Admin2 admin){
         Admin admin2 = new Admin();
-        BaseReqVo<Object> boaseReqVo = new BaseReqVo<>();
+        BaseRespVo<Object> boaseReqVo = new BaseRespVo<>();
         admin2.setId(admin.getId());
         admin2.setUsername(admin.getUsername());
         admin2.setPassword(admin.getPassword());
@@ -195,12 +195,12 @@ public class AdminController {
      * @return
      */
     @RequestMapping("admin/delete")
-    public BaseReqVo adminDelete(@RequestBody Admin2 admin2){
-        BaseReqVo<Object> baseReqVo = new BaseReqVo<>();
+    public BaseRespVo adminDelete(@RequestBody Admin2 admin2){
+        BaseRespVo<Object> BaseRespVo = new BaseRespVo<>();
         adminService.adminDelete(admin2);
-        baseReqVo.setErrmsg("成功");
-        baseReqVo.setErrno(0);
-        return baseReqVo;
+        BaseRespVo.setErrmsg("成功");
+        BaseRespVo.setErrno(0);
+        return BaseRespVo;
     }
 
     /**
@@ -230,13 +230,13 @@ public class AdminController {
      * @return
      */
     @RequestMapping("role/list")
-    public BaseReqVo roleList(int page,int limit,String name, String sort, String order){
-        BaseReqVo<Object> baseReqVo = new BaseReqVo<>();
+    public BaseRespVo roleList(int page,int limit,String name, String sort, String order){
+        BaseRespVo<Object> BaseRespVo = new BaseRespVo<>();
         Map map = adminService.roleList(page, limit,name, sort, order);
-        baseReqVo.setData(map);
-        baseReqVo.setErrmsg("成功");
-        baseReqVo.setErrno(0);
-        return baseReqVo;
+        BaseRespVo.setData(map);
+        BaseRespVo.setErrmsg("成功");
+        BaseRespVo.setErrno(0);
+        return BaseRespVo;
     }
 
     /**
@@ -253,12 +253,12 @@ public class AdminController {
      * @return
      */
     @RequestMapping("role/update")
-    public BaseReqVo roleUpdate(@RequestBody Role role){
-        BaseReqVo<Object> baseReqVo = new BaseReqVo<>();
+    public BaseRespVo roleUpdate(@RequestBody Role role){
+        BaseRespVo<Object> BaseRespVo = new BaseRespVo<>();
         adminService.roleUpdate(role);
-        baseReqVo.setErrmsg("成功");
-        baseReqVo.setErrno(0);
-        return baseReqVo;
+        BaseRespVo.setErrmsg("成功");
+        BaseRespVo.setErrno(0);
+        return BaseRespVo;
     }
 
     /**
@@ -280,19 +280,19 @@ public class AdminController {
      * @return
      */
     @RequestMapping("role/create")
-    public BaseReqVo roleCreate(@RequestBody Role role){
-        BaseReqVo<Object> baseReqVo = new BaseReqVo<>();
+    public BaseRespVo roleCreate(@RequestBody Role role){
+        BaseRespVo<Object> BaseRespVo = new BaseRespVo<>();
         int i = adminService.sameToRoleName(role);
         if(i != -1) {
             Role role1 = adminService.roleCreate(role);
-            baseReqVo.setData(role1);
-            baseReqVo.setErrmsg("成功");
-            baseReqVo.setErrno(0);
-            return baseReqVo;
+            BaseRespVo.setData(role1);
+            BaseRespVo.setErrmsg("成功");
+            BaseRespVo.setErrno(0);
+            return BaseRespVo;
         }else{
-            baseReqVo.setErrmsg("该角色名称已经存在");
-            baseReqVo.setErrno(-1);
-            return baseReqVo;
+            BaseRespVo.setErrmsg("该角色名称已经存在");
+            BaseRespVo.setErrno(-1);
+            return BaseRespVo;
         }
     }
 
@@ -326,13 +326,13 @@ public class AdminController {
      * @return
      */
     @RequestMapping("role/permissions")
-    public BaseReqVo rolePermissions(int roleId){
-        BaseReqVo<Object> baseReqVo = new BaseReqVo<>();
+    public BaseRespVo rolePermissions(int roleId){
+        BaseRespVo<Object> BaseRespVo = new BaseRespVo<>();
         Map map = adminService.rolePermissions(roleId);
-        baseReqVo.setData(map);
-        baseReqVo.setErrmsg("成功");
-        baseReqVo.setErrno(0);
-        return baseReqVo;
+        BaseRespVo.setData(map);
+        BaseRespVo.setErrmsg("成功");
+        BaseRespVo.setErrno(0);
+        return BaseRespVo;
     }
 
     /**
@@ -352,17 +352,17 @@ public class AdminController {
      * @return
      */
     @RequestMapping("role/delete")
-    public BaseReqVo roleDelete(@RequestBody Role role){
-        BaseReqVo baseReqVo = new BaseReqVo();
+    public BaseRespVo roleDelete(@RequestBody Role role){
+        BaseRespVo BaseRespVo = new BaseRespVo();
         int i = adminService.roleDelete(role);
         if(i != -1) {
-            baseReqVo.setErrmsg("成功");
-            baseReqVo.setErrno(0);
-            return baseReqVo;
+            BaseRespVo.setErrmsg("成功");
+            BaseRespVo.setErrno(0);
+            return BaseRespVo;
         }else{
-            baseReqVo.setErrmsg("当前角色存在管理员，不能删除");
-            baseReqVo.setErrno(-1);
-            return baseReqVo;
+            BaseRespVo.setErrmsg("当前角色存在管理员，不能删除");
+            BaseRespVo.setErrno(-1);
+            return BaseRespVo;
         }
     }
 
@@ -394,13 +394,13 @@ public class AdminController {
      * @return
      */
     @RequestMapping("log/list")
-    public BaseReqVo adminLog(int page, int limit ,String name, String sort, String order){
-        BaseReqVo<Object> baseReqVo = new BaseReqVo<>();
+    public BaseRespVo adminLog(int page, int limit ,String name, String sort, String order){
+        BaseRespVo<Object> BaseRespVo = new BaseRespVo<>();
         Map map = adminService.logList(page, limit, name, sort, order);
-        baseReqVo.setData(map);
-        baseReqVo.setErrmsg("成功");
-        baseReqVo.setErrno(0);
-        return baseReqVo;
+        BaseRespVo.setData(map);
+        BaseRespVo.setErrmsg("成功");
+        BaseRespVo.setErrno(0);
+        return BaseRespVo;
     }
 
     /**
@@ -434,13 +434,13 @@ public class AdminController {
      * @return
      */
     @RequestMapping("storage/list")
-    public BaseReqVo storageList(int page, int limit ,String key, String name, String sort, String order){
-        BaseReqVo<Object> baseReqVo = new BaseReqVo<>();
+    public BaseRespVo storageList(int page, int limit ,String key, String name, String sort, String order){
+        BaseRespVo<Object> BaseRespVo = new BaseRespVo<>();
         Map map = adminService.storageList(page, limit, key, name, sort, order);
-        baseReqVo.setData(map);
-        baseReqVo.setErrmsg("成功");
-        baseReqVo.setErrno(0);
-        return baseReqVo;
+        BaseRespVo.setData(map);
+        BaseRespVo.setErrmsg("成功");
+        BaseRespVo.setErrno(0);
+        return BaseRespVo;
     }
 
     /**
@@ -476,13 +476,13 @@ public class AdminController {
      * @return
      */
     @RequestMapping("storage/update")
-    public BaseReqVo storageUpdate(@RequestBody Storage storage){
-        BaseReqVo<Object> baseReqVo = new BaseReqVo<>();
+    public BaseRespVo storageUpdate(@RequestBody Storage storage){
+        BaseRespVo<Object> BaseRespVo = new BaseRespVo<>();
         Storage storage1 = adminService.storageUpdate(storage);
-        baseReqVo.setData(storage1);
-        baseReqVo.setErrmsg("成功");
-        baseReqVo.setErrno(0);
-        return baseReqVo;
+        BaseRespVo.setData(storage1);
+        BaseRespVo.setErrmsg("成功");
+        BaseRespVo.setErrno(0);
+        return BaseRespVo;
     }
 
     /**
@@ -504,11 +504,11 @@ public class AdminController {
      * @return
      */
     @RequestMapping("storage/delete")
-    public BaseReqVo storageDelete(@RequestBody Storage storage){
-        BaseReqVo<Object> baseReqVo = new BaseReqVo<>();
+    public BaseRespVo storageDelete(@RequestBody Storage storage){
+        BaseRespVo<Object> BaseRespVo = new BaseRespVo<>();
         adminService.storageDelete(storage);
-        baseReqVo.setErrmsg("成功");
-        baseReqVo.setErrno(0);
-        return baseReqVo;
+        BaseRespVo.setErrmsg("成功");
+        BaseRespVo.setErrno(0);
+        return BaseRespVo;
     }
 }

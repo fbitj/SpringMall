@@ -1,7 +1,7 @@
-package com.springmall.controller;
+package com.springmall.controller.admincontroller;
 
 import com.springmall.bean.Admin;
-import com.springmall.bean.BaseReqVo;
+import com.springmall.bean.BaseRespVo;
 import com.springmall.bean.InfoData;
 import com.springmall.service.AdminService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,23 +24,23 @@ public class AuthController {
     AdminService adminService;
 
     @RequestMapping("login")
-    public BaseReqVo<String> login(@RequestBody Admin admin) {
-        BaseReqVo<String> baseReqVo = new BaseReqVo<>();
+    public BaseRespVo<String> login(@RequestBody Admin admin) {
+        BaseRespVo<String> BaseRespVo = new BaseRespVo<>();
 //        if (adminService.login(admin) == 1) {
-            baseReqVo.setErrno(0);
-            baseReqVo.setData("6d182056-3821-4a75-ac59-1724a0707524");
-            baseReqVo.setErrmsg("成功");
+            BaseRespVo.setErrno(0);
+            BaseRespVo.setData("6d182056-3821-4a75-ac59-1724a0707524");
+            BaseRespVo.setErrmsg("成功");
         /*} else {
-            baseReqVo.setErrno(605);
-            baseReqVo.setErrmsg("用户账号或密码不正确");
+            BaseRespVo.setErrno(605);
+            BaseRespVo.setErrmsg("用户账号或密码不正确");
         }*/
-        return  baseReqVo;
+        return  BaseRespVo;
     }
 
     @RequestMapping("info")
-    public BaseReqVo getInfo(String token) {
+    public BaseRespVo getInfo(String token) {
         // 通过请求参数中sessionid获取到session中的管理员系信息
-        BaseReqVo baseReqVo = new BaseReqVo();
+        BaseRespVo BaseRespVo = new BaseRespVo();
         InfoData data = new InfoData();
         data.setAvatar("https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif");
         data.setName("songge");
@@ -50,10 +50,10 @@ public class AuthController {
         ArrayList<String> roles = new ArrayList<>();
         roles.add("超级管理员");
         data.setRoles(roles);
-        baseReqVo.setData(data);
-        baseReqVo.setErrmsg("成功");
-        baseReqVo.setErrno(0);
-        return baseReqVo;
+        BaseRespVo.setData(data);
+        BaseRespVo.setErrmsg("成功");
+        BaseRespVo.setErrno(0);
+        return BaseRespVo;
     }
 
 

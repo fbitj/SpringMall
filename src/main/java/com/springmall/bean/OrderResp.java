@@ -40,6 +40,15 @@ public class OrderResp {
     private Short comments;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date payTime;
+
+    //物流编号
+    private String shipSn;
+
+    //物流公司
+    private String shipChannel;
+
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date endTime;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")

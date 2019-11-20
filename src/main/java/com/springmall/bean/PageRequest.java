@@ -28,4 +28,9 @@ public class PageRequest {
     //groupon请求新增
     private Integer goodsId;
 
+    //wx/goods/list新增
+    private Integer categoryId;
+    private String keyword;
+    private Integer size;
+    private Integer brandId;
 }

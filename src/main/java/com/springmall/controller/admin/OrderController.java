@@ -1,6 +1,8 @@
 package com.springmall.controller.admin;
 
 import com.springmall.bean.BaseReqVo;
+import com.springmall.bean.Category;
+import com.springmall.bean.Order;
 import com.springmall.service.CommentService;
 import com.springmall.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,5 +63,26 @@ public class OrderController {
             baseReqVo.setErrno(622);
         }
         return baseReqVo;
+    }
+
+    //发货
+    @RequestMapping("ship")
+    public BaseReqVo ship(@RequestBody Order order) {
+        int shiped = orderService.shipGoods(order);
+        if (shiped == 1) {
+            return BaseReqVo.ok();
+        }
+        return BaseReqVo.error(555, "发货失败");
+    }
+
+    //退款
+    @RequestMapping("refund")
+    public BaseReqVo refund(@RequestBody Map<String, Object> map) {
+        int refunded = orderService.refund(map);
+        if(refunded == 1) {
+            return BaseReqVo.ok();
+        }
+        return BaseReqVo.error(621, "订单退款失败");
+
     }
 }

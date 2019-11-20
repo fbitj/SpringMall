@@ -46,6 +46,7 @@ public class ShiroConfig {
         filterChainMap.put("/admin/auth/login", "anon");
 //        filterChainMap.put("/admin/auth/info", "anon");
         filterChainMap.put("/wx/auth/login", "anon");
+        filterChainMap.put("/wx/**", "anon");
 //        filterChainMap.put("/user/query", "perms[user:query]");  // 采用声明式的鉴权更好
         filterChainMap.put("/**", "authc");
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainMap); // 设置过滤链Map

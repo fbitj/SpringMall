@@ -7,6 +7,8 @@ import org.apache.shiro.subject.Subject;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.Serializable;
+
 /**
  * Created by fwj on 2019-11-20.
  */
@@ -18,6 +20,8 @@ public class WxUserController {
     public BaseReqVo index() {
         Subject subject = SecurityUtils.getSubject();
         User principal = (User) subject.getPrincipal();
+        String username = principal.getUsername();
+        Serializable id = subject.getSession().getId();
 
         return BaseReqVo.ok();
 

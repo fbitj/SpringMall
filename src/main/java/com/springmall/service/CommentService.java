@@ -30,5 +30,18 @@ public interface CommentService {
      */
     int replay(int commentId, String content);
 
+
+    /**
+     * 提交评论
+     * @param userId
+     * @param orderGoodsId
+     * @param content
+     * @param hasPicture
+     * @param star
+     * @param picUrls
+     * @return 1：已提交，0：未提交
+     */
+    int commentSubmit(int userId, Integer orderGoodsId, String content, boolean hasPicture, short star, String[] picUrls);
+
     List queryCommentsByGoodsId(Integer id);
 }

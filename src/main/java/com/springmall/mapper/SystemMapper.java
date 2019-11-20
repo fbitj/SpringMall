@@ -27,4 +27,9 @@ public interface SystemMapper {
     int updateByPrimaryKeySelective(System record);
 
     int updateByPrimaryKey(System record);
+
+    String selectFreightMin();
+
+
+    String selectFreightPrice();
 }

@@ -356,6 +356,11 @@
       deleted = #{deleted,jdbcType=BIT}
     where id = #{id,jdbcType=INTEGER}
   </update>
+    <update id="logicDeleteCartById">
+      update cskaoyan_mall_cart
+      set deleted = true, update_time = now()
+      where id = #{id}
+    </update>
   <update id="updateByProductIdSelective" parameterType="com.springmall.bean.Cart">
     update cskaoyan_mall_cart set deleted = true where product_id = #{productId,jdbcType=INTEGER}
   </update>

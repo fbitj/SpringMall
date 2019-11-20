@@ -321,4 +321,8 @@
     where id = #{id,jdbcType=INTEGER}
   </update>
 
+  <select id="selectChannelCatagory" resultType="com.springmall.bean.Category">
+    select id,name,icon_url as iconUrl from cskaoyan_mall_category where level='L1'
+  </select>
+
 </mapper>

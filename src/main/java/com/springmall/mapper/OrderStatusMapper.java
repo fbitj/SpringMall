@@ -1,5 +1,6 @@
 package com.springmall.mapper;
 
+<<<<<<< HEAD
 import com.springmall.bean.OrderStatus;
 import com.springmall.bean.OrderStatusExample;
 import org.apache.ibatis.annotations.Param;
@@ -28,4 +29,9 @@ public interface OrderStatusMapper {
     int updateByPrimaryKeySelective(OrderStatus record);
 
     int updateByPrimaryKey(OrderStatus record);
+=======
+public interface OrderStatusMapper {
+    String queryStatusTextByStatusId(Short orderStatus);
+
+>>>>>>> 12c4de6b9e552316bcc912e9d52f3accc50f6e33
 }

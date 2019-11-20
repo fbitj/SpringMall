@@ -3,6 +3,7 @@ package com.springmall.service;
 import com.springmall.bean.*;
 
 import java.util.HashMap;
+import java.util.List;
 
 public interface GrouponService {
 
@@ -21,4 +22,8 @@ public interface GrouponService {
     HashMap<String, Object> queryMyGrouponByShowType(String showType, int userId);
 
     GrouponDetail queryGrouponByGrouponId(int grouponId);
+
+    List<GrouponInfo> getGrouponInfo();
+
+    List selectRulesByGoodsId(Integer id);
 }

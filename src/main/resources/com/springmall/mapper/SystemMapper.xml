@@ -225,4 +225,10 @@
       deleted = #{deleted,jdbcType=BIT}
     where id = #{id,jdbcType=INTEGER}
   </update>
+    <select id="selectFreightMin" resultType="java.lang.String">
+      select key_value from cskaoyan_mall_system where key_name = 'cskaoyan_mall_express_freight_min'
+    </select>
+  <select id="selectFreightPrice" resultType="java.lang.String">
+    select key_value from cskaoyan_mall_system where key_name = 'cskaoyan_mall_express_freight_value'
+  </select>
 </mapper>

@@ -81,4 +81,15 @@ public class IssueServiceImpl implements IssueService {
         // int delete = issueMapper.deleteByPrimaryKey(issue.getId());
         return delete;
     }
+
+    /**
+     * 查询所有问题
+     * @return
+     */
+    @Override
+    public List queryAllIssue() {
+        IssueExample example = new IssueExample();
+        example.createCriteria().andDeletedEqualTo(false);
+        return issueMapper.selectByExample(example);
+    }
 }

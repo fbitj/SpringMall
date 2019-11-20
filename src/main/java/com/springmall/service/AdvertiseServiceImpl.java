@@ -80,4 +80,10 @@ public class AdvertiseServiceImpl implements AdvertiseService {
     public void delete(Integer id) {
         advertiseMapper.delete(id);
     }
+
+    // 查询未被删除、允许显示、指定数目的广告
+    @Override
+    public List<Ad> getAvailAdvertise(int amountLimit) {
+        return advertiseMapper.selectAvailAdvertise(amountLimit);
+    }
 }

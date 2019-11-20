@@ -86,7 +86,7 @@ public class CouponServiceImpl implements CouponService{
     }
 
     /**
-     * 根据条件所有用户优惠券并分页
+     * 根据条件查询所有用户优惠券并分页
      * @param request
      * @return
      */
@@ -95,12 +95,14 @@ public class CouponServiceImpl implements CouponService{
         PageHelper.startPage(request.getPage(), request.getLimit());
 
         Coupon_userExample example = new Coupon_userExample();
+        Coupon_userExample.Criteria criteria = example.createCriteria();
         if (!StringUtils.isEmpty(request.getCouponId())) {
-            example.createCriteria().andCouponIdEqualTo(Integer.parseInt(request.getCouponId()));
+            criteria.andCouponIdEqualTo(Integer.parseInt(request.getCouponId()));
         }
         if (request.getStatus() != null) {
-            example.createCriteria().andStatusEqualTo(request.getStatus());
+            criteria.andStatusEqualTo(request.getStatus());
         }
+        criteria.andDeletedEqualTo(false);
         List<Coupon_user> couponUsers = coupon_userMapper.selectByExample(example);
 
         PageInfo<Coupon_user> pageInfo = new PageInfo(couponUsers);
@@ -301,5 +303,10 @@ public class CouponServiceImpl implements CouponService{
         couponExample.createCriteria().andStatusEqualTo((short) 0).andMinLessThanOrEqualTo(goodsTotalPrice).andDeletedEqualTo(false);
         List<Coupon> couponList = couponMapper.selectByExample(couponExample);
         return couponList;
+    }
+
+    @Override
+    public List<Coupon> getAllCoupon() {
+        return couponMapper.selectAllCoupon();
     }
 }

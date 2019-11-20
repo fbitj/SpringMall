@@ -31,4 +31,6 @@ public interface CouponService {
     HashMap<String, Object> queryMyCouponListByStatusAndPage(String status, String page, String size, int userId);
 
     List<Coupon> queryOrderCouponList(int userId);
+
+    List<Coupon> getAllCoupon();
 }

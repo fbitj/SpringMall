@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.springmall.mapper.OrderStatusMapper">
+<<<<<<< HEAD
   <resultMap id="BaseResultMap" type="com.springmall.bean.OrderStatus">
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="status_id" jdbcType="INTEGER" property="statusId" />
@@ -178,4 +179,10 @@
       status_text = #{statusText,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
+=======
+
+  <select id="queryStatusTextByStatusId" resultType="java.lang.String">
+    select status_text from cskaoyan_mall_order_status where status_id = #{orderStatus}
+  </select>
+>>>>>>> 12c4de6b9e552316bcc912e9d52f3accc50f6e33
 </mapper>

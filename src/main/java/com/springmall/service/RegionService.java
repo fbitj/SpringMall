@@ -9,4 +9,5 @@ import java.util.List;
 public interface RegionService {
     List<RegionProvince> queryRegion();
     List<Region> queryRegionList(int pid);
+    String queryRegionName(Integer id);
 }

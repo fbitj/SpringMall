@@ -1,11 +1,9 @@
 package com.springmall.service;
 
-import com.springmall.bean.CatAndBrandReqVo;
-import com.springmall.bean.Category;
-import com.springmall.bean.CategoryL1;
-import com.springmall.bean.CategoryResp;
+import com.springmall.bean.*;
 
 import java.util.List;
+import java.util.Map;
 
 public interface CategoryService {
     /**
@@ -26,4 +24,16 @@ public interface CategoryService {
     Category selectCategory(Category category);
 
     int updateCategory(Category category);
+
+    Map<String, Object> queryCategoryById(Integer id);
+
+    List<Category> queryCategoryByL2(List categoryId);
+
+    List<Category> getChannelCatagory();
+
+    List<Category> getCategoryByLevel(String level);
+
+    List<Category> getSubCategoryByPid(Integer id);
+
+    Category getCategoryById(Integer id);
 }

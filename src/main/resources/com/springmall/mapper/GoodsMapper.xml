@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.springmall.mapper.GoodsMapper">
+
+  <select id="selectGoodsInSameCategory" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List"/> from cskaoyan_mall_goods g
+    left join cskaoyan_mall_category c on c.id = g.category_id
+    where g.id = #{id} and g.deleted = false
+  </select>
+
   <resultMap id="BaseResultMap" type="com.springmall.bean.Goods">
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="goods_sn" jdbcType="VARCHAR" property="goodsSn" />
@@ -128,7 +135,7 @@
     ,
     <include refid="Blob_Column_List" />
     from cskaoyan_mall_goods
-    where id = #{id,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER} and deleted = false
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from cskaoyan_mall_goods

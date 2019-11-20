@@ -44,4 +44,14 @@ public class FeedBackServiceImpl implements FeedBackService {
         }*/
         return feedbackList;
     }
+
+    /**
+     * 新增反馈
+     * @param feedback
+     * @return
+     */
+    @Override
+    public int submitFeedBack(Feedback feedback) {
+        return feedbackMapper.insertSelective(feedback);
+    }
 }

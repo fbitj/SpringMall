@@ -6,6 +6,7 @@ import com.springmall.bean.CategoryL1;
 import com.springmall.bean.CategoryResp;
 
 import java.util.List;
+import java.util.Map;
 
 public interface CategoryService {
     /**
@@ -26,4 +27,9 @@ public interface CategoryService {
     Category selectCategory(Category category);
 
     int updateCategory(Category category);
+
+    Map<String, Object> queryCategoryById(Integer id);
+
+
+    List<Category> queryCategoryByL2(List categoryId);
 }

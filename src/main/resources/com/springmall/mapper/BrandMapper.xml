@@ -91,7 +91,7 @@
     select
     <include refid="Base_Column_List" />
     from cskaoyan_mall_brand
-    where id = #{id,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER} and deleted = false
   </select>
 
   <select id="selectByName" parameterType="java.lang.String" resultMap="BaseResultMap">

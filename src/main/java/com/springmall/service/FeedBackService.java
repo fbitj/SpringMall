@@ -6,4 +6,6 @@ import java.util.List;
 
 public interface FeedBackService {
     List<Feedback> queryFeedBackList(Integer id,String username);
+
+    int submitFeedBack(Feedback feedback);
 }

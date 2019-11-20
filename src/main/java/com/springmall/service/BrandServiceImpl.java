@@ -4,6 +4,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.springmall.bean.Brand;
 import com.springmall.bean.BrandExample;
+import com.springmall.bean.PageRequest;
 import com.springmall.mapper.BrandMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -140,6 +141,36 @@ public class BrandServiceImpl implements BrandService {
         return map;
     }
 
+    /**
+     * 根据id查询品牌信息
+     * @param id
+     * @return
+     */
+    @Override
+    public Brand queryBrandById(Integer id) {
+        return brandMapper.selectByPrimaryKey(id);
+    }
+
+    /**
+     * 显示所有品牌信息并分页
+     * @param pageRequest
+     * @return
+     */
+    @Override
+    public Map queryAllBrandByPage(PageRequest pageRequest) {
+        PageHelper.startPage(pageRequest.getPage(), pageRequest.getSize());
+
+        BrandExample example = new BrandExample();
+        example.createCriteria().andDeletedEqualTo(false);
+        List<Brand> brands = brandMapper.selectByExample(example);
+        PageInfo<Brand> info = new PageInfo<>(brands);
+        int pages = info.getPages();
+
+        Map map = new HashMap();
+        map.put("brandList", brands);
+        map.put("totalPages", pages);
+        return map;
+    }
 
 
     public Brand selectBrandByName(String name) {

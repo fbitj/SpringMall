@@ -29,4 +29,6 @@ public interface CommentService {
      * @return 1：回复成功，0：回复失败（该评论已经回复）
      */
     int replay(int commentId, String content);
+
+    List queryCommentsByGoodsId(Integer id);
 }

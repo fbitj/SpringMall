@@ -31,6 +31,11 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
+    public List queryCommentsByGoodsId(Integer id) {
+        return commentMapper.queryCommentsByGoodsId(id);
+    }
+
+    @Override
     public int deleteCommentById(Integer id) {
         Comment comment = new Comment();
         comment.setId(id);

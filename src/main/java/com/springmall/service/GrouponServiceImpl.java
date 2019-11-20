@@ -97,6 +97,10 @@ public class GrouponServiceImpl implements GrouponService {
         return grouponRulesMapper.updateByPrimaryKeySelective(rules);
     }
 
+    @Override
+    public List<GrouponInfo> getGrouponInfo() {
+        return grouponRulesMapper.getGrouponInfo();
+    }
     /**
      * 根据商品id查询该商品参加的团购
      * @param id

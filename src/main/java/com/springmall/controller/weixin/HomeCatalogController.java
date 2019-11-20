@@ -1,11 +1,7 @@
 package com.springmall.controller.weixin;
 
-import com.springmall.bean.BaseReqVo;
-import com.springmall.bean.Category;
-import com.springmall.bean.HomePageData;
-import com.springmall.service.CategoryService;
-import com.springmall.service.CouponService;
-import com.springmall.service.GoodsService;
+import com.springmall.bean.*;
+import com.springmall.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -24,14 +20,29 @@ public class HomeCatalogController {
     CategoryService categoryService;
     @Autowired
     CouponService couponService;
+    @Autowired
+    GrouponService grouponService;
+    @Autowired
+    TopicService topicService;
+    @Autowired
+    AdvertiseService advertiseService;
     // 首页显示数据
     @RequestMapping("/wx/home/index")
     @ResponseBody
     public BaseReqVo homeIndex() {
         HomePageData homePageData = new HomePageData();
-        List<Category> categoryList = categoryService.getChannelCatagory();
+        List<Category> categoryList = categoryService.getChannelCatagory(); //获取分类频道数据
         homePageData.setChannel(categoryList);
-        
+        List<Coupon> couponList = couponService.getAllCoupon(); // 获取所有优惠券
+        homePageData.setCouponList(couponList);
+        List<GrouponInfo> grouponInfoList = grouponService.getGrouponInfo();
+        homePageData.setGrouponList(grouponInfoList);
+
+//        homePageData.setTopicList(); // 设置专题列表
+
+        List<Ad> adList = advertiseService.getAvailAdvertise(6); // 查询指定数目的广告
+        homePageData.setBanner(adList); // 设置广告横幅
+
         return BaseReqVo.ok(homePageData);
     }
 
@@ -49,6 +60,7 @@ public class HomeCatalogController {
         dataMap.put("currentCategory", currentCategory);
         List<Category> subCategoryList = categoryService.getSubCategoryByPid(currentCategory.getId()); // 获取当前分类的子分类
         dataMap.put("currentSubCategory", subCategoryList);
+
         return BaseReqVo.ok(dataMap);
     }
 

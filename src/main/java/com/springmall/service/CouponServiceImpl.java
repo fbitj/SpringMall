@@ -147,4 +147,9 @@ public class CouponServiceImpl implements CouponService{
         i = coupon_userMapper.deleteByCouponId(id);
         return i;
     }
+
+    @Override
+    public List<Coupon> getAllCoupon() {
+        return couponMapper.selectAllCoupon();
+    }
 }

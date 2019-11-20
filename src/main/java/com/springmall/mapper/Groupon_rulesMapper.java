@@ -1,5 +1,6 @@
 package com.springmall.mapper;
 
+import com.springmall.bean.GrouponInfo;
 import com.springmall.bean.Groupon_rules;
 import com.springmall.bean.Groupon_rulesExample;
 import org.apache.ibatis.annotations.Param;
@@ -30,4 +31,7 @@ public interface Groupon_rulesMapper {
     int updateByPrimaryKey(Groupon_rules record);
 
     int deleteById(Integer id);
+
+    List<GrouponInfo> getGrouponInfo();
+
 }

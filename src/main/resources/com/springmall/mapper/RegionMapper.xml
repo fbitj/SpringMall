@@ -208,4 +208,7 @@
       code = #{code,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
+  <select id="selectRegionName" resultType="string">
+    select `name` from cskaoyan_mall_region where id=#{id};
+  </select>
 </mapper>

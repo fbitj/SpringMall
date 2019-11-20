@@ -2,8 +2,11 @@ package com.springmall.controller.weixin;
 
 import com.springmall.bean.Address;
 import com.springmall.bean.BaseReqVo;
+import com.springmall.bean.User;
 import com.springmall.service.AddressService;
 import com.springmall.service.RegionService;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,9 +31,11 @@ public class WxAddressListController {
         BaseReqVo<List<Address>> listBaseReqVo = new BaseReqVo<>();
         //进行逻辑删除的标识
         boolean deleted=false;//false是代表为0，其他是有效的信息
+        Subject subject = SecurityUtils.getSubject();
+        User user= (User) subject.getPrincipal();
+        Integer id = user.getId();
         //第一步拿到数据库中的地址信息
-        List<Address> addresses=addressService.queryAddressList(1,deleted);
-
+        List<Address> addresses=addressService.queryAddressList(id,deleted);
         //这一步需要将对应的省，市，区的id进行拼接到address上面
         for (Address address1 : addresses) {
             Integer provinceId = address1.getProvinceId();
@@ -49,7 +54,7 @@ public class WxAddressListController {
     }
 
     /**
-     * 进行添加收货地址
+     * 进行添加收货地址和修改收货地址
      * @param address
      * @return
      */
@@ -57,22 +62,31 @@ public class WxAddressListController {
     public BaseReqVo saveAddress(@RequestBody Address address){
         BaseReqVo<Object> objectBaseReqVo = new BaseReqVo<>();
         //使用id进行判断是插入还是进行修改的(0是插入，其他的是修改)
+        Subject subject = SecurityUtils.getSubject();
+        User user= (User) subject.getPrincipal();
+        Integer userId=user.getId();
         Integer id = address.getId();
         address.setDeleted(false);
         if(id==0) {
             //进行添加时候的时间
             Date addTime = new Date();
             address.setAddTime(addTime);
-            //这里是写死的用户的id
-            address.setUserId(1);
-            addressService.saveAddress(address);
+            address.setUserId(userId);
+            //添加的时候也要进行判断是否是默认的地址
+            if(address.getIsDefault().equals(true)){
+                //将所有的设置为非默认地址
+                addressService.setDefault();
+                addressService.saveAddress(address);
+            }else{
+                addressService.saveAddress(address);
+            }
             objectBaseReqVo.setErrno(0);
             objectBaseReqVo.setData(address.getId());
             objectBaseReqVo.setErrmsg("成功");
             return objectBaseReqVo;
         }
         //id不是0的时候就是进行了修改
-        Integer userId=addressService.queryUserId(id);
+       // Integer userId=addressService.queryUserId(id);
         Date addTime=addressService.queryAddTime(id);
         address.setAddTime(addTime);
         address.setUserId(userId);

@@ -4,6 +4,7 @@ import com.springmall.bean.*;
 import com.springmall.mapper.RegionMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,6 +37,20 @@ public class RegionServiceImpl implements RegionService {
         }
         return regionProvinces;
     }
+
+    /**
+     * 区域列表获取
+     * @param pid
+     * @return
+     */
+    @Override
+    public List<Region> queryRegionList(int pid) {
+        RegionExample regionExample = new RegionExample();
+        regionExample.createCriteria().andPidEqualTo(pid);
+        List<Region> regionList = regionMapper.selectByExample(regionExample);
+        return regionList;
+    }
+
     public List<RegionCity> queryCity(Region province){
         //查找地级市/区
         RegionExample regionExample = new RegionExample();

@@ -19,4 +19,7 @@ public interface CouponService {
     Coupon updateListUser(Coupon coupon);
 
     int deleteCoupon(Coupon coupon);
+
+    List<Coupon> getAllCoupon();
+
 }

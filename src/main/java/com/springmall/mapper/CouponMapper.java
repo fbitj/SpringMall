@@ -30,4 +30,7 @@ public interface CouponMapper {
     int updateByPrimaryKey(Coupon record);
 
     int deleteById(Integer id);
+
+    List<Coupon> selectAllCoupon();
+
 }

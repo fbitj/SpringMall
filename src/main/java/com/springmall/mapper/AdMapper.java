@@ -33,4 +33,7 @@ public interface AdMapper {
     List<Ad> selectAllWithParm(PageRequest adRequest);
 
     int delete(Integer id);
+
+//    查询未被删除、允许显示、指定数目的广告
+    List<Ad> selectAvailAdvertise(int amountLimit);
 }

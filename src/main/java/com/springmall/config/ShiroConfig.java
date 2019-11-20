@@ -66,7 +66,7 @@ public class ShiroConfig {
     public CustomSessionManager sessionManager() {
         CustomSessionManager sessionManager = new CustomSessionManager();
         sessionManager.setDeleteInvalidSessions(true); // 删除失效的Session
-        sessionManager.setGlobalSessionTimeout(1000 * 60 * 20); // 全局Session超时时间
+        sessionManager.setGlobalSessionTimeout(1000 * 60 * 60 * 3); // 全局Session超时时间
         return sessionManager;
     }
 

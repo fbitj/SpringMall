@@ -452,4 +452,8 @@
       deleted = #{deleted,jdbcType=BIT}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+  <select id="selectAllCoupon" resultType="com.springmall.bean.Coupon">
+    select days,`desc`,discount,end_time endTime,id,min,name,start_time startTime,tag from cskaoyan_mall_coupon
+  </select>
 </mapper>

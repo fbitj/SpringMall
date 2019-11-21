@@ -159,7 +159,14 @@ public class CouponServiceImpl implements CouponService{
         CouponExample couponExample = new CouponExample();
         //优惠券状态需为正常可用，优惠券赠送类型需为通用券，过滤逻辑删除。
         couponExample.createCriteria().andStatusEqualTo((short) 0).andTypeEqualTo((short) 0).andDeletedEqualTo(false);
-        List<Coupon> couponList = couponMapper.selectByExample(couponExample);
+        List<Coupon> cpList = couponMapper.selectByExample(couponExample);
+        List<Coupon> couponList = new ArrayList<>();
+        for (Coupon coupon : cpList) {
+            //若time_type为1，需判断当前是否已满足使用券开始时间start_time。
+            if(coupon.getTimeType()==0 || coupon.getStartTime().before(new Date())){
+                couponList.add(coupon);
+            }
+        }
         PageInfo<Coupon> pageInfo = new PageInfo<>(couponList);
         HashMap<String, Object> dataMap = new HashMap<>();
         dataMap.put("data",couponList);
@@ -247,8 +254,8 @@ public class CouponServiceImpl implements CouponService{
         Coupon_user couponUser = null;
         if(coupon.getTimeType()==0){
             Date startTime = new Date();
-            Date end_time = new Date(startTime.getTime() + 1000*60*60*24*coupon.getDays());
-            couponUser = new Coupon_user(userId,coupon.getId(), (short) 0,startTime,end_time,false);
+            Date endTime = new Date(startTime.getTime() + 1000*60*60*24*coupon.getDays());
+            couponUser = new Coupon_user(userId,coupon.getId(), (short) 0,startTime,endTime,false);
         }
         //若coupon表中的time_type为1，则取出coupon表中的start_time和end_time赋给coupon_user表。
         if (coupon.getTimeType()==1){

@@ -51,6 +51,17 @@ public class RegionServiceImpl implements RegionService {
         return regionList;
     }
 
+    /**
+     * 通过address中的code拿到对应对应的省、市、区
+     * @param code
+     * @return
+     */
+    @Override
+    public String queryRegionName(Integer id) {
+      String idName= regionMapper.selectRegionName(id);
+      return idName;
+    }
+
     public List<RegionCity> queryCity(Region province){
         //查找地级市/区
         RegionExample regionExample = new RegionExample();

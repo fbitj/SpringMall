@@ -30,6 +30,12 @@ public class CartController {
         int goodsCount = cartService.addCart(cart);
         return BaseReqVo.ok(goodsCount);
     }
+    // 立即购买商品
+    @RequestMapping("fastadd")
+    public BaseReqVo fastAddCart(@RequestBody Cart cart) {
+        return BaseReqVo.ok();
+
+    }
 
     // 删除购物车的商品
     @RequestMapping("delete")
@@ -71,11 +77,8 @@ public class CartController {
 
     // 下单前信息确认
     @RequestMapping("checkout")
-    public BaseReqVo checkoutCart() {
-
-        return BaseReqVo.ok();
-
+    public BaseReqVo checkoutCart(Integer cartId, Integer addressId, Integer couponId, Integer grouponRulesId) {
+        Map<String, Object> map = cartService.checkOutBeforePay(cartId, addressId, couponId, grouponRulesId);
+        return BaseReqVo.ok(map);
     }
-
-
 }

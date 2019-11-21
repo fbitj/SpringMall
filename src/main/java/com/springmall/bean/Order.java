@@ -282,4 +282,37 @@ public class Order {
     public void setOrderId(Integer orderId) {
         this.orderId = orderId;
     }
+
+    @Override
+    public String toString() {
+        return "Order{" +
+                "id=" + id +
+                ", orderId=" + orderId +
+                ", userId=" + userId +
+                ", orderSn='" + orderSn + '\'' +
+                ", orderStatus=" + orderStatus +
+                ", consignee='" + consignee + '\'' +
+                ", mobile='" + mobile + '\'' +
+                ", address='" + address + '\'' +
+                ", message='" + message + '\'' +
+                ", goodsPrice=" + goodsPrice +
+                ", freightPrice=" + freightPrice +
+                ", couponPrice=" + couponPrice +
+                ", integralPrice=" + integralPrice +
+                ", grouponPrice=" + grouponPrice +
+                ", orderPrice=" + orderPrice +
+                ", actualPrice=" + actualPrice +
+                ", payId='" + payId + '\'' +
+                ", payTime=" + payTime +
+                ", shipSn='" + shipSn + '\'' +
+                ", shipChannel='" + shipChannel + '\'' +
+                ", shipTime=" + shipTime +
+                ", confirmTime=" + confirmTime +
+                ", comments=" + comments +
+                ", endTime=" + endTime +
+                ", addTime=" + addTime +
+                ", updateTime=" + updateTime +
+                ", deleted=" + deleted +
+                '}';
+    }
 }

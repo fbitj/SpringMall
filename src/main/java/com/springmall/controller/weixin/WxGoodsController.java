@@ -129,9 +129,10 @@ public class WxGoodsController {
      */
     @RequestMapping("related")
     public BaseReqVo relatedGoods(Integer id){
-        List<Goods> goods = goodsService.selectGoodsInSameCategory(id);
+        Goods good = goodsService.selectGoodsById(id);
+        List<Goods> goods = goodsService.selectGoodsInSameCategory(good.getCategoryId());
         if (goods.size() > 6) {
-            goods.subList(0,6);
+            goods = goods.subList(0, 6);
         }
         Map map = new HashMap();
         map.put("goodsList", goods);

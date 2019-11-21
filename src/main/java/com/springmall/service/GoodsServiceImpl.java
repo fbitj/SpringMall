@@ -156,7 +156,10 @@ public class GoodsServiceImpl implements GoodsService {
      */
     @Override
     public List<Goods> selectGoodsInSameCategory(Integer id) {
-        return goodsMapper.selectGoodsInSameCategory(id);
+        //return goodsMapper.selectGoodsInSameCategory(id);
+        GoodsExample example = new GoodsExample();
+        example.createCriteria().andCategoryIdEqualTo(id).andDeletedEqualTo(false);
+        return goodsMapper.selectByExample(example);
     }
 
     /**

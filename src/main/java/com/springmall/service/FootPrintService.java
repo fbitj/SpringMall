@@ -10,4 +10,6 @@ public interface FootPrintService {
     List queryUserFootPrintByPage(Integer userId, Integer page, Integer size);
 
     int addUserFoot(Integer goodsId, Integer userId);
+
+    int deleteFootPrintById(Footprint footprint);
 }

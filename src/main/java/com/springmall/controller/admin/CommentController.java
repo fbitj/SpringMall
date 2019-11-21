@@ -30,9 +30,9 @@ public class CommentController {
      * @return
      */
     @RequestMapping("list")
-    public BaseReqVo queryComments(int page, int limit, String add_time, String order){
+    public BaseReqVo queryComments(int page, int limit,Integer valueId, String add_time, String order){
         BaseReqVo baseReqVo = new BaseReqVo();
-        List<Comment> comments = commentService.queryCommentsByPage(page, limit, add_time, order);
+        List<Comment> comments = commentService.queryCommentsByPage(page, limit,valueId, add_time, order);
         PageInfo<Comment> goodsInfo = new PageInfo<>(comments);
         long total = goodsInfo.getTotal();
         //2、结果封装并返回

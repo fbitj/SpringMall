@@ -275,8 +275,12 @@ public class OrderServiceImpl implements OrderService {
         String statusText = orderStatusMapper.queryStatusTextByStatusId(orderStatus);
         orderRespVo.setOrderStatusText(statusText);
         HashMap<String, Object> map = new HashMap<>();
+        HashMap<String, Object> expressInfo = new HashMap<>();
+        expressInfo.put("shipperName",orderRespVo.getShipChannel());
+        expressInfo.put("logisticCode",orderRespVo.getShipSn());
         map.put("orderInfo", orderRespVo);
         map.put("orderGoods", order_goods);
+        map.put("expressInfo", expressInfo);
         return map;
     }
 
@@ -355,7 +359,11 @@ public class OrderServiceImpl implements OrderService {
         order.setMessage(message);// 订单留言
         BigDecimal goodPrice = new BigDecimal("0");
         for (Cart cart : carts) {
-            goodPrice.add(cart.getPrice().multiply(BigDecimal.valueOf(cart.getNumber())));
+            BigDecimal price = cart.getPrice();
+            Short number = cart.getNumber();
+            BigDecimal multiplicand = BigDecimal.valueOf(number);
+            BigDecimal multiply = price.multiply(multiplicand);
+            goodPrice = goodPrice.add(multiply);
         }
         order.setGoodsPrice(goodPrice);// 商品总费用
         // 查询配送规则
@@ -374,7 +382,7 @@ public class OrderServiceImpl implements OrderService {
         order.setIntegralPrice(new BigDecimal("0"));// 用户积分减免============没有不考虑！！！！！！！！！！！
         order.setGrouponPrice(new BigDecimal("0"));// 团购优惠减免============不考虑！！！！！！！！！！！
         order.setOrderPrice(order.getGoodsPrice().add(order.getFreightPrice()).subtract(discount));// 订单费用 goods_price + freight_price - coupon_price
-        order.setActualPrice(order.getGoodsPrice().subtract(order.getIntegralPrice()));// 实付费用 order_price - integral_price
+        order.setActualPrice(order.getOrderPrice().subtract(order.getIntegralPrice()));// 实付费用 order_price - integral_price
         order.setPayTime(new Date());//微信支付时间
         order.setAddTime(new Date());
         order.setDeleted(false);

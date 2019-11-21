@@ -16,14 +16,22 @@ public class ResExceptionHandler {
      * @param exception
      * @return
      */
-    /*@ExceptionHandler(HttpMessageNotReadableException.class)
+    @ExceptionHandler(HttpMessageNotReadableException.class)
     public BaseReqVo handleCustomException(HttpMessageNotReadableException exception){
         BaseReqVo baseReqVo = new BaseReqVo();
         baseReqVo.setErrno(402);
         baseReqVo.setErrmsg("参数值不对");
         return baseReqVo;
-    }*/
-/*    @ExceptionHandler(Exception.class)
+    }
+
+    @ExceptionHandler(DbException.class)
+    public BaseReqVo handleDbException(DbException exception) {
+        BaseReqVo baseReqVo = new BaseReqVo();
+        baseReqVo.setErrno(402);
+        baseReqVo.setErrmsg("服务器异常，请再次登陆后重试");
+        return baseReqVo;
+    }
+    @ExceptionHandler(Exception.class)
     public BaseReqVo handleCustomException(Exception exception){
         exception.printStackTrace();
         return BaseReqVo.error(500,"网络繁忙，请稍后再试！");
@@ -33,5 +41,5 @@ public class ResExceptionHandler {
     public BaseReqVo handlerOrderException(Exception exception){
         exception.printStackTrace();
         return BaseReqVo.error(500,exception.getMessage());
-    }*/
+    }
 }

@@ -3,7 +3,7 @@
 <mapper namespace="com.springmall.mapper.AdMapper">
 
   <update id="delete">
-    update cskaoyan_mall_ad set deleted = true where id = #{id}
+    update cskaoyan_mall_ad set deleted = true, update_time = #{time} where id = #{id}
   </update>
 
   <select id="selectAllWithParm" resultMap="BaseResultMap">

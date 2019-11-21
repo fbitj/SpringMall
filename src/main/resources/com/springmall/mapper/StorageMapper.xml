@@ -93,6 +93,10 @@
     from cskaoyan_mall_storage
     where id = #{id,jdbcType=INTEGER}
   </select>
+  <select id="selectLastInsertId" resultType="int">
+    select distinct last_insert_id()
+    from cskaoyan_mall_storage
+  </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from cskaoyan_mall_storage
     where id = #{id,jdbcType=INTEGER}
@@ -245,6 +249,13 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
+  <update id="updateByExampleDeleteId" parameterType="map">
+    update cskaoyan_mall_storage
+    set deleted = #{record.deleted,jdbcType=BIT}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
   <update id="updateByPrimaryKeySelective" parameterType="com.springmall.bean.Storage">
     update cskaoyan_mall_storage
     <set>
@@ -287,4 +298,11 @@
       deleted = #{deleted,jdbcType=BIT}
     where id = #{id,jdbcType=INTEGER}
   </update>
+  <update id="updateDeletedByPrimaryKey" parameterType="com.springmall.bean.Storage2">
+    update cskaoyan_mall_storage
+    set deleted = #{deleted,jdbcType=BIT}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+
 </mapper>

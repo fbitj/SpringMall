@@ -14,11 +14,15 @@ public interface CommentMapper {
 
     int insert(Comment record);
 
+    int insertDetail(Comment record);
+
     int insertSelective(Comment record);
 
     List<Comment> selectByExample(CommentExample example);
 
     Comment selectByPrimaryKey(Integer id);
+
+    int selectLastInsertId();
 
     int updateByExampleSelective(@Param("record") Comment record, @Param("example") CommentExample example);
 

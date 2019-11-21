@@ -65,5 +65,4 @@ public class AliyunComponent {
         HashMap<String, String> resMap = new HashMap<>();
         return String.valueOf(code);
     }
-
 }

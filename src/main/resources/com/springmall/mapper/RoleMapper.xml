@@ -97,7 +97,13 @@
     where id = #{id}
   </select>
 
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+  <select id="selectLastInsertId" parameterType="java.lang.Integer" resultType="int">
+  select
+  distinct last_insert_id()
+  from cskaoyan_mall_role
+  </select>
+
+<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from cskaoyan_mall_role
     where id = #{id,jdbcType=INTEGER}
   </delete>
@@ -225,6 +231,14 @@
     </if>
   </update>
 
+  <update id="updateByExampleDetailSet" parameterType="map">
+    update cskaoyan_mall_role
+    set enabled = #{record.enabled,jdbcType=BIT}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+
   <update id="updateByPrimaryKeySelective" parameterType="com.springmall.bean.Role">
     update cskaoyan_mall_role
     <set>
@@ -259,4 +273,26 @@
       deleted = #{deleted,jdbcType=BIT}
     where id = #{id,jdbcType=INTEGER}
   </update>
+  <update id="updateDeletedById" parameterType="com.springmall.bean.Role2">
+    update cskaoyan_mall_role
+    set deleted = #{deleted,jdbcType=BIT}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateEnabledById" parameterType="com.springmall.bean.Role2">
+    update cskaoyan_mall_role
+    set enabled = #{enabled,jdbcType=BIT}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateEnabledByIdSet" parameterType="com.springmall.bean.Role2">
+    update cskaoyan_mall_role
+    set enabled = #{enabled,jdbcType=BIT}
+    where id not in #{id,jdbcType=INTEGER}
+    <!--where id not in #{id}-->
+  </update>
+  <update id="deleteRoleById" parameterType="com.springmall.bean.Role2">
+    update cskaoyan_mall_role
+    set deleted = #{deleted,jdbcType=BIT}
+    where id = #{id,jdbcType=INTEGER} and enabled = 0
+  </update>
+
 </mapper>

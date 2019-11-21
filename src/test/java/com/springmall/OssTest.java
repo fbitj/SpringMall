@@ -6,21 +6,18 @@ import com.aliyun.oss.model.PutObjectRequest;
 import com.aliyun.oss.model.PutObjectResult;
 import com.aliyuncs.CommonRequest;
 import com.aliyuncs.CommonResponse;
-import com.aliyuncs.DefaultAcsClient;
 import com.aliyuncs.IAcsClient;
 import com.aliyuncs.exceptions.ClientException;
 import com.aliyuncs.exceptions.ServerException;
 import com.aliyuncs.http.MethodType;
-import com.aliyuncs.profile.DefaultProfile;
 import com.springmall.component.AliyunComponent;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-@SpringBootTest
+
 public class OssTest {
 
     @Test
@@ -33,7 +30,6 @@ public class OssTest {
         String endPoint = "oss-cn-beijing.aliyuncs.com";
 
         File file = new File("C:\\Users\\Administrator\\Desktop", "car.png");
-
         OSSClient ossClient = new OSSClient(endPoint, accessKeyId, accessSecret);
         FileInputStream fileInputStream = new FileInputStream(file);
         PutObjectResult putObjectResult = ossClient.putObject(bucket, "songge.jpg", fileInputStream);
@@ -51,6 +47,7 @@ public class OssTest {
 
         File file = new File("C:\\Users\\Administrator\\Desktop", "car.png");
 
+
         OSSClient ossClient = new OSSClient(endPoint, accessKeyId, accessSecret);
         FileInputStream fileInputStream = new FileInputStream(file);
 //        bucket, "songge.jpg", fileInputStream
@@ -60,6 +57,7 @@ public class OssTest {
         System.out.println(putObjectResult);
 
     }
+
     @Autowired
     AliyunComponent aliyunComponent;
     @Test
@@ -87,4 +85,5 @@ public class OssTest {
             e.printStackTrace();
         }
     }
+
 }

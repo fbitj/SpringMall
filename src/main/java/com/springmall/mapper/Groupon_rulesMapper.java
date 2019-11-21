@@ -5,6 +5,7 @@ import com.springmall.bean.Groupon_rules;
 import com.springmall.bean.Groupon_rulesExample;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.Date;
 import java.util.List;
 
 public interface Groupon_rulesMapper {
@@ -30,7 +31,7 @@ public interface Groupon_rulesMapper {
 
     int updateByPrimaryKey(Groupon_rules record);
 
-    int deleteById(Integer id);
+    int deleteById(@Param("id") Integer id, @Param("time") Date time);
 
     List<GrouponInfo> getGrouponInfo();
 

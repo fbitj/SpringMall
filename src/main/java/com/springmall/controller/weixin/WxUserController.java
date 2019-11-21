@@ -34,9 +34,7 @@ public class WxUserController {
 
 
 
-
     //个人页面用户信息
-
     /**
      * request
      * /wx/user/index
@@ -126,7 +124,7 @@ public class WxUserController {
     public BaseReqVo collectList(int type,int page,int size){
         BaseReqVo<Object> baseReqVo = new BaseReqVo<>();
         User user = SubjectUtil.getUser();
-        Integer id = user.getId();
+        int id = user.getId();
         Map map = userService.collectList(type, page, size, id);
         baseReqVo.setData(map);
         baseReqVo.setErrmsg("成功");
@@ -315,7 +313,6 @@ public class WxUserController {
         baseReqVo.setErrno(0);
         return baseReqVo;
     }
-
 
 
     /**

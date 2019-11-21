@@ -5,6 +5,7 @@ import com.github.pagehelper.PageInfo;
 import com.springmall.bean.*;
 import com.springmall.exception.OrderException;
 import com.springmall.mapper.*;
+import com.springmall.utils.GetUserUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -398,6 +399,7 @@ public class OrderServiceImpl implements OrderService {
             orderGoodsMapper.updateNumberById(cart.getProductId(),number);
             // 购物车中逻辑删除
             cartMapper.logicDeleteCartById(cart.getId());
+
         }
         return 1;
     }

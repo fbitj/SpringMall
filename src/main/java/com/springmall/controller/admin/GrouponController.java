@@ -63,6 +63,12 @@ public class GrouponController {
         if (illegal != null) {
             return ResultUtil.fail(402, illegal);
         }
+        //团购折扣不能超过商品价格
+        BigDecimal discount = rules.getDiscount();
+        BigDecimal retailPrice = goods.getRetailPrice();
+        if (discount.compareTo(retailPrice) == 1) {
+            return ResultUtil.fail(402, "团购折扣价格不能高于商品本身价格");
+        }
 
         //封装商品相关属性
         rules.setGoodsName(goods.getName());

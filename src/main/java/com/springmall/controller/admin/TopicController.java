@@ -86,7 +86,13 @@ public class TopicController {
                     return "格式有误,单位必须为'k'(示例: 1000k,1000.5k)";
                 }
             } else {
-                return "格式有误,单位必须为'k'(示例: 1000k,1000.5k)";
+                try {
+                    //没有异常则表示格式正确
+                    Integer.parseInt(readCount.trim());
+                    return null;
+                } catch (NumberFormatException e) {
+                    return "格式有误,单位必须为'k'(示例: 1000k,1000.5k),否则必须为整数";
+                }
             }
 
         }

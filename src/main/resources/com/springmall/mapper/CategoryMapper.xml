@@ -325,4 +325,11 @@
     select id,name,icon_url as iconUrl from cskaoyan_mall_category where level='L1'
   </select>
 
+<!--  根据一级分类id查询该类别的指定数目的商品数据-->
+  <select id="selectFloorGoodsByCategory" resultType="com.springmall.bean.Goods">
+    SELECT brief,counter_price counterPrice,g.id,is_hot isHot,is_new isNew,g.name,g.pic_url picUrl,retail_price retailPrice
+    FROM cskaoyan_mall_category c left join cskaoyan_mall_goods g on c.id=g.category_id
+    where c.pid=#{id} and c.deleted=false and g.is_on_sale=1 and g.deleted=0 LIMIT #{amountLimit} OFFSET 0
+  </select>
+
 </mapper>

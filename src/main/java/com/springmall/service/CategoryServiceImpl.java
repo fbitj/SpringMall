@@ -286,5 +286,10 @@ public class CategoryServiceImpl implements CategoryService {
         return categoryList.get(0);
     }
 
+    @Override
+    public List<Goods> getFloorGoodsByCategory(Integer id, int amountLimit) {
+        return categoryMapper.selectFloorGoodsByCategory(id, amountLimit);
+    }
+
 
 }

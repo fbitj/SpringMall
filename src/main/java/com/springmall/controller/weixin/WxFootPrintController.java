@@ -11,6 +11,7 @@ import com.springmall.utils.ResultUtil;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -43,5 +44,20 @@ public class WxFootPrintController {
         result.put("footprintList", footList);
         result.put("totalPages", info.getPages());
         return ResultUtil.success(result);
+    }
+
+    /**
+     * 删除足迹
+     * @param footprint
+     * @return
+     */
+    @RequestMapping("delete")
+    public BaseReqVo deleteFootPrint(@RequestBody Footprint footprint) {
+        footprint.setDeleted(true);
+        int i = footPrintService.deleteFootPrintById(footprint);
+        if (i == 0) {
+            return ResultUtil.fail(402, "服务器异常，请登陆后重试");
+        }
+        return ResultUtil.success(null);
     }
 }

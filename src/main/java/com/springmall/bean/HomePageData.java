@@ -21,11 +21,11 @@ public class HomePageData {
     private List banner;
     // 品牌制造商直供
     private List brandList;
-
+    // 热销商品列表
     private List hotGoodsList;
     // 专题列表
     private List topicList;
-
+    // 底部商品列表
     private List floorGoodsList;
 
 

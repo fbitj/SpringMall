@@ -361,6 +361,22 @@
     SELECT DATE_FORMAT(o.add_time,'%Y-%m-%d') day,count(distinct o.id) orders,sum(og.number) as products,sum(og.number*og.price) as amount
     FROM cskaoyan_mall_order o left join cskaoyan_mall_order_goods og on o.id=og.order_id GROUP BY day;
   </select>
+  <update id="updateDeleteAndTimeByOrderId">
+    update cskaoyan_mall_order_goods set
+      update_time = now(),
+      deleted = true
+    where order_id = #{orderId}
+  </update>
+  <select id="queryOrderGoodsCommentById" resultType="int">
+    select comment from  cskaoyan_mall_order_goods
+    where id = #{orderGoodsId}
+  </select>
+  <update id="updateCommentById">
+    update cskaoyan_mall_order_goods set comment = #{commentId}, update_time = now() where id = #{id}
+  </update>
+  <update id="updateNumberById">
+     update cskaoyan_mall_order_goods set number = #{number} where id = #{id}
+  </update>
 
 </mapper>
 

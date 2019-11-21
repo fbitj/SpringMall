@@ -74,7 +74,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, name, user_id, province_id, city_id, area_id, address, mobile, is_default, add_time, 
+    id, `name`, user_id, province_id, city_id, area_id, address, mobile, is_default, add_time,
     update_time, deleted
   </sql>
   <select id="selectByExample" parameterType="com.springmall.bean.AddressExample" resultMap="BaseResultMap">
@@ -108,12 +108,12 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.springmall.bean.Address">
-    insert into cskaoyan_mall_address (id, name, user_id, 
+    insert into cskaoyan_mall_address (id,`name`, user_id,
       province_id, city_id, area_id, 
       address, mobile, is_default, 
       add_time, update_time, deleted
       )
-    values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{userId,jdbcType=INTEGER}, 
+    values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{userId,jdbcType=INTEGER},
       #{provinceId,jdbcType=INTEGER}, #{cityId,jdbcType=INTEGER}, #{areaId,jdbcType=INTEGER}, 
       #{address,jdbcType=VARCHAR}, #{mobile,jdbcType=VARCHAR}, #{isDefault,jdbcType=BIT}, 
       #{addTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{deleted,jdbcType=BIT}
@@ -251,7 +251,7 @@
   <update id="updateByExample" parameterType="map">
     update cskaoyan_mall_address
     set id = #{record.id,jdbcType=INTEGER},
-      name = #{record.name,jdbcType=VARCHAR},
+      `name` = #{record.name,jdbcType=VARCHAR},
       user_id = #{record.userId,jdbcType=INTEGER},
       province_id = #{record.provinceId,jdbcType=INTEGER},
       city_id = #{record.cityId,jdbcType=INTEGER},
@@ -307,7 +307,7 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.springmall.bean.Address">
     update cskaoyan_mall_address
-    set name = #{name,jdbcType=VARCHAR},
+    set `name` = #{name,jdbcType=VARCHAR},
       user_id = #{userId,jdbcType=INTEGER},
       province_id = #{provinceId,jdbcType=INTEGER},
       city_id = #{cityId,jdbcType=INTEGER},
@@ -319,5 +319,17 @@
       update_time = #{updateTime,jdbcType=TIMESTAMP},
       deleted = #{deleted,jdbcType=BIT}
     where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="queryUserId" resultType="integer">
+    select  user_id from cskaoyan_mall_address where id=#{id};
+  </select>
+  <select id="queryAddTime" resultType="date">
+    select add_time from cskaoyan_mall_address where id=#{id};
+  </select>
+  <update id="deleteAddress" parameterType="int">
+      update cskaoyan_mall_address set deleted=1 where id=#{id};
+  </update>
+  <update id="updateDefault" parameterType="int">
+    update cskaoyan_mall_address set is_default=0;
   </update>
 </mapper>

@@ -1,6 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.springmall.mapper.CommentMapper">
+
+  <select id="queryCommentsByGoodsId" resultType="com.springmall.bean.Comment">
+    select
+    c.id, c.value_id, c.`type`, c.content, c.user_id, c.has_picture, c.pic_urls, c.star, c.add_time, c.update_time,
+    c.deleted
+    from cskaoyan_mall_order_goods od
+    left join cskaoyan_mall_comment c on c.id = od.comment
+    where od.goods_id = #{id} and c.deleted = false
+  </select>
+
   <resultMap id="BaseResultMap" type="com.springmall.bean.Comment">
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="value_id" jdbcType="INTEGER" property="valueId" />
@@ -117,6 +127,9 @@
       #{updateTime,jdbcType=TIMESTAMP}, #{deleted,jdbcType=BIT})
   </insert>
   <insert id="insertSelective" parameterType="com.springmall.bean.Comment">
+    <selectKey resultType="int" keyColumn="id" keyProperty="id" order="AFTER">
+      select LAST_INSERT_ID()
+    </selectKey>
     insert into cskaoyan_mall_comment
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">

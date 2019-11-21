@@ -2,6 +2,7 @@ package com.springmall.service;
 
 import com.springmall.bean.Issue;
 
+import java.util.List;
 import java.util.Map;
 
 public interface IssueService {
@@ -10,4 +11,5 @@ public interface IssueService {
     Issue updateIssue(Issue issue);
     int deleteIssue(Issue issue);
 
+    List queryAllIssue();
 }

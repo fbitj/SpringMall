@@ -72,7 +72,7 @@ public class WxAuthController {
             e.printStackTrace();
             return BaseReqVo.error(700, "账号密码不对");
         }
-        UserData userData = new UserData();
+        UserData userData = new UserData(); // 返回的user数据的封装
         User principal = (User) subject.getPrincipal();
         UserData.UserInfoBean userInfo = new UserData.UserInfoBean();
         userInfo.setNickName(user.getUsername());

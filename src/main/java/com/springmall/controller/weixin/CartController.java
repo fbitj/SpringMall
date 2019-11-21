@@ -26,9 +26,15 @@ public class CartController {
 
     // 添加商品到购物车
     @RequestMapping("add")
-    public BaseReqVo addCart() {
+    public BaseReqVo addCart(@RequestBody Cart cart) {
+        int goodsCount = cartService.addCart(cart);
+        return BaseReqVo.ok(goodsCount);
+    }
+    // 立即购买商品
+    @RequestMapping("fastadd")
+    public BaseReqVo fastAddCart(@RequestBody Cart cart) {
+        return BaseReqVo.ok();
 
-        return null;
     }
 
     // 删除购物车的商品
@@ -71,11 +77,8 @@ public class CartController {
 
     // 下单前信息确认
     @RequestMapping("checkout")
-    public BaseReqVo checkoutCart() {
-
-        return BaseReqVo.ok();
-
+    public BaseReqVo checkoutCart(Integer cartId, Integer addressId, Integer couponId, Integer grouponRulesId) {
+        Map<String, Object> map = cartService.checkOutBeforePay(cartId, addressId, couponId, grouponRulesId);
+        return BaseReqVo.ok(map);
     }
-
-
 }

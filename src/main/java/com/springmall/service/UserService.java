@@ -3,6 +3,7 @@ package com.springmall.service;
 import com.springmall.bean.Comment;
 import com.springmall.bean.User;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -15,7 +16,7 @@ public interface UserService {
 
     Map collectList(int type,int page,int size, int id);
 
-    Map userIndex();
+    Map userIndex(int id);
 
     Map commentList(int valueId, int type, int size, int page, int showType);
 
@@ -28,5 +29,13 @@ public interface UserService {
     Map topicDetail(int id);
 
     Comment commentPost(Comment comment);
+
+    int register(HashMap<String, String> userInfoMap);
+
+    int isUserExist(String username);
+
+    int isMobileExist(String mobile);
+
+    int resetPassword(String password, String mobile);
 
 }

@@ -9,6 +9,8 @@ import com.springmall.mapper.*;
 import com.springmall.utils.SubjectUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * 用户管理——会员管理——service
@@ -86,7 +88,7 @@ public class UserServiceImpl implements UserService {
     public Map collectList(int type, int page, int size, int id) {
         HashMap<Object, Object> map = new HashMap<>();
         CollectExample collectExample = new CollectExample();
-        collectExample.createCriteria().andDeletedEqualTo(false).andUserIdEqualTo(id).andDeletedEqualTo(false);
+        collectExample.createCriteria().andUserIdEqualTo(id)/*.andDeletedEqualTo(false)./*.andTypeEqualTo((byte)type)*/;
         //分页查询
         PageHelper.offsetPage(page, size);
         List<Collect> collects = collectMapper.selectByExample(collectExample);
@@ -118,11 +120,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Map userIndex() {
+    public Map userIndex(int id) {
         HashMap<Object, Object> map = new HashMap<>();
         HashMap<Object, Object> map1 = new HashMap<>();
-        User user = SubjectUtil.getUser();
-        Integer id = user.getId();
         OrderExample orderExample = new OrderExample();
         orderExample.createCriteria().andUserIdEqualTo(id).andDeletedEqualTo(false);
         List<Order> orders = orderMapper.selectByExample(orderExample);
@@ -262,6 +262,32 @@ public class UserServiceImpl implements UserService {
         int id = commentMapper.selectLastInsertId();
         comment.setId(id);
         return comment;
+    }
+
+    @Override
+    public int register(HashMap<String, String> userInfoMap) {
+        return userMapper.insertUser(userInfoMap);
+    }
+
+    @Override
+    public int isUserExist(String username) {
+        return userMapper.selectUserCountByName(username);
+    }
+
+    @Override
+    public int isMobileExist(String mobile) {
+        return userMapper.selectUserCountByMobile(mobile);
+    }
+
+    // 根据手机号重置用户密码
+    @Override
+    public int resetPassword(String password, String mobile) {
+        User user = new User();
+        user.setPassword(password);
+        UserExample userExample = new UserExample();
+        userExample.createCriteria().andMobileEqualTo(mobile);
+        return userMapper.updateByExampleSelective(user, userExample);
+
     }
 
 

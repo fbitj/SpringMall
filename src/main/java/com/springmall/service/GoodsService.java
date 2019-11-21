@@ -3,6 +3,7 @@ package com.springmall.service;
 import com.springmall.bean.*;
 
 import java.util.List;
+import java.util.Map;
 
 public interface GoodsService {
     /**
@@ -24,6 +25,11 @@ public interface GoodsService {
      */
     int deleteGoods(Goods goods);
 
+    /**
+     * 根据商品id查询商品信息
+     * @param goodsId
+     * @return
+     */
     Goods selectGoodsById(Integer goodsId);
 
     /**
@@ -52,4 +58,28 @@ public interface GoodsService {
      */
     void updateGoodsInfo(Goods goods, List<Goods_specification> specifications, List<Goods_product> products, List<Goods_attribute> attributes);
 
+    /**
+     *查询总的商品数量
+     * @return
+     */
+    long queryTotalGoods();
+
+    /**
+     * 若categoryId不为0获取当前类目下的商品信息和所有二级类目信息
+     * 为0则搜索关键词
+     * @param
+     * @return
+     */
+    List<Goods> goodsListInCurrentCategory(PageRequest request);
+
+    /**
+     * 获取相同类目的商品
+     * @param id
+     * @return
+     */
+    List<Goods> selectGoodsInSameCategory(Integer id);
+
+    Map selectGoodsDetailById(Integer id);
+
+    List<Goods> getHotGoods(int amountLimimt);
 }

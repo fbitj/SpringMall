@@ -4,6 +4,8 @@ import com.springmall.bean.Ad;
 import com.springmall.bean.PageRequest;
 import com.springmall.bean.DataForPage;
 
+import java.util.List;
+
 public interface AdvertiseService {
     DataForPage<Ad> totalAdvertise(PageRequest adRequest);
 
@@ -12,4 +14,6 @@ public interface AdvertiseService {
     Ad create(Ad advertise);
 
     void delete(Integer id);
+
+    List<Ad> getAvailAdvertise(int amountLimit);
 }

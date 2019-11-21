@@ -57,7 +57,6 @@ public class WxUserController {
     @RequestMapping("storage/upload")
     public BaseReqVo storageUpload(MultipartFile file){
         BaseReqVo<Object> baseReqVo = new BaseReqVo<>();
-
         baseReqVo.setData("");
         baseReqVo.setErrmsg("成功");
         baseReqVo.setErrno(0);
@@ -89,11 +88,14 @@ public class WxUserController {
     @RequestMapping("user/index")
     public BaseReqVo userIndex() {
         BaseReqVo<Object> baseReqVo = new BaseReqVo<>();
-        Map map = userService.userIndex();
+        User user = SubjectUtil.getUser();
+        Integer id = user.getId();
+        Map map = userService.userIndex(id);
         baseReqVo.setData(map);
         baseReqVo.setErrmsg("成功");
         baseReqVo.setErrno(0);
-        return baseReqVo;
+        return BaseReqVo.ok(map);
+//        return baseReqVo;
     }
 
     //商品收藏，取消收藏
@@ -109,8 +111,8 @@ public class WxUserController {
      *
      * @return
      */
-    @RequestMapping("collect/addrodelete")
-    public BaseReqVo collectAddrodelete(Map map) {
+    @RequestMapping("collect/addordelete")
+    public BaseReqVo collectAddrodelete(@RequestBody Map map) {
         User user = SubjectUtil.getUser();
         Integer id = user.getId();
         BaseReqVo<Object> baseReqVo = new BaseReqVo<>();
@@ -123,6 +125,7 @@ public class WxUserController {
         return baseReqVo;
     }
 
+    //收藏列表
     /**
      * request
      * wx/collect/list?type=0&page=1&size=10

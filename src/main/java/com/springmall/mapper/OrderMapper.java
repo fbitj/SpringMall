@@ -1,11 +1,9 @@
 package com.springmall.mapper;
 
-import com.springmall.bean.Order;
-import com.springmall.bean.OrderExample;
+import com.springmall.bean.*;
+
 import java.util.List;
 
-import com.springmall.bean.OrderStat;
-import com.springmall.bean.UserStat;
 import org.apache.ibatis.annotations.Param;
 
 public interface OrderMapper {
@@ -32,4 +30,16 @@ public interface OrderMapper {
     int updateByPrimaryKey(Order record);
 
     List<OrderStat> selectOrderStat();
+
+    /**
+     * 查询未删除订单
+     *
+     * @param id
+     * @return
+     */
+    OrderRespVo queryOrderById(@Param("id") int id);
+
+    int updateOrderDeletedAndTimeById(@Param("id") Integer id);
+
+    int OrderPayById(@Param("id") int id, @Param("status") short status, @Param("payId") String payId);
 }

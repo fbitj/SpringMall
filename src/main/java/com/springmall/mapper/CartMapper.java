@@ -30,5 +30,13 @@ public interface CartMapper {
 
     int updateByPrimaryKey(Cart record);
 
+
+    /**
+     * 逻辑删除购物车
+     * @param id
+     * @return
+     */
+    int logicDeleteCartById(Integer id);
+
     int updateByProductIdSelective(int productId);
 }

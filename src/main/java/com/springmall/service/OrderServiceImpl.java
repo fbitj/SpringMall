@@ -5,13 +5,13 @@ import com.github.pagehelper.PageInfo;
 import com.springmall.bean.*;
 import com.springmall.exception.OrderException;
 import com.springmall.mapper.*;
+import com.springmall.utils.GetUserUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.*;
-
 
 
 @Service
@@ -28,6 +28,7 @@ public class OrderServiceImpl implements OrderService {
     /**
      * 显示订单
      * 根据userId、orderSn、OrderStatusArray查找订单
+     *
      * @param page
      * @param limit
      * @return
@@ -39,7 +40,7 @@ public class OrderServiceImpl implements OrderService {
         //查询
         OrderExample orderExample = new OrderExample();
         List<Order> orders = orderMapper.selectByExample(orderExample);
-        List<OrderResp> orderResps=new ArrayList<>();
+        List<OrderResp> orderResps = new ArrayList<>();
         for (Order order : orders) {
             OrderResp orderResp = packageOrderToOrderResp(order);
             orderResps.add(orderResp);
@@ -54,6 +55,7 @@ public class OrderServiceImpl implements OrderService {
 
     /**
      * 条件查询
+     *
      * @param page
      * @param limit
      * @param userId
@@ -68,32 +70,32 @@ public class OrderServiceImpl implements OrderService {
         //查询
         OrderExample orderExample = new OrderExample();
         List<Short> shorts = null;
-        if( orderStatusArray != null) {
-             shorts = orderStatusArrayToList(orderStatusArray);
+        if (orderStatusArray != null) {
+            shorts = orderStatusArrayToList(orderStatusArray);
         }
-        if(userId != null && orderSn != null && orderStatusArray !=null) {
+        if (userId != null && orderSn != null && orderStatusArray != null) {
             orderExample.createCriteria().andUserIdEqualTo(userId).andOrderSnEqualTo(orderSn).andOrderStatusIn(shorts);
         }
-        if(userId != null && orderSn != null) {
+        if (userId != null && orderSn != null) {
             orderExample.createCriteria().andUserIdEqualTo(userId).andOrderSnEqualTo(orderSn);
         }
-        if(userId != null && orderStatusArray != null) {
+        if (userId != null && orderStatusArray != null) {
             orderExample.createCriteria().andUserIdEqualTo(userId).andOrderStatusIn(shorts);
         }
-        if(orderSn != null && orderStatusArray != null) {
+        if (orderSn != null && orderStatusArray != null) {
             orderExample.createCriteria().andOrderSnEqualTo(orderSn).andOrderStatusIn(shorts);
         }
         if (userId != null) {
             orderExample.createCriteria().andUserIdEqualTo(userId);
         }
-        if(orderSn != null) {
+        if (orderSn != null) {
             orderExample.createCriteria().andOrderSnEqualTo(orderSn);
         }
-        if(orderStatusArray != null) {
+        if (orderStatusArray != null) {
             orderExample.createCriteria().andOrderStatusIn(shorts);
         }
         List<Order> orders = orderMapper.selectByExample(orderExample);
-        List<OrderResp> orderResps=new ArrayList<>();
+        List<OrderResp> orderResps = new ArrayList<>();
         for (Order order : orders) {
             OrderResp orderResp = packageOrderToOrderResp(order);
             orderResps.add(orderResp);
@@ -123,12 +125,13 @@ public class OrderServiceImpl implements OrderService {
         Map<String, Object> map = new HashMap<>();
         map.put("orderGoods", order_goods);
         map.put("user", userMap);
-        map.put("order",orderResp);
+        map.put("order", orderResp);
         return map;
     }
 
     /**
      * 发货：改变订单状态。order_status = 301
+     *
      * @param order
      * @return
      */
@@ -146,6 +149,7 @@ public class OrderServiceImpl implements OrderService {
 
     /**
      * 退款，order_status = 203
+     *
      * @param map
      * @return
      */
@@ -167,6 +171,7 @@ public class OrderServiceImpl implements OrderService {
     /**
      * 将order封装到orderResp
      * 刨除了几个前端不需要接收的成员变量
+     *
      * @param order
      * @return
      */
@@ -200,7 +205,7 @@ public class OrderServiceImpl implements OrderService {
 
     public List<Short> orderStatusArrayToList(Short[] orderStatusArray) {
         ArrayList<Short> shorts = new ArrayList<>();
-        for (int i = 0; i < orderStatusArray.length ; i++) {
+        for (int i = 0; i < orderStatusArray.length; i++) {
             shorts.add(orderStatusArray[i]);
         }
         return shorts;
@@ -219,11 +224,11 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public ArrayList<OrderRespVo> queryUserOrders(int userId, int showType, int page, int size) {
-        PageHelper.startPage(page,size);//分页查询
+        PageHelper.startPage(page, size);//分页查询
         OrderExample orderExample = new OrderExample();
         orderExample.setOrderByClause("id desc");// id倒序
         OrderExample.Criteria criteria = orderExample.createCriteria();
-        criteria.andOrderStatusGreaterThanOrEqualTo((short) (showType*100)).andOrderStatusLessThan((short) ((showType+1)*100));
+        criteria.andOrderStatusGreaterThanOrEqualTo((short) (showType * 100)).andOrderStatusLessThan((short) ((showType + 1) * 100));
         // 查询未删除订单
         criteria.andUserIdEqualTo(userId).andDeletedEqualTo(false);
         List<Order> orders = orderMapper.selectByExample(orderExample);
@@ -277,19 +282,21 @@ public class OrderServiceImpl implements OrderService {
 
     /**
      * 逻辑删除订单，并更新修改时间
+     *
      * @param orderId
      * @return
      */
     @Override
     @Transactional
     public int deleteOrderById(Integer orderId) {
-       orderMapper.updateOrderDeletedAndTimeById(orderId);
-       order_goodsMapper.updateDeleteAndTimeByOrderId(orderId);
-       return 1;
+        orderMapper.updateOrderDeletedAndTimeById(orderId);
+        order_goodsMapper.updateDeleteAndTimeByOrderId(orderId);
+        return 1;
     }
 
     @Autowired
     Order_goodsMapper orderGoodsMapper;
+
     @Override
     public Order_goods queryOrderGoodsByOrderIdAndGoodsId(int orderId, int goodsId) {
         Order_goodsExample orderGoodsExample = new Order_goodsExample();
@@ -297,6 +304,7 @@ public class OrderServiceImpl implements OrderService {
         List<Order_goods> order_goods = orderGoodsMapper.selectByExample(orderGoodsExample);
         return order_goods.get(0);
     }
+
     @Autowired
     CartMapper cartMapper;
     @Autowired
@@ -309,7 +317,6 @@ public class OrderServiceImpl implements OrderService {
     Goods_productMapper goodsProductMapper;
 
     /**
-     *
      * @param userid
      * @param cartId         购物车id(没有用到)
      * @param addressId      地址id
@@ -331,8 +338,8 @@ public class OrderServiceImpl implements OrderService {
         CartExample cartExample = new CartExample();
         cartExample.createCriteria().andUserIdEqualTo(userid).andCheckedEqualTo(true).andDeletedEqualTo(false);
         List<Cart> carts = cartMapper.selectByExample(cartExample);
-        if (carts.size() == 0){
-            throw  new OrderException("服务器异常");
+        if (carts.size() == 0) {
+            throw new OrderException("服务器异常");
         }
         // 生成订单编号
         String orderSn = UUID.randomUUID().toString().replaceAll("-", "");
@@ -341,7 +348,7 @@ public class OrderServiceImpl implements OrderService {
         Order order = new Order();
         order.setUserId(userid);
         order.setOrderSn(orderSn);
-        order.setOrderStatus((short)101);// 订单状态
+        order.setOrderStatus((short) 101);// 订单状态
         order.setConsignee(address.getName());// 收件人
         order.setMobile(address.getMobile());
         order.setAddress(address.getAddress());
@@ -354,15 +361,19 @@ public class OrderServiceImpl implements OrderService {
         // 查询配送规则
         BigDecimal freightMin = new BigDecimal(systemMapper.selectFreightMin());
         BigDecimal freightPrice = new BigDecimal(systemMapper.selectFreightPrice());
-        if (goodPrice.compareTo(freightMin) == -1){
+        if (goodPrice.compareTo(freightMin) == -1) {
             order.setFreightPrice(freightPrice);// 配送费用
-        }else {
+        } else {
             order.setFreightPrice(new BigDecimal("0"));// 配送费用
         }
-        order.setCouponPrice(coupon.getDiscount());// 优惠券减免
+        BigDecimal discount = new BigDecimal("0");
+        if (coupon != null) {
+            discount = coupon.getDiscount();
+        }
+        order.setCouponPrice(discount);// 优惠券减免
         order.setIntegralPrice(new BigDecimal("0"));// 用户积分减免============没有不考虑！！！！！！！！！！！
         order.setGrouponPrice(new BigDecimal("0"));// 团购优惠减免============不考虑！！！！！！！！！！！
-        order.setOrderPrice(order.getGoodsPrice().add(order.getFreightPrice()).subtract(coupon.getDiscount()));// 订单费用 goods_price + freight_price - coupon_price
+        order.setOrderPrice(order.getGoodsPrice().add(order.getFreightPrice()).subtract(discount));// 订单费用 goods_price + freight_price - coupon_price
         order.setActualPrice(order.getGoodsPrice().subtract(order.getIntegralPrice()));// 实付费用 order_price - integral_price
         order.setPayTime(new Date());//微信支付时间
         order.setAddTime(new Date());
@@ -378,7 +389,7 @@ public class OrderServiceImpl implements OrderService {
             Short number = cart.getNumber();
             // 判断商品库存是否足够，不足返回 -1
             Goods_product goods_product = goodsProductMapper.selectByPrimaryKey(productId);
-            if (goods_product.getNumber() < number){
+            if (goods_product.getNumber() < number) {
                 throw new OrderException("商品库存不足");
             }
             Order_goods orderGoods = new Order_goods();
@@ -397,18 +408,19 @@ public class OrderServiceImpl implements OrderService {
             orderGoods.setDeleted(false);
             orderGoodsMapper.insertSelective(orderGoods);
             // 商品库存good_product的number减少
-            orderGoodsMapper.updateNumberById(cart.getProductId(),number);
+            orderGoodsMapper.updateNumberById(cart.getProductId(), number);
             // 购物车中逻辑删除
             cartMapper.logicDeleteCartById(cart.getId());
+
         }
-        return 1;
+        return order.getId();
     }
 
 
     @Override
     public int orderPay(int orderId) {
         short status = 201;
-        String payId = UUID.randomUUID().toString().replaceAll("-","");
-        return orderMapper.OrderPayById(orderId, status,payId);
+        String payId = UUID.randomUUID().toString().replaceAll("-", "");
+        return orderMapper.OrderPayById(orderId, status, payId);
     }
 }

@@ -7,7 +7,7 @@ import java.util.List;
 public interface SearchHistoryService {
     List<Search_history> querySearchHistoryList(Integer userId,String keyword);
     //删除搜索的历史记录
-    void deleteSearchHistory();
+    void deleteSearchHistory(Integer userId);
 
     int addUserSearchHistory(Integer userId, String keyword);
 }

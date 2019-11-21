@@ -39,8 +39,9 @@ public class SearchHistoryServiceImpl implements SearchHistoryService {
      * 刪除搜索的歷史記錄
      */
     @Override
-    public void deleteSearchHistory() {
+    public void deleteSearchHistory(Integer userId) {
         Search_historyExample search_historyExample = new Search_historyExample();
+        search_historyExample.createCriteria().andUserIdEqualTo(userId);
         int i = search_historyMapper.deleteByExample(search_historyExample);
     }
 

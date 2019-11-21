@@ -6,7 +6,7 @@ import com.springmall.bean.UserData;
 import com.springmall.component.AliyunComponent;
 import com.springmall.service.UserService;
 import com.springmall.shiro.CustomToken;
-import com.springmall.utils.RandomUtil;
+import com.springmall.utils.Md5Utils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.subject.Subject;
@@ -32,13 +32,16 @@ public class WxAuthController {
      */
     @RequestMapping(value = "login", method = RequestMethod.POST)
     public BaseReqVo login(@RequestBody User user) {
+        // 对密码进行MD5加密
+        String encryptPwd = Md5Utils.getDefaultMd5Encrypt(user.getPassword());
+        user.setPassword(encryptPwd);
         // Shiro登录
         Subject subject = SecurityUtils.getSubject(); // 获取subject（主体）
         CustomToken token = new CustomToken(user.getUsername(), user.getPassword(), "user"); // 创建token
         try {
             subject.login(token); // 登录认证
         } catch (AuthenticationException e) {
-            return BaseReqVo.error(700, "账号密码不对"); //认证失败
+            return BaseReqVo.error(703, "账号密码不对"); //认证失败
         }
         // 封装返回数据
         UserData userData = new UserData(); // 返回的user数据的封装
@@ -99,10 +102,10 @@ public class WxAuthController {
     @RequestMapping("register")
     public BaseReqVo register(@RequestBody HashMap<String, String> userInfoMap) {
         // 判断验证码是否相同
-        String userCode = userInfoMap.get("code");
-        if (!isCodeEquals(userCode)){
-            return BaseReqVo.error(500,"验证码不正确");
-        }
+//        String userCode = userInfoMap.get("code");
+//        if (!isCodeEquals(userCode)){
+//            return BaseReqVo.error(500,"验证码不正确");
+//        }
         // 判断是否已经存在该用户,0表示不存在，否则存在
         int isUserExist = userService.isUserExist(userInfoMap.get("username"));
         if (isUserExist != 0) {
@@ -113,7 +116,10 @@ public class WxAuthController {
         if (isMobileExist != 0) {
             return BaseReqVo.error(700, "该手机号已被注册"); //认证失败
         }
-        // 用户注册
+        // 对密码进行MD5加密
+        String encryptPwd = Md5Utils.getDefaultMd5Encrypt(userInfoMap.get("password"));
+        userInfoMap.put("password", encryptPwd);
+        // 用户注册，将用户信息插入数据库
         int res = userService.register(userInfoMap);
         if (res == 0)
             return BaseReqVo.error(703, "注册失败，请稍后再试");

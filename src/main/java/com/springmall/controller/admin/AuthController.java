@@ -10,6 +10,8 @@ import com.springmall.utils.Md5Utils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.authz.annotation.Logical;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,7 +61,7 @@ public class AuthController {
     public BaseReqVo getInfo(String token) {
         // 通过请求参数中sessionid获取到session中的管理员系信息
         Subject subject = SecurityUtils.getSubject();
-        Admin principal = (Admin) subject.getPrincipal(); // 为什么这个就是当前登录用户的信息?
+            Admin principal = (Admin) subject.getPrincipal(); // 为什么这个就是当前登录用户的信息?
 
         BaseReqVo baseReqVo = new BaseReqVo();
         InfoData data = new InfoData();

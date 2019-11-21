@@ -3,6 +3,8 @@ package com.springmall.controller.admin;
 import com.springmall.bean.BaseReqVo;
 import com.springmall.bean.Brand;
 import com.springmall.service.BrandService;
+import org.apache.shiro.authz.annotation.Logical;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,6 +19,7 @@ public class BrandController {
     BrandService brandService;
     //显示全部品牌
     @RequestMapping("list")
+    @RequiresPermissions(value = {"admin:brand:list"})
     public BaseReqVo brandList(Integer page, Integer limit, Integer id, String name) {
         BaseReqVo baseReqVo = new BaseReqVo();
         //Map<String, Object> map = new HashMap<>();
@@ -33,6 +36,7 @@ public class BrandController {
     }
     //添加
     @RequestMapping("create")
+    @RequiresPermissions(value = {"admin:brand:create"})
     public BaseReqVo createBrand(@RequestBody Brand brand) {
         BaseReqVo baseReqVo = new BaseReqVo();
         Brand newBrand = brandService.addBrand(brand);

@@ -73,9 +73,9 @@ public class WxCouponController {
      * @return
      */
     @RequestMapping("exchange")
-    public BaseReqVo exchangeCoupon(@RequestBody String code) {
+    public BaseReqVo exchangeCoupon(@RequestBody Map<String,String> code) {
         User user = (User) SecurityUtils.getSubject().getPrincipal();
-        int result = couponService.exchangeCoupon(code, user.getId());
+        int result = couponService.exchangeCoupon(code.get("code"), user.getId());
         if(result==0){
             return ResultUtil.fail(742,"兑换码不正确！");
         }
@@ -83,15 +83,15 @@ public class WxCouponController {
             return ResultUtil.success(null);
         }
         if (result==2){
-            return ResultUtil.fail(742,"您兑换该券的数量已达到限制，不可再兑换！");
+            return ResultUtil.fail(742,"您兑换该券已满");
         }
         if (result==3){
-            return ResultUtil.fail(742,"来晚啦，该优惠券已兑换完！");
+            return ResultUtil.fail(742,"该券已兑换完");
         }
         if (result==4){
-            return ResultUtil.fail(742,"来晚啦，该券已失效，不可再兑换！");
+            return ResultUtil.fail(742,"该券已失效");
         }
-        return ResultUtil.fail(742,"服务器异常！");
+        return ResultUtil.fail(742,"服务器异常");
     }
 
     /**
@@ -117,7 +117,7 @@ public class WxCouponController {
     @RequestMapping("selectlist")
     public BaseReqVo queryOrderCouponList(String cartId, String grouponRulesId) {
         User user = (User) SecurityUtils.getSubject().getPrincipal();
-        List<Coupon> dataList = couponService.queryOrderCouponList(user.getId());
+        List<Coupon> dataList = couponService.queryOrderCouponList(Integer.parseInt(cartId),Integer.parseInt(grouponRulesId),user.getId());
         return ResultUtil.success(dataList);
     }
 }

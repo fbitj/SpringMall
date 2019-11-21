@@ -28,7 +28,7 @@ public class Cart {
 
     private Boolean checked;
 
-    private String[] picUrl;
+    private String picUrl;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date addTime;

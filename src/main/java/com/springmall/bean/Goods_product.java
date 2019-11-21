@@ -18,7 +18,7 @@ public class Goods_product {
 
     private Integer number;
 
-    private String[] url;
+    private String url;
 
     @JsonFormat(pattern = "yyyy-MM-dd hh:mm:ss")
     private Date addTime;

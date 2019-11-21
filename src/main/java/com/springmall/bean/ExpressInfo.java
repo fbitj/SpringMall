@@ -9,4 +9,5 @@ import lombok.Data;
 public class ExpressInfo {
     private String shipperName;
     private String logisticCode;
+    private String Traces;
 }

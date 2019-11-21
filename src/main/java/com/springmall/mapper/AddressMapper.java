@@ -2,6 +2,8 @@ package com.springmall.mapper;
 
 import com.springmall.bean.Address;
 import com.springmall.bean.AddressExample;
+
+import java.util.Date;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
@@ -27,4 +29,12 @@ public interface AddressMapper {
     int updateByPrimaryKeySelective(Address record);
 
     int updateByPrimaryKey(Address record);
+
+    Integer queryUserId(Integer id);
+
+    Date queryAddTime(Integer id);
+
+    int deleteAddress(Integer id);
+
+    int updateDefault();
 }

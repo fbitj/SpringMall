@@ -1,13 +1,14 @@
 package com.springmall.controller.weixin;
 
 import com.github.pagehelper.PageInfo;
-import com.springmall.bean.BaseReqVo;
-import com.springmall.bean.Category;
-import com.springmall.bean.Goods;
-import com.springmall.bean.PageRequest;
+import com.springmall.bean.*;
 import com.springmall.service.CategoryService;
+import com.springmall.service.FootPrintService;
 import com.springmall.service.GoodsService;
+import com.springmall.service.SearchHistoryService;
 import com.springmall.utils.ResultUtil;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -26,6 +27,12 @@ public class WxGoodsController {
 
     @Autowired
     CategoryService categoryService;
+
+    @Autowired
+    FootPrintService footPrintService;
+
+    @Autowired
+    SearchHistoryService searchHistoryService;
 
     /**
      * 获取总的商品数量
@@ -84,6 +91,17 @@ public class WxGoodsController {
         }
         List<Category> categories = categoryService.queryCategoryByL2(categoryId);
 
+        //若keyword存在则需要为用户添加搜索历史
+        String keyword = request.getKeyword();
+        if (keyword != null) {
+            //判断是否有用户登录
+            User principal = (User) SecurityUtils.getSubject().getPrincipal();
+            if (principal != null) {
+                int i = searchHistoryService.addUserSearchHistory(principal.getId(), keyword);
+                if (i == 0) return ResultUtil.fail(402, "服务器繁忙,请登陆后重试");
+            }
+        }
+
         //封装信息
         PageInfo<Goods> info = new PageInfo<>(goods);
         Map map = new HashMap();
@@ -115,6 +133,13 @@ public class WxGoodsController {
     @RequestMapping("detail")
     public BaseReqVo goodsDetail(Integer id) {
         Map result = goodsService.selectGoodsDetailById(id);
+        //为用户添加商品足迹
+        Subject subject = SecurityUtils.getSubject();
+        User principal = (User) subject.getPrincipal();
+        if (principal != null) {
+            //为用户添加足迹
+            footPrintService.addUserFoot(id, principal.getId());
+        }
         return ResultUtil.success(result);
     }
 

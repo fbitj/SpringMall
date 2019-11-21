@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -27,7 +28,9 @@ public class WxBrandController {
     @RequestMapping("detail")
     public BaseReqVo brandInfo(Integer id) {
         Brand brand = brandService.queryBrandById(id);
-        return ResultUtil.success(brand);
+        Map<String,Brand> map = new HashMap<>();
+        map.put("brand", brand);
+        return ResultUtil.success(map);
     }
 
     /**

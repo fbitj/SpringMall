@@ -248,7 +248,7 @@ public class CategoryServiceImpl implements CategoryService {
         CategoryExample example = new CategoryExample();
         CategoryExample.Criteria criteria = example.createCriteria();
         criteria.andLevelEqualTo("L2");
-        if (categoryId != null) {
+        if (categoryId != null && categoryId.size() > 0) {
             criteria.andIdIn(categoryId);
         }
         return categoryMapper.selectByExample(example);
@@ -284,6 +284,11 @@ public class CategoryServiceImpl implements CategoryService {
             return null;
         }
         return categoryList.get(0);
+    }
+
+    @Override
+    public List<Goods> getFloorGoodsByCategory(Integer id, int amountLimit) {
+        return categoryMapper.selectFloorGoodsByCategory(id, amountLimit);
     }
 
 

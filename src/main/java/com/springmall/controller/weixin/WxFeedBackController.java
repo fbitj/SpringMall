@@ -18,7 +18,11 @@ public class WxFeedBackController {
 
     @RequestMapping("submit")
     public BaseReqVo submitFeedBack(@RequestBody Feedback feedback) {
-        feedBackService.submitFeedBack(feedback);
+        int i = feedBackService.submitFeedBack(feedback);
+        if (i == 0) {
+            //异常
+            return ResultUtil.fail(402, "请登陆后重试");
+        }
         return ResultUtil.success(null);
     }
 }

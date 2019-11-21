@@ -559,4 +559,9 @@
       deleted = #{deleted,jdbcType=BIT}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+  <select id="selectHotGoods" resultType="com.springmall.bean.Goods">
+    select brief,counter_price counterPrice,id,is_hot isHot,is_new isNew,name,pic_url picUrl,retail_price retailPrice
+    from cskaoyan_mall_goods where is_hot=true limit #{amountLimit} offset 0
+  </select>
 </mapper>

@@ -1,18 +1,16 @@
 package com.springmall.controller.weixin;
 
-import com.springmall.bean.BaseReqVo;
-import com.springmall.bean.Category;
-import com.springmall.bean.HomePageData;
-import com.springmall.service.CategoryService;
-import com.springmall.service.CouponService;
-import com.springmall.service.GoodsService;
+import com.springmall.bean.*;
+import com.springmall.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by fwj on 2019-11-20.
@@ -24,14 +22,58 @@ public class HomeCatalogController {
     CategoryService categoryService;
     @Autowired
     CouponService couponService;
+    @Autowired
+    GrouponService grouponService;
+    @Autowired
+    TopicService topicService;
+    @Autowired
+    AdvertiseService advertiseService;
+    @Autowired
+    BrandService brandService;
+    @Autowired
+    GoodsService goodsService;
     // 首页显示数据
     @RequestMapping("/wx/home/index")
     @ResponseBody
     public BaseReqVo homeIndex() {
         HomePageData homePageData = new HomePageData();
+        //设置首页分类频道数据
         List<Category> categoryList = categoryService.getChannelCatagory();
         homePageData.setChannel(categoryList);
-        
+        // 设置首页优惠券
+        List<Coupon> couponList = couponService.getAllCoupon();
+        homePageData.setCouponList(couponList);
+        List<GrouponInfo> grouponInfoList = grouponService.getGrouponInfo();
+        homePageData.setGrouponList(grouponInfoList);
+        // 设置专题列表
+//        homePageData.setTopicList();
+        // 设置广告横幅
+        List<Ad> adList = advertiseService.getAvailAdvertise(6); // 查询指定数目的广告
+        homePageData.setBanner(adList);
+        // 设置广告列表
+        PageRequest brandPageRequest = new PageRequest();
+        brandPageRequest.setLimit(4);
+        brandPageRequest.setPage(0);
+        brandPageRequest.setSize(4);
+        Map map = brandService.queryAllBrandByPage(brandPageRequest);
+        List<Brand> brandList = (List<Brand>) map.get("brandList");
+        homePageData.setBrandList(brandList);
+        // 设置热销商品
+        List<Goods> hotGoodsList = goodsService.getHotGoods(6);
+        homePageData.setHotGoodsList(hotGoodsList);
+        // 设置底部商品列表
+        ArrayList floorGoodsList = new ArrayList();
+        List<Category> categories = categoryService.getChannelCatagory(); //查询一级类目
+        for (Category category : categories) {
+            HashMap<String, Object> goodsForCategory = new HashMap<String, Object>();
+            goodsForCategory.put("id", category.getId());
+            goodsForCategory.put("name", category.getName());
+            // 根据一级类目的id查询指定数量的商品
+            List<Goods> goodsList = categoryService.getFloorGoodsByCategory(category.getId(), 4);
+            goodsForCategory.put("goodsList", goodsList);
+            floorGoodsList.add(goodsForCategory);
+        }
+        homePageData.setFloorGoodsList(floorGoodsList);
         return BaseReqVo.ok(homePageData);
     }
 
@@ -49,6 +91,7 @@ public class HomeCatalogController {
         dataMap.put("currentCategory", currentCategory);
         List<Category> subCategoryList = categoryService.getSubCategoryByPid(currentCategory.getId()); // 获取当前分类的子分类
         dataMap.put("currentSubCategory", subCategoryList);
+
         return BaseReqVo.ok(dataMap);
     }
 

@@ -35,6 +35,8 @@ public class HomeCatalogController {
     BrandService brandService;
     @Autowired
     GoodsService goodsService;
+    @Autowired
+    UserService userService;
 
     // 首页显示数据
     @RequestMapping("/wx/home/index")
@@ -53,7 +55,9 @@ public class HomeCatalogController {
         List<Groupon> grouponList = (List<Groupon>) grouponDataMap.get("data");
         homePageData.setGrouponList(grouponList);
         // 设置专题列表
-//        homePageData.setTopicList();
+        Map topicMap = userService.topicList(0, 4);
+        List data = (List) topicMap.get("data");
+        homePageData.setTopicList(data);
         // 设置广告横幅
         List<Ad> adList = advertiseService.getAvailAdvertise(6); // 查询指定数目的广告
         homePageData.setBanner(adList);
@@ -65,8 +69,8 @@ public class HomeCatalogController {
         Map map = brandService.queryAllBrandByPage(brandPageRequest);
         List<Brand> brandList = (List<Brand>) map.get("brandList");
         homePageData.setBrandList(brandList);
-        // 设置热销商品
-        List<Goods> hotGoodsList = goodsService.getHotGoods(6);
+        // 设置人气推荐热销商品
+        List<Goods> hotGoodsList = goodsService.getHotGoods(5);
         homePageData.setHotGoodsList(hotGoodsList);
         // 设置底部商品列表
         ArrayList floorGoodsList = new ArrayList();

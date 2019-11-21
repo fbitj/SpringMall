@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import com.springmall.bean.*;
 import com.springmall.service.AdminService;
+import com.springmall.utils.Md5Utils;
 import org.apache.shiro.authz.annotation.Logical;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -147,6 +148,10 @@ public class AdminController {
     @RequestMapping("admin/create")
 //    @RequiresPermissions("admin:admin:create")
     public BaseReqVo adminCreate(@RequestBody Admin2 admin, HttpServletRequest request) {
+        // 对密码进行Md5加密
+        String encryptPwd = Md5Utils.getDefaultMd5Encrypt(admin.getPassword());
+        admin.setPassword(encryptPwd);
+        // 创建管理员
         BaseReqVo<Object> baseReqVo = new BaseReqVo<>();
         Admin admin2 = new Admin();
         admin2.setUsername(admin.getUsername());
@@ -195,6 +200,10 @@ public class AdminController {
     @RequestMapping("admin/update")
 //    @RequiresPermissions("admin:admin:update")
     public BaseReqVo updateAdmin(@RequestBody Admin2 admin){
+        // 对密码进行Md5加密
+        String encryptPwd = Md5Utils.getDefaultMd5Encrypt(admin.getPassword());
+        admin.setPassword(encryptPwd);
+        // 更新管理员信息
         Admin admin2 = new Admin();
         BaseReqVo<Object> boaseReqVo = new BaseReqVo<>();
         admin2.setId(admin.getId());

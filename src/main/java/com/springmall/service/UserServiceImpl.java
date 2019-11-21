@@ -298,6 +298,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void recordUserLoginInfo(String ip) {
         User principal = (User) SecurityUtils.getSubject().getPrincipal(); // 获取当前用户对象
+        if (principal == null) return;
         UserExample userExample = new UserExample();
         userExample.createCriteria().andUsernameEqualTo(principal.getUsername());
         User user = new User();

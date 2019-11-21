@@ -39,8 +39,6 @@
             <artifactId>druid-spring-boot-starter</artifactId>
             <version>1.1.10</version>
         </dependency>
-
-
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
@@ -88,16 +86,6 @@
             <groupId>com.alibaba</groupId>
             <artifactId>druid</artifactId>
             <version>1.1.20</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.shiro</groupId>
-            <artifactId>shiro-spring</artifactId>
-            <version>1.4.1</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.shiro</groupId>
-            <artifactId>shiro-spring</artifactId>
-            <version>1.4.1</version>
         </dependency>
         <dependency>
             <groupId>org.aspectj</groupId>

@@ -50,11 +50,13 @@ public class FootPrintServiceImpl implements FootPrintService {
     public List queryUserFootPrintByPage(Integer userId, Integer page, Integer size) {
         PageHelper.startPage(page, size);
         List<Map> list = footprintMapper.queryUserFootPrintByPage(userId);
-        for (Map map : list) {
-            Date addTime = (Date) map.get("addTime");
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            String format = simpleDateFormat.format(addTime);
-            map.put("addTime", format);
+        if (list.size() > 0) {
+            for (Map map : list) {
+                Date addTime = (Date) map.get("addTime");
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                String format = simpleDateFormat.format(addTime);
+                map.put("addTime", format);
+            }
         }
         return list;
     }
@@ -71,5 +73,15 @@ public class FootPrintServiceImpl implements FootPrintService {
         footprint.setGoodsId(goodsId);
         footprint.setUserId(userId);
         return footprintMapper.insertSelective(footprint);
+    }
+
+    /**
+     * 根据id删除足迹
+     * @param footprint
+     * @return
+     */
+    @Override
+    public int deleteFootPrintById(Footprint footprint) {
+        return footprintMapper.updateByPrimaryKeySelective(footprint);
     }
 }

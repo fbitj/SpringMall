@@ -5,9 +5,11 @@ import com.springmall.bean.Coupon;
 import com.springmall.bean.Coupon_user;
 import com.springmall.bean.DataForPage;
 
+import java.util.HashMap;
 import java.util.List;
 
 public interface CouponService {
+
     List<Coupon> totalCoupons(PageRequest request);
 
     Coupon addCoupon(Coupon coupon);
@@ -20,6 +22,15 @@ public interface CouponService {
 
     int deleteCoupon(Coupon coupon);
 
-    List<Coupon> getAllCoupon();
+    HashMap<String, Object> queryCouponListByPage(String page, String size);
 
+    int receiveCouponByCouponId(int couponId, int userId);
+
+    int exchangeCoupon(String code, int userId);
+
+    HashMap<String, Object> queryMyCouponListByStatusAndPage(String status, String page, String size, int userId);
+
+    List<Coupon> queryOrderCouponList(int userId);
+
+    List<Coupon> getAllCoupon();
 }

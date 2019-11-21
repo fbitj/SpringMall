@@ -37,8 +37,10 @@ public class TopicController {
     @RequestMapping("create")
     public BaseReqVo addTopic(@RequestBody Topic topic) {
         //底价不能为null且必须大于等于0
-        if (isIllegal(topic.getPrice())) return ResultUtil.fail(402, "底价必须大于等于0");
-        Topic result = topicService.addTopic(topic);
+        String illegal = isIllegal(topic);
+        if (illegal != null) {
+            return ResultUtil.fail(402, illegal);
+        }        Topic result = topicService.addTopic(topic);
         return ResultUtil.success(result);
     }
 
@@ -49,7 +51,10 @@ public class TopicController {
      */
     @RequestMapping("update")
     public BaseReqVo updateTopicById(@RequestBody Topic topic) {
-        if (isIllegal(topic.getPrice())) return ResultUtil.fail(402, "底价必须大于等于0");
+        String illegal = isIllegal(topic);
+        if (illegal != null) {
+            return ResultUtil.fail(402, illegal);
+        }
         Topic result = topicService.updatedTopic(topic);
         return ResultUtil.success(result);
     }
@@ -65,10 +70,26 @@ public class TopicController {
         return ResultUtil.success(null);
     }
 
-    private boolean isIllegal(BigDecimal price) {
-        if (price == null || price.compareTo(BigDecimal.ZERO) == -1) {
-            return true;
+    private String isIllegal(Topic topic) {
+        if (topic.getPrice() == null || topic.getPrice().compareTo(BigDecimal.ZERO) == -1) {
+            return "底价必须大于等于0";
         }
-        return false;
+        String readCount = topic.getReadCount();
+        if (readCount != null) {
+            if (readCount.toLowerCase().endsWith("k")) {
+                String substring = readCount.substring(0, readCount.length() - 1);
+                try {
+                    //没有异常则表示格式正确
+                    Double.parseDouble(substring.trim());
+                    return null;
+                } catch (NumberFormatException e) {
+                    return "格式有误,单位必须为'k'(示例: 1000k,1000.5k)";
+                }
+            } else {
+                return "格式有误,单位必须为'k'(示例: 1000k,1000.5k)";
+            }
+
+        }
+        return null;
     }
 }

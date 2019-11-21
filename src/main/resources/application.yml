@@ -5,8 +5,6 @@ server:
     context-path: /
 
 
-
-
 pagehelper:
   helper-dialect: mysql
 
@@ -19,12 +17,13 @@ spring:
 
 mall:
   aliyun:
+    access-key-id: LTAI4Fr5gfYhcVjLMqeRGbuT
+    access-secret: IrkcHu6dZyrjPZRushgO76P5392HJ1
     oss:
       bucket: cskaoyan
       end-point: oss-cn-beijing.aliyuncs.com
     sms:
       sign-name: 王道训练营
-      template-code: 65535
+      template-code: SMS_173765187
       region-id: cn-hangzhou
-    access-key-id: LTAI4Fr5gfYhcVjLMqeRGbuT
-    access-secret: IrkcHu6dZyrjPZRushgO76P5392HJ1
+

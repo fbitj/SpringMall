@@ -67,7 +67,7 @@ public class CommentServiceImpl implements CommentService {
     @Transactional
     public int commentSubmit(int userId, Integer orderGoodsId, String content, boolean hasPicture, short star, String[] picUrls) {
         // 查询该订单中该商品是否已经提交评论
-        Order_goods order_goods = orderGoodsMapper.selectByPrimaryKey2(userId);
+        Order_goods order_goods = orderGoodsMapper.selectByPrimaryKey(orderGoodsId);
         int commentStatus = order_goods.getComment();
         if (commentStatus == 0){
             //否：修改订单中商品的评论相关信息

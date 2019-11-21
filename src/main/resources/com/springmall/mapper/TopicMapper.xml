@@ -3,7 +3,7 @@
 <mapper namespace="com.springmall.mapper.TopicMapper">
 
   <update id="deleteById">
-    update cskaoyan_mall_topic set deleted = true where id = #{id}
+    update cskaoyan_mall_topic set deleted = true, update_time = #{time} where id = #{id}
   </update>
 
   <resultMap id="BaseResultMap" type="com.springmall.bean.Topic">

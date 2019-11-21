@@ -2,6 +2,7 @@ package com.springmall.component;
 
 import lombok.Data;
 
+
 /**
  * @author Cats-Fish
  * @version 1.0

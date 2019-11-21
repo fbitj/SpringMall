@@ -3,16 +3,20 @@ package com.springmall.service;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.springmall.bean.*;
+import com.springmall.exception.DbException;
+import com.springmall.mapper.GrouponMapper;
+import com.springmall.mapper.Groupon_rulesMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import javax.xml.bind.DataBindingException;
 import com.springmall.mapper.*;
 import com.springmall.utils.HandleOptionUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class GrouponServiceImpl implements GrouponService {
@@ -64,7 +68,9 @@ public class GrouponServiceImpl implements GrouponService {
      */
     @Override
     public int deleteRulesById(Groupon_rules rules) {
-        return grouponRulesMapper.deleteById(rules.getId());
+        int i = grouponRulesMapper.deleteById(rules.getId(), new Date());
+        if (i == 0) throw new DbException();
+        return i;
     }
 
     /**
@@ -93,9 +99,10 @@ public class GrouponServiceImpl implements GrouponService {
     @Override
     public Groupon_rules create(Groupon_rules rules) {
         Date date = new Date();
-        rules.setAddTime(date);
         rules.setUpdateTime(date);
-        grouponRulesMapper.insertSelective(rules);
+        rules.setAddTime(date);
+        int i = grouponRulesMapper.insertSelective(rules);
+        if (i == 0) throw new DbException();
         return rules;
     }
 
@@ -107,7 +114,9 @@ public class GrouponServiceImpl implements GrouponService {
     @Override
     public int update(Groupon_rules rules) {
         rules.setUpdateTime(new Date());
-        return grouponRulesMapper.updateByPrimaryKeySelective(rules);
+        int update = grouponRulesMapper.updateByPrimaryKeySelective(rules);
+        if (update == 0) throw new DbException();
+        return update;
     }
 
     /**
@@ -122,6 +131,7 @@ public class GrouponServiceImpl implements GrouponService {
         GrouponExample grouponExample = new GrouponExample();
         grouponExample.createCriteria().andDeletedEqualTo(false);    //需过滤逻辑删除
         List<Groupon> grouponList = grouponMapper.selectByExample(grouponExample);
+        List<HashMap<String,Object>> dataList = new ArrayList<>();
         for (Groupon groupon : grouponList) {
             HashMap<String, Object> data = new HashMap<>();
             Groupon_rules rules = grouponRulesMapper.selectByPrimaryKey(groupon.getRulesId());
@@ -130,10 +140,11 @@ public class GrouponServiceImpl implements GrouponService {
             data.put("groupon_price",groupon_price);
             data.put("goods",goods);
             data.put("groupon_member",rules.getDiscountMember());
+            dataList.add(data);
         }
         HashMap<String,Object> dataMap = new HashMap<>();
-        dataMap.put("data",grouponList);
-        dataMap.put("count",grouponList.size());
+        dataMap.put("data",dataList);
+        dataMap.put("count",dataList.size());
         return dataMap;
     }
 

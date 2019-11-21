@@ -9,10 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class GrouponServiceImpl implements GrouponService {
@@ -122,6 +119,7 @@ public class GrouponServiceImpl implements GrouponService {
         GrouponExample grouponExample = new GrouponExample();
         grouponExample.createCriteria().andDeletedEqualTo(false);    //需过滤逻辑删除
         List<Groupon> grouponList = grouponMapper.selectByExample(grouponExample);
+        List<HashMap<String,Object>> dataList = new ArrayList<>();
         for (Groupon groupon : grouponList) {
             HashMap<String, Object> data = new HashMap<>();
             Groupon_rules rules = grouponRulesMapper.selectByPrimaryKey(groupon.getRulesId());
@@ -130,10 +128,11 @@ public class GrouponServiceImpl implements GrouponService {
             data.put("groupon_price",groupon_price);
             data.put("goods",goods);
             data.put("groupon_member",rules.getDiscountMember());
+            dataList.add(data);
         }
         HashMap<String,Object> dataMap = new HashMap<>();
-        dataMap.put("data",grouponList);
-        dataMap.put("count",grouponList.size());
+        dataMap.put("data",dataList);
+        dataMap.put("count",dataList.size());
         return dataMap;
     }
 

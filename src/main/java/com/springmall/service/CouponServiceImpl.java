@@ -3,6 +3,7 @@ package com.springmall.service;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.springmall.bean.*;
+import com.springmall.mapper.AddressMapper;
 import com.springmall.mapper.CouponMapper;
 import com.springmall.mapper.Coupon_userMapper;
 import com.springmall.utils.RandomUtil;
@@ -23,6 +24,8 @@ public class CouponServiceImpl implements CouponService{
     Coupon_userMapper coupon_userMapper;
     @Autowired
     CartService cartService;
+    @Autowired
+    AddressMapper addressMapper;
 
     /**
      * 查找优惠券并分页
@@ -283,6 +286,8 @@ public class CouponServiceImpl implements CouponService{
         for (Coupon_user couponUser : couponUserList) {
             Coupon coupon = couponMapper.selectByPrimaryKey(couponUser.getCouponId());
             if(!coupon.getDeleted()){
+                coupon.setStartTime(couponUser.getStartTime());
+                coupon.setEndTime(couponUser.getEndTime());
                 couponList.add(coupon);
             }
         }
@@ -299,27 +304,29 @@ public class CouponServiceImpl implements CouponService{
      * @return 当前订单可用的优惠券列表
      */
     @Override
-    public List<Coupon> queryOrderCouponList(int userId) {
+    public List<Coupon> queryOrderCouponList(int cartId, int grouponRulesId, int userId) {
+        AddressExample addressExample = new AddressExample();
+        addressExample.createCriteria().andUserIdEqualTo(userId).andIsDefaultEqualTo(true).andDeletedEqualTo(false);
+        Address addresses = addressMapper.selectByExample(addressExample).get(0);
+        //根据wx/cart/checkout接口的service层方法，获取下单前信息确认的商品总价goodsTotalPrice。
+        BigDecimal goodsTotalPrice = (BigDecimal) cartService.checkOutBeforePay(cartId,addresses.getId(),0,grouponRulesId).get("goodsTotalPrice");
         Coupon_userExample couponUserExample = new Coupon_userExample();
         //获取该用户所有已拥有的未使用状态的优惠券，过滤逻辑删除。
-        couponUserExample.createCriteria().andUserIdEqualTo(userId).andStatusEqualTo((short) 0).andDeletedEqualTo(false);    //过滤逻辑删除
+        couponUserExample.createCriteria().andUserIdEqualTo(userId).andStatusEqualTo((short) 0).andDeletedEqualTo(false);
         List<Coupon_user> couponUserList = coupon_userMapper.selectByExample(couponUserExample);
-        List<Integer> couponIdList = new ArrayList<>();
+        List<Coupon> couponList = new ArrayList<>();
         for (Coupon_user couponUser : couponUserList) {
-            couponIdList.add(couponUser.getCouponId());
+            Coupon coupon = couponMapper.selectByPrimaryKey(couponUser.getCouponId());
+            //优惠券还需满足：最低可用消费金额小于等于下单前信息确认的商品总价、状态为可使用，需过滤逻辑删除。
+            if (coupon.getMin().compareTo(goodsTotalPrice)<=0 && coupon.getStatus()==0 && coupon.getDeleted().equals(false)){
+                coupon.setStartTime(couponUser.getStartTime());
+                coupon.setEndTime(couponUser.getEndTime());
+                couponList.add(coupon);
+            }
         }
-        /*
-        现在先假设商品总价为goodsTotalPrice
-        */
-        BigDecimal goodsTotalPrice = new BigDecimal(500);
-        //根据wx/cart/checkout接口的service层方法，获取下单前信息确认的商品总价goodsTotalPrice。
-        /*
-        BigDecimal goodsTotalPrice = cartService.checkout().get("goodsTotalPrice");
-        */
-        CouponExample couponExample = new CouponExample();
-        //优惠券还需满足：最低可用消费金额小于等于下单前信息确认的商品总价、状态为可使用，需过滤逻辑删除。
+        /*CouponExample couponExample = new CouponExample();
         couponExample.createCriteria().andStatusEqualTo((short) 0).andMinLessThanOrEqualTo(goodsTotalPrice).andDeletedEqualTo(false);
-        List<Coupon> couponList = couponMapper.selectByExample(couponExample);
+        List<Coupon> couponList = couponMapper.selectByExample(couponExample);*/
         return couponList;
     }
 

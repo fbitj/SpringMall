@@ -1,5 +1,6 @@
 package com.springmall.bean;
 
+import com.springmall.utils.HandleOptionUtil;
 import lombok.Data;
 
 import java.util.List;
@@ -17,13 +18,13 @@ public class OrderRespVo extends Order {
 
 
     public void setHandleOption(int orderStatus) {
-        this.handleOption = new HandleOption(orderStatus);
+        this.handleOption = HandleOptionUtil.handleOption(orderStatus);
     }
 
     /**
      * 订单用户允许的操作
      */
-    @Data
+    /*@Data
     private class HandleOption {
         private boolean cancel;
 
@@ -73,5 +74,5 @@ public class OrderRespVo extends Order {
                     break;
             }
         }
-    }
+    }*/
 }

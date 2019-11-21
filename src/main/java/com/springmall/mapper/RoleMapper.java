@@ -22,15 +22,27 @@ public interface RoleMapper {
 
     Role selectByPrimaryKey(Integer id);
 
+    int selectLastInsertId();
+
     int updateByExampleSelective(@Param("record") Role record, @Param("example") RoleExample example);
 
     int updateByExample(@Param("record") Role record, @Param("example") RoleExample example);
 
     int updateByExampleDetail(@Param("record") Role2 record, @Param("example") RoleExample example);
 
+    int updateByExampleDetailSet(@Param("record") Role2 record, @Param("example") RoleExample example);
+
     int updateByPrimaryKeySelective(Role record);
 
     int updateByPrimaryKey(Role record);
+
+    int updateDeletedById(@Param("deleted") int value,@Param("id") int id);
+
+    int updateEnabledById(@Param("enabled") int value,@Param("id") int id);
+
+    int updateEnabledByIdSet(@Param("enabled") int value,@Param("id") String id);
+
+    int deleteRoleById(@Param("deleted") int value,@Param("id") int id);
 
     String selectById(Integer id);
 }

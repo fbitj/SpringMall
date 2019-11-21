@@ -21,6 +21,8 @@ public interface AdminMapper {
 
     Admin selectByPrimaryKey(Integer id);
 
+    int selectLastInsertId();
+
     int updateByExampleSelective(@Param("record") Admin record, @Param("example") AdminExample example);
 
     int updateByExample(@Param("record") Admin record, @Param("example") AdminExample example);
@@ -31,5 +33,8 @@ public interface AdminMapper {
 
     int updateByPrimaryKey(Admin record);
 
+    int updateDeletedById(@Param("deleted") int value,@Param("id") int id);
+
     Admin selectAdminByUsername(String username);
+
 }

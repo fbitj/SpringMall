@@ -12,6 +12,7 @@ import com.springmall.mapper.RoleMapper;
 import com.springmall.mapper.StorageMapper;
 import com.springmall.utils.PasswordUtil;
 import com.springmall.utils.StringUtil;
+import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -459,5 +460,17 @@ public class AdminServiceImpl implements AdminService{
             file.delete();
         }
         return 1;
+    }
+
+    // 记录当前用户的登出时间和登陆的ip地址信息
+    @Override
+    public void recordUserLoginInfo(String ip) {
+        Admin principal = (Admin) SecurityUtils.getSubject().getPrincipal();
+        AdminExample adminExample = new AdminExample();
+        adminExample.createCriteria().andUsernameEqualTo(principal.getUsername());
+        Admin admin = new Admin();
+        admin.setLastLoginTime(new Date());
+        admin.setLastLoginIp(ip);
+        int res = adminMapper.updateByExampleSelective(admin, adminExample);
     }
 }

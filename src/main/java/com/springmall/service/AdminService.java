@@ -54,4 +54,5 @@ public interface AdminService {
     int storageDelete(Storage storage);
 
 
+    void recordUserLoginInfo(String ip);
 }

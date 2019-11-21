@@ -3,9 +3,13 @@ package com.springmall.service;
 import com.springmall.bean.User;
 import com.springmall.bean.UserExample;
 import com.springmall.mapper.UserMapper;
+import org.apache.derby.iapi.security.SecurityUtil;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -70,6 +74,18 @@ public class UserServiceImpl implements UserService {
         userExample.createCriteria().andMobileEqualTo(mobile);
         return userMapper.updateByExampleSelective(user, userExample);
 
+    }
+
+    // 记录当前用户的登出时间和登陆的ip地址信息
+    @Override
+    public void recordUserLoginInfo(String ip) {
+        User principal = (User) SecurityUtils.getSubject().getPrincipal(); // 获取当前用户对象
+        UserExample userExample = new UserExample();
+        userExample.createCriteria().andUsernameEqualTo(principal.getUsername());
+        User user = new User();
+        user.setLastLoginTime(new Date());
+        user.setLastLoginIp(ip);
+        int res = userMapper.updateByExampleSelective(user, userExample);
     }
 
 

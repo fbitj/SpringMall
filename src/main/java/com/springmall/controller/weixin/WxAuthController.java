@@ -8,17 +8,13 @@ import com.springmall.shiro.CustomToken;
 import com.springmall.utils.RandomUtil;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
-import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-
-import java.io.Serializable;
+import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Random;
 
 /**
  * Created by fwj on 2019-11-19.
@@ -61,7 +57,11 @@ public class WxAuthController {
      * @return
      */
     @RequestMapping("logout")
-    public BaseReqVo logout() {
+    public BaseReqVo logout(HttpServletRequest request) {
+        // 记录登出时间和登陆的ip地址
+        String ip = request.getRemoteAddr();
+        userService.recordUserLoginInfo(ip);
+        // Shiro登出
         Subject subject = SecurityUtils.getSubject();
         subject.logout();
         return BaseReqVo.ok();

@@ -17,4 +17,6 @@ public interface UserService {
     int isMobileExist(String mobile);
 
     int resetPassword(String password, String mobile);
+
+    void recordUserLoginInfo(String ip);
 }

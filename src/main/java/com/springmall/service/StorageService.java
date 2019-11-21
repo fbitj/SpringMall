@@ -11,4 +11,6 @@ public interface StorageService {
     String storageImg(MultipartFile myfile, HttpServletRequest request) throws IOException;
 
     int addStorage(Storage storage);
+
+    Storage uploadImg(MultipartFile file);
 }

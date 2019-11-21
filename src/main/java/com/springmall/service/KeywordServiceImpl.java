@@ -108,12 +108,13 @@ public class KeywordServiceImpl implements KeywordService {
     }
 
     /**
-     * 前端搜索历史记录
+     * 微信搜索历史记录
      *
      * @return searchHistoryList
      */
-    public List<Search_history> querySearchHistoryList() {
+    public List<Search_history> querySearchHistoryList(Integer userId) {
         Search_historyExample search_historyExample = new Search_historyExample();
+        search_historyExample.createCriteria().andUserIdEqualTo(userId);
         List<Search_history> searchHistoryList = search_historyMapper.selectByExample(search_historyExample);
         return searchHistoryList;
     }

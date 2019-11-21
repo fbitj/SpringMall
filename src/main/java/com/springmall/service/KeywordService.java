@@ -13,6 +13,6 @@ public interface KeywordService {
     Keyword updateKeyword(Keyword keyword);
     int deleteKeyword(Keyword keyword);
     List<Keyword> queryKeyWordList();
-    List<Search_history> querySearchHistoryList();
+    List<Search_history> querySearchHistoryList(Integer userId);
     List<Keyword> queryKeyWordList(String keyword);
 }

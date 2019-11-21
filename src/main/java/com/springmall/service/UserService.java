@@ -2,7 +2,6 @@ package com.springmall.service;
 
 import com.springmall.bean.Comment;
 import com.springmall.bean.User;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -38,4 +37,5 @@ public interface UserService {
 
     int resetPassword(String password, String mobile);
 
+    void recordUserLoginInfo(String ip);
 }

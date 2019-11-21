@@ -33,35 +33,6 @@ public class WxUserController {
     UserService userService;
 
 
-    //文件上传
-    /**
-     * request
-     * //wx/storage/upload
-     * response
-     * {
-     * 	"errno": 0,
-     * 	"data": {
-     * 		"id": 2068,
-     * 		"key": "8uvuwsv946kme1hgolcu.jpg",
-     * 		"name": "touristappid.o6zAJswdq_-9LHVll5Z5sXPYPwKY.tmTgNmxFfD8P518023d8df478b23e93dcac54f371abb.jpg",
-     * 		"type": "image/jpeg",
-     * 		"size": 139443,
-     * 		"url": "http://192.168.2.100:8081/wx/storage/fetch/8uvuwsv946kme1hgolcu.jpg",
-     * 		"addTime": "2019-11-20 07:35:35",
-     * 		"updateTime": "2019-11-20 07:35:35"
-     *        },
-     * 	"errmsg": "成功"
-     * }
-     * @return
-     */
-    @RequestMapping("storage/upload")
-    public BaseReqVo storageUpload(MultipartFile file){
-        BaseReqVo<Object> baseReqVo = new BaseReqVo<>();
-        baseReqVo.setData("");
-        baseReqVo.setErrmsg("成功");
-        baseReqVo.setErrno(0);
-        return baseReqVo;
-    }
 
 
     //个人页面用户信息

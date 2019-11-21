@@ -238,6 +238,16 @@ public class GoodsServiceImpl implements GoodsService {
     }
 
     /**
+     * 获取热销商品
+     * @param amountLimimt
+     * @return
+     */
+    @Override
+    public List<Goods> getHotGoods(int amountLimimt) {
+        return goodsMapper.selectHotGoods(amountLimimt);
+    }
+
+    /**
      *
      * @param goods 商品信息
      * @param specifications 商品规格

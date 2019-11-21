@@ -307,9 +307,15 @@
       role_ids = #{roleIds,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
   <update id="updateDeletedById" parameterType="com.springmall.bean.Admin2">
     update cskaoyan_mall_admin
     set deleted = #{deleted,jdbcType=BIT}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+  <select id="selectAdminByUsername" resultType="com.springmall.bean.Admin">
+    select id,username,password,avatar,role_ids from cskaoyan_mall_admin where username=#{username}
+  </select>
+
 </mapper>

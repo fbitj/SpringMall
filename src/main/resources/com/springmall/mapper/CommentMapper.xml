@@ -96,6 +96,11 @@
     from cskaoyan_mall_comment
     where id = #{id,jdbcType=INTEGER}
   </select>
+  <select id="selectLastInsertId" resultType="int">
+    select
+    distinct last_insert_id()
+    from cskaoyan_mall_comment
+  </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from cskaoyan_mall_comment
     where id = #{id,jdbcType=INTEGER}
@@ -114,6 +119,16 @@
     values (#{id,jdbcType=INTEGER}, #{valueId,jdbcType=INTEGER}, #{type,jdbcType=TINYINT}, 
       #{content,jdbcType=VARCHAR}, #{userId,jdbcType=INTEGER}, #{hasPicture,jdbcType=BIT}, 
       #{picUrls,jdbcType=VARCHAR}, #{star,jdbcType=SMALLINT}, #{addTime,jdbcType=TIMESTAMP}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{deleted,jdbcType=BIT})
+  </insert>
+  <insert id="insertDetail" parameterType="com.springmall.bean.Comment">
+    insert into cskaoyan_mall_comment ( value_id, `type`,
+      content, user_id, has_picture,
+      pic_urls, star, add_time,
+      update_time, deleted)
+    values (#{valueId,jdbcType=INTEGER}, #{type,jdbcType=TINYINT},
+      #{content,jdbcType=VARCHAR}, #{userId,jdbcType=INTEGER}, #{hasPicture,jdbcType=BIT},
+      #{picUrls,jdbcType=VARCHAR}, #{star,jdbcType=SMALLINT}, #{addTime,jdbcType=TIMESTAMP},
       #{updateTime,jdbcType=TIMESTAMP}, #{deleted,jdbcType=BIT})
   </insert>
   <insert id="insertSelective" parameterType="com.springmall.bean.Comment">

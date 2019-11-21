@@ -35,4 +35,6 @@ public interface AdminMapper {
 
     int updateDeletedById(@Param("deleted") int value,@Param("id") int id);
 
+    Admin selectAdminByUsername(String username);
+
 }

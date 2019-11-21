@@ -4,6 +4,8 @@ import java.io.IOException;
 
 import com.springmall.bean.*;
 import com.springmall.service.AdminService;
+import org.apache.shiro.authz.annotation.Logical;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -22,11 +24,29 @@ import java.util.*;
 @RequestMapping("admin")
 public class AdminController {
 
+//    @RequiresPermissions(value = {"user:query","user:insert2"},logical = Logical.AND)
+
     @Autowired
     AdminService adminService;
 
     //显示管理员信息
     /**
+     * request
+     * admin/list?page=1&limit=20&sort=add_time&order=desc
+     * response
+     * {
+     * 	"errno": 0,
+     * 	"data": {
+     * 		"total": 81,
+     * 		"items": [{
+     * 			"id": 165,
+     * 			"username": "admin12311",
+     * 			"avatar": "http://192.168.2.100:8081/wx/storage/fetch/kymo4lkgbh5xjj9e0mlh.jpg",
+     * 			"roleIds": [2]
+     *        }]*
+     *     },
+     * 	"errmsg": "成功"
+     * }
      * 显示管理员信息
      * @param page      当前页数
      * @param limit     分页
@@ -36,6 +56,7 @@ public class AdminController {
      * @return
      */
     @RequestMapping("admin/list")
+//    @RequiresPermissions("admin:admin:list")
     public BaseReqVo adminList(String page, int limit, String username, String sort, String order){
         BaseReqVo<Object> baseReqVo = new BaseReqVo<>();
         Map map = adminService.adminList(page, limit, username, sort, order);
@@ -81,6 +102,7 @@ public class AdminController {
      * @throws IOException
      */
     @RequestMapping("storage/create")
+//    @RequiresPermissions("admin:storage:create")
     public BaseReqVo storage(HttpServletRequest request, HttpServletResponse response, @RequestParam("file") MultipartFile file) throws IOException {
         BaseReqVo<Object> baseReqVo = new BaseReqVo<>();
         Storage storage = adminService.storageCreate(request, response, file);
@@ -123,6 +145,7 @@ public class AdminController {
      * @return
      */
     @RequestMapping("admin/create")
+//    @RequiresPermissions("admin:admin:create")
     public BaseReqVo adminCreate(@RequestBody Admin2 admin, HttpServletRequest request) {
         BaseReqVo<Object> baseReqVo = new BaseReqVo<>();
         Admin admin2 = new Admin();
@@ -170,6 +193,7 @@ public class AdminController {
      * @return
      */
     @RequestMapping("admin/update")
+//    @RequiresPermissions("admin:admin:update")
     public BaseReqVo updateAdmin(@RequestBody Admin2 admin){
         Admin admin2 = new Admin();
         BaseReqVo<Object> boaseReqVo = new BaseReqVo<>();
@@ -201,6 +225,7 @@ public class AdminController {
      * @return
      */
     @RequestMapping("admin/delete")
+//    @RequiresPermissions("admin:admin:delete")
     public BaseReqVo adminDelete(@RequestBody Admin2 admin2){
         BaseReqVo<Object> baseReqVo = new BaseReqVo<>();
         adminService.adminDelete(admin2);
@@ -237,6 +262,7 @@ public class AdminController {
      * @return
      */
     @RequestMapping("role/list")
+//    @RequiresPermissions("admin:role:list")
     public BaseReqVo roleList(int page,int limit,String name, String sort, String order){
         BaseReqVo<Object> baseReqVo = new BaseReqVo<>();
         Map map = adminService.roleList(page, limit,name, sort, order);
@@ -261,6 +287,7 @@ public class AdminController {
      * @return
      */
     @RequestMapping("role/update")
+//    @RequiresPermissions("admin:role:update")
     public BaseReqVo roleUpdate(@RequestBody Role role){
         BaseReqVo<Object> baseReqVo = new BaseReqVo<>();
         adminService.roleUpdate(role);
@@ -289,6 +316,7 @@ public class AdminController {
      * @return
      */
     @RequestMapping("role/create")
+//    @RequiresPermissions("admin:role:create")
     public BaseReqVo roleCreate(@RequestBody Role role){
         BaseReqVo<Object> baseReqVo = new BaseReqVo<>();
         int i = adminService.sameToRoleName(role);
@@ -334,6 +362,7 @@ public class AdminController {
      * @return
      */
     @RequestMapping(value = "role/permissions",method = RequestMethod.GET)
+//    @RequiresPermissions("admin:role:permissions")
     public BaseReqVo rolePermissionsUpdate(int roleId){
         BaseReqVo<Object> baseReqVo = new BaseReqVo<>();
         Map map1 = adminService.rolePermissions(roleId);
@@ -354,6 +383,7 @@ public class AdminController {
      * @return
      */
     @RequestMapping(value = "role/permissions",method = RequestMethod.POST)
+//    @RequiresPermissions("admin:role:permissions")
     public BaseReqVo rolePermissionsUpdate(@RequestBody RolePermission rolePermission){
         BaseReqVo<Object> baseReqVo = new BaseReqVo<>();
         int roleId = rolePermission.getRoleId();
@@ -382,6 +412,7 @@ public class AdminController {
      * @return
      */
     @RequestMapping("role/delete")
+//    @RequiresPermissions("admin:role:delete")
     public BaseReqVo roleDelete(@RequestBody Role role){
         BaseReqVo baseReqVo = new BaseReqVo();
         int i = adminService.roleDelete(role);
@@ -425,6 +456,7 @@ public class AdminController {
      * @return
      */
     @RequestMapping("log/list")
+//    @RequiresPermissions("admin:log:list")
     public BaseReqVo adminLog(int page, int limit ,String name, String sort, String order){
         BaseReqVo<Object> baseReqVo = new BaseReqVo<>();
         Map map = adminService.logList(page, limit, name, sort, order);
@@ -466,6 +498,7 @@ public class AdminController {
      * @return
      */
     @RequestMapping("storage/list")
+//    @RequiresPermissions("admin:storage:list")
     public BaseReqVo storageList(int page, int limit ,String key, String name, String sort, String order){
         BaseReqVo<Object> baseReqVo = new BaseReqVo<>();
         Map map = adminService.storageList(page, limit, key, name, sort, order);
@@ -509,6 +542,7 @@ public class AdminController {
      * @return
      */
     @RequestMapping("storage/update")
+//    @RequiresPermissions("admin:storage:update")
     public BaseReqVo storageUpdate(@RequestBody Storage storage){
         BaseReqVo<Object> baseReqVo = new BaseReqVo<>();
         Storage storage1 = adminService.storageUpdate(storage);
@@ -538,6 +572,7 @@ public class AdminController {
      * @return
      */
     @RequestMapping("storage/delete")
+//    @RequiresPermissions("admin:storage:delete")
     public BaseReqVo storageDelete(@RequestBody Storage storage){
         BaseReqVo<Object> baseReqVo = new BaseReqVo<>();
         int i = adminService.storageDelete(storage);

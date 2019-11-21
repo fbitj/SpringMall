@@ -49,7 +49,7 @@ public class AliyunComponent {
         request.putQueryParameter("PhoneNumbers", mobile);
         request.putQueryParameter("SignName", sms.getSignName());
         request.putQueryParameter("TemplateCode", sms.getTemplateCode());
-        int code = (int) (Math.random() * 10000);
+        String code = String.valueOf(Math.random()*10+1).substring(2,8);
         System.out.println(mobile + ": " + code);
         request.putQueryParameter("TemplateParam", "{\"code\": \"" + code + "\"}");
         CommonResponse response = null;

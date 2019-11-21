@@ -36,4 +36,6 @@ public interface CategoryService {
     List<Category> getSubCategoryByPid(Integer id);
 
     Category getCategoryById(Integer id);
+
+    List<Goods> getFloorGoodsByCategory(Integer id, int amountLimit);
 }

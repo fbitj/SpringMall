@@ -22,6 +22,7 @@ public class UserRealm extends AuthorizingRealm {
     @Autowired
     UserMapper userMapper;
 
+    // 返回认证信息
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) throws AuthenticationException {
         CustomToken token = (CustomToken) authenticationToken;
@@ -29,7 +30,7 @@ public class UserRealm extends AuthorizingRealm {
         UserExample userExample = new UserExample();
         userExample.createCriteria().andUsernameEqualTo(username);
         List<User> users = userMapper.selectByExample(userExample);
-        if (users == null) {
+        if (users.size() == 0) {
             return null;
         }
         User user = users.get(0);
@@ -38,6 +39,7 @@ public class UserRealm extends AuthorizingRealm {
         return authenticationInfo;
     }
 
+    // 返回授权信息
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
         return null;

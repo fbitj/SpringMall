@@ -5,16 +5,20 @@ import com.springmall.bean.User;
 import com.springmall.bean.UserData;
 import com.springmall.service.UserService;
 import com.springmall.shiro.CustomToken;
+import com.springmall.utils.RandomUtil;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
+import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 /**
  * Created by fwj on 2019-11-19.
@@ -27,18 +31,19 @@ public class WxAuthController {
     UserService userService;
 
     /**
-     * 微信端登录，进行shiro认证
+     * 微信端账号登录，进行shiro认证
      */
     @RequestMapping(value = "login", method = RequestMethod.POST)
     public BaseReqVo login(@RequestBody User user) {
+        // Shiro登录
         Subject subject = SecurityUtils.getSubject(); // 获取subject（主体）
         CustomToken token = new CustomToken(user.getUsername(), user.getPassword(), "user"); // 创建token
         try {
             subject.login(token); // 登录认证
         } catch (AuthenticationException e) {
-//            e.printStackTrace();
             return BaseReqVo.error(700, "账号密码不对"); //认证失败
         }
+        // 封装返回数据
         UserData userData = new UserData(); // 返回的user数据的封装
         User principal = (User) subject.getPrincipal();
         UserData.UserInfoBean userInfo = new UserData.UserInfoBean();
@@ -62,17 +67,7 @@ public class WxAuthController {
         return BaseReqVo.ok();
     }
 
-    /**
-     * 密码重置
-     * @return
-     */
-    @RequestMapping("reset")
-    public BaseReqVo reset(@RequestBody Map<String,String> dataMap) {
-        dataMap.forEach((x,y) -> {
-            System.out.println(x + ":" + y);
-        });
-        return BaseReqVo.ok();
-    }
+
 
     /**
      * 短信验证码
@@ -82,11 +77,94 @@ public class WxAuthController {
     @RequestMapping("regCaptcha")
     public BaseReqVo regCaptcha(@RequestBody String mobile) {
         System.out.println("mobile = " + mobile);
+        String vericode = RandomUtil.randomVericode();
+        HashMap<String, String> stringStringHashMap = new HashMap<>();
+
+        return BaseReqVo.error(701, "验证码为" + vericode);
+    }
+
+    /**
+     * 微信账号注册
+     * 请求数据
+     * {
+     *     "username": "songge",
+     *     "password": "111111",
+     *     "mobile": "13455447452",
+     *     "code": "1122",
+     *     "wxCode": "043wNK942fjt8P0lrb7429EQ942wNK9U"
+     * }
+     * 返回数据和登录时一样
+     */
+    @RequestMapping("register")
+    public BaseReqVo register(@RequestBody HashMap<String, String> userInfoMap) {
+        // 判断验证码是否相同
+
+        // 判断是否已经存在该用户,0表示不存在，否则存在
+        int isUserExist = userService.isUserExist(userInfoMap.get("username"));
+        if (isUserExist != 0) {
+            return BaseReqVo.error(700, "该用户名已被注册"); //认证失败
+        }
+        // 判断是否已经存在该手机号,0表示不存在，否则存在
+        int isMobileExist = userService.isMobileExist(userInfoMap.get("mobile"));
+        if (isMobileExist != 0) {
+            return BaseReqVo.error(700, "该手机号已被注册"); //认证失败
+        }
+        // 用户注册
+        int res = userService.register(userInfoMap);
+        if (res == 0)
+            return BaseReqVo.error(703, "注册失败，请稍后再试");
+        //Shiro登录
+        Subject subject = SecurityUtils.getSubject(); // 获取subject（主体）
+        CustomToken token = new CustomToken(userInfoMap.get("username"), userInfoMap.get("password"), "user"); // 创建token
+        try {
+            subject.login(token); // 登录认证
+        } catch (AuthenticationException e) {
+            return BaseReqVo.error(700, "注册认证失败，请稍后再试"); //认证失败
+        }
+        // 封装返回数据
+        UserData userData = new UserData(); // 返回的user数据的封装
+        User principal = (User) subject.getPrincipal();
+        UserData.UserInfoBean userInfo = new UserData.UserInfoBean();
+        userInfo.setNickName(principal.getUsername());
+        userInfo.setAvatarUrl(principal.getAvatar());
+        userData.setUserInfo(userInfo);
+        userData.setToken(subject.getSession().getId().toString()); // 获取sessionid
+        String tokenExpire = new Date(subject.getSession().getTimeout()).toString(); // 获取session的过期时间
+        userData.setTokenExpire(tokenExpire);
+        return BaseReqVo.ok(userData);
+    }
+
+    /**
+     * 密码重置
+     * 接收参数格式：
+     *  {
+     *     "mobile": "13544458745",
+     *     "code": "1234",
+     *     "password": "1234"
+     * }
+     * 失败返回格式：
+     * {"errno":703,"errmsg":"验证码错误"}
+     */
+    @RequestMapping("reset")
+    public BaseReqVo reset(@RequestBody Map<String,String> dataMap) {
+        // 判断验证码是否相等
+
+        // 判断数据库是否存在该手机号
+        int isMobileExist = userService.isMobileExist(dataMap.get("mobile"));
+        if (isMobileExist == 0) {
+            return BaseReqVo.error(703, "该手机号未被注册"); //认证失败
+        }
+        // 根据手机号,重置数据库密码
+        int res = userService.resetPassword(dataMap.get("password"), dataMap.get("mobile"));
+        if (res == 0) {
+            return BaseReqVo.error(703, "重置数据库密码错误");
+        }
+        // 返回成功
         return BaseReqVo.ok();
     }
 
     /**
-     * 绑定手机
+     * 绑定手机，不用做
      */
     @RequestMapping("bindPhone")
     public BaseReqVo regCaptcha(@RequestBody String encryptedData, @RequestBody String iv) {

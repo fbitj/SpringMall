@@ -6,6 +6,7 @@ import com.springmall.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -44,5 +45,32 @@ public class UserServiceImpl implements UserService {
             return 2;
         return 1;
     }
+
+    @Override
+    public int register(HashMap<String, String> userInfoMap) {
+        return userMapper.insertUser(userInfoMap);
+    }
+
+    @Override
+    public int isUserExist(String username) {
+        return userMapper.selectUserCountByName(username);
+    }
+
+    @Override
+    public int isMobileExist(String mobile) {
+        return userMapper.selectUserCountByMobile(mobile);
+    }
+
+    // 根据手机号重置用户密码
+    @Override
+    public int resetPassword(String password, String mobile) {
+        User user = new User();
+        user.setPassword(password);
+        UserExample userExample = new UserExample();
+        userExample.createCriteria().andMobileEqualTo(mobile);
+        return userMapper.updateByExampleSelective(user, userExample);
+
+    }
+
 
 }

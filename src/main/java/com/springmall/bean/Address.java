@@ -28,8 +28,10 @@ public class Address {
     private String mobile;
 
     private Boolean isDefault;
+
     @JsonFormat(pattern = "yyyy-MM-dd hh:mm:ss",timezone ="GMT+8")
     private Date addTime;
+
     @JsonFormat(pattern = "yyyy-MM-dd hh:mm:ss",timezone ="GMT+8")
     private Date updateTime;
 
@@ -133,6 +135,7 @@ public class Address {
         this.deleted = deleted;
     }
 
+
     public String getDetailedAddress() {
         return detailedAddress;
     }
@@ -166,3 +169,4 @@ public class Address {
     }
 
 }
+

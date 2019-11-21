@@ -1,6 +1,7 @@
 package com.springmall.service;
 
 import com.springmall.bean.Cart;
+import com.springmall.bean.Order;
 
 import java.util.List;
 import java.util.Map;
@@ -18,5 +19,9 @@ public interface CartService {
     int goodsCountCart();
     //添加商品到购物车
     int addCart(Cart cart);
+    // 立即购买商品
+    int fastAddCart(Cart cart);
+    //下单前信息确认
+    Map<String, Object> checkOutBeforePay(Integer cartId, Integer addressId, Integer couponId, Integer grouponRulesId);
 
 }

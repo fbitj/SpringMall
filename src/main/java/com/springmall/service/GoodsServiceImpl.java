@@ -119,21 +119,22 @@ public class GoodsServiceImpl implements GoodsService {
         Integer brandId = request.getBrandId();
         Boolean isHot = request.getIsHot();
         GoodsExample example = new GoodsExample();
+        String order = request.getOrder();
+        String sort = request.getSort();
 
         //如果id不为0则根据id查询
-        if (categoryId != null && categoryId != 0) {
-            example.createCriteria().andCategoryIdEqualTo(categoryId).andDeletedEqualTo(false);
-        }
         if (keyword != null){
             //否则根据关键词查询
-            example.createCriteria().andNameLike("%" + keyword + "%").andDeletedEqualTo(false);
+            example.setOrderByClause(sort + " " + order);
+            if (categoryId == 0) {
+                example.createCriteria().andNameLike("%" + keyword + "%").andDeletedEqualTo(false);
+            } else {
+                example.createCriteria().andCategoryIdEqualTo(categoryId).andDeletedEqualTo(false)
+                        .andNameLike("%" + keyword + "%");
+            }
         }
-        if (brandId != null) {
-            example.createCriteria().andBrandIdEqualTo(brandId).andDeletedEqualTo(false);
-        }
+
         if (isHot != null) {
-            String order = request.getOrder();
-            String sort = request.getSort();
             example.setOrderByClause(sort + " " + order);
             if (categoryId == 0) {
                 example.createCriteria().andIsHotEqualTo(true).andDeletedEqualTo(false);
@@ -142,6 +143,15 @@ public class GoodsServiceImpl implements GoodsService {
                         .andIsHotEqualTo(true);
             }
         }
+
+        if (categoryId != null && categoryId != 0) {
+            example.createCriteria().andCategoryIdEqualTo(categoryId).andDeletedEqualTo(false);
+        }
+
+        if (brandId != null) {
+            example.createCriteria().andBrandIdEqualTo(brandId).andDeletedEqualTo(false);
+        }
+
 
         List<Goods> goods = goodsMapper.selectByExample(example);
 

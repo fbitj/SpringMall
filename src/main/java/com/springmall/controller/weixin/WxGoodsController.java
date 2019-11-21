@@ -99,10 +99,7 @@ public class WxGoodsController {
                 categoryId.add(good.getCategoryId());
             }
         }
-        //否则查询所有二级类目
-        List<Category> categories = categoryService.queryCategoryByL2(categoryId);
 
-        //若keyword存在则需要为用户添加搜索历史
         String keyword = request.getKeyword();
         if (keyword != null) {
             //判断是否有用户登录
@@ -111,7 +108,20 @@ public class WxGoodsController {
                 int i = searchHistoryService.addUserSearchHistory(principal.getId(), keyword);
                 if (i == 0) return ResultUtil.fail(402, "服务器繁忙,请登陆后重试");
             }
+            //查询关键词搜出来的商品
+            request.setCategoryId(0);
+            List<Goods> keyGoods = goodsService.goodsListInCurrentCategory(request);
+            categoryId = new ArrayList();
+            for (Goods good : keyGoods) {
+                categoryId.add(good.getCategoryId());
+            }
         }
+
+        //否则查询所有二级类目
+        List<Category> categories = categoryService.queryCategoryByL2(categoryId);
+
+        //若keyword存在则需要为用户添加搜索历史
+
 
         //封装信息
         PageInfo<Goods> info = new PageInfo<>(goods);

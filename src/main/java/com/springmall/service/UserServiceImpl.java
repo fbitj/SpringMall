@@ -67,6 +67,8 @@ public class UserServiceImpl implements UserService {
         collectExample.createCriteria().andUserIdEqualTo(id).andTypeEqualTo((byte)type).andValueIdEqualTo(value).andDeletedEqualTo(false);
         List<Collect> collects = collectMapper.selectByExample(collectExample);
         if(collects.size() != 0){   //说明已经有收藏了， 则删除收藏
+            Collect collect = collects.get(0);
+            collectMapper.deleteByPrimaryKey(collect.getId());
             map.put("type","delete");
             return map;
         }
@@ -87,32 +89,29 @@ public class UserServiceImpl implements UserService {
     @Override
     public Map collectList(int type, int page, int size, int id) {
         HashMap<Object, Object> map = new HashMap<>();
-        CollectExample collectExample = new CollectExample();
-        collectExample.createCriteria().andUserIdEqualTo(id)/*.andDeletedEqualTo(false)./*.andTypeEqualTo((byte)type)*/;
         //分页查询
-        PageHelper.offsetPage(page, size);
-        List<Collect> collects = collectMapper.selectByExample(collectExample);
+        PageHelper.startPage(page, size);
+        List<Collect> collects = collectMapper.selectByDetail(id, type, false);
         PageInfo<Collect> objectPageInfo = new PageInfo<Collect>(collects);
         long total = objectPageInfo.getTotal();
         map.put("totalPages",(int)total);
 
-        GoodsExample goodsExample = new GoodsExample();
         ArrayList<Object> arrayList = new ArrayList<>();
         if(collects.size() != 0) {
             for (Collect collect : collects) {
-                goodsExample.createCriteria().andGoodsSnEqualTo(collect.getValueId() + "").andDeletedEqualTo(false);
+                GoodsExample goodsExample = new GoodsExample();
+                goodsExample.createCriteria().andGoodsSnEqualTo(String.valueOf(collect.getValueId()).trim()).andDeletedEqualTo(false);
                 List<Goods> goods = goodsMapper.selectByExample(goodsExample);
-                for (Goods good : goods) {
-                    HashMap<Object, Object> map1 = new HashMap<>();
-                    map1.put("brief", good.getBrief());
-                    map1.put("picUrl", good.getPicUrl());
-                    map1.put("valueId", collect.getValueId());
-                    map1.put("name", good.getName());
-                    map1.put("id", good.getId());
-                    map1.put("type", collect.getType());
-                    map1.put("retailPrice", good.getRetailPrice());
-                    arrayList.add(map1);
-                }
+                HashMap<Object, Object> map1 = new HashMap<>();
+                Goods good = goods.get(0);
+                map1.put("brief", good.getBrief());
+                map1.put("picUrl", good.getPicUrl());
+                map1.put("valueId", collect.getValueId());
+                map1.put("name", good.getName());
+                map1.put("id", good.getId());
+                map1.put("type", collect.getType());
+                map1.put("retailPrice", good.getRetailPrice());
+                arrayList.add(map1);
             }
         }
         map.put("collectList",arrayList);

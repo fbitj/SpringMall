@@ -218,6 +218,8 @@ public class GrouponServiceImpl implements GrouponService {
         order.setOrderStatusText(orderStatus.getStatusText());
         HandleOption handleOption = HandleOptionUtil.handleOption(order.getOrderStatus());
         order.setHandleOption(handleOption);
+        order.setExpCode(order.getShipChannel());
+        order.setExpNo(order.getShipSn());
         Order_goodsExample orderGoodsExample = new Order_goodsExample();
         orderGoodsExample.createCriteria().andOrderIdEqualTo(order.getId()).andDeletedEqualTo(false);    //过滤逻辑删除
         List<Order_goods> orderGoodsList = orderGoodsMapper.selectByExample(orderGoodsExample);

@@ -42,4 +42,18 @@ public class Coupon_user {
         this.endTime = endTime;
         this.deleted = deleted;
     }
+
+    public Coupon_user(Integer id, Integer userId, Integer couponId, Short status, Date usedTime, Date startTime, Date endTime, Integer orderId, Date addTime, Date updateTime, Boolean deleted) {
+        this.id = id;
+        this.userId = userId;
+        this.couponId = couponId;
+        this.status = status;
+        this.usedTime = usedTime;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.orderId = orderId;
+        this.addTime = addTime;
+        this.updateTime = updateTime;
+        this.deleted = deleted;
+    }
 }

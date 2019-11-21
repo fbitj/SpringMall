@@ -7,11 +7,13 @@ import com.springmall.service.CouponService;
 import com.springmall.utils.ResultUtil;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 处理前台系统所有关于coupon模块下的请求
@@ -42,11 +44,12 @@ public class WxCouponController {
 
     /**
      * 领取优惠券
-     * @param couponId 优惠券id
+     * @param map Json优惠券id
      * @return
      */
     @RequestMapping("receive")
-    public BaseReqVo receiveCouponByCouponId(int couponId) {
+    public BaseReqVo receiveCouponByCouponId(@RequestBody HashMap<String,String> map) {
+        int couponId = Integer.parseInt(map.get("couponId"));
         User user = (User) SecurityUtils.getSubject().getPrincipal();
         int result = couponService.receiveCouponByCouponId(couponId, user.getId());
         if(result==0){
@@ -56,10 +59,10 @@ public class WxCouponController {
             return ResultUtil.success(null);
         }
         if (result==2){
-            return ResultUtil.fail(740,"您领取该券的数量已达到限制，不可再领取！");
+            return ResultUtil.fail(740,"您领取该券数满！");
         }
         if (result==3){
-            return ResultUtil.fail(740,"来晚啦，该优惠券已被领完！");
+            return ResultUtil.fail(740,"该券已被领完！");
         }
         return ResultUtil.fail(740,"服务器异常！");
     }
@@ -70,7 +73,7 @@ public class WxCouponController {
      * @return
      */
     @RequestMapping("exchange")
-    public BaseReqVo exchangeCoupon(String code) {
+    public BaseReqVo exchangeCoupon(@RequestBody String code) {
         User user = (User) SecurityUtils.getSubject().getPrincipal();
         int result = couponService.exchangeCoupon(code, user.getId());
         if(result==0){

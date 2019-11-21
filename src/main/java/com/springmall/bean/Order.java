@@ -73,4 +73,8 @@ public class Order {
     private Boolean deleted;
 
     private HandleOption handleOption;
+
+    private String expCode;
+
+    private String expNo;
 }

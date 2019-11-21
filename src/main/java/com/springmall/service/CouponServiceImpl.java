@@ -242,7 +242,18 @@ public class CouponServiceImpl implements CouponService{
                 return 2;
             }
         }
-        Coupon_user couponUser = new Coupon_user(userId,coupon.getId(), (short) 0,coupon.getStartTime(),coupon.getEndTime(),false);
+        //在coupon_user表中插入数据
+        //若coupon表中的time_type为0，则将当前时间设为start_time，加上有效天数days作为end_time。
+        Coupon_user couponUser = null;
+        if(coupon.getTimeType()==0){
+            Date startTime = new Date();
+            Date end_time = new Date(startTime.getTime() + 1000*60*60*24*coupon.getDays());
+            couponUser = new Coupon_user(userId,coupon.getId(), (short) 0,startTime,end_time,false);
+        }
+        //若coupon表中的time_type为1，则取出coupon表中的start_time和end_time赋给coupon_user表。
+        if (coupon.getTimeType()==1){
+            couponUser = new Coupon_user(userId,coupon.getId(), (short) 0,coupon.getStartTime(),coupon.getEndTime(),false);
+        }
         int result = coupon_userMapper.insertSelective(couponUser);
         return result;
     }

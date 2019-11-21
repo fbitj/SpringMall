@@ -4,7 +4,17 @@ import com.aliyun.oss.OSSClient;
 import com.aliyun.oss.model.ObjectMetadata;
 import com.aliyun.oss.model.PutObjectRequest;
 import com.aliyun.oss.model.PutObjectResult;
+import com.aliyuncs.CommonRequest;
+import com.aliyuncs.CommonResponse;
+import com.aliyuncs.DefaultAcsClient;
+import com.aliyuncs.IAcsClient;
+import com.aliyuncs.exceptions.ClientException;
+import com.aliyuncs.exceptions.ServerException;
+import com.aliyuncs.http.MethodType;
+import com.aliyuncs.profile.DefaultProfile;
+import com.springmall.component.AliyunComponent;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.io.File;
@@ -49,5 +59,32 @@ public class OssTest {
         PutObjectResult putObjectResult = ossClient.putObject(new PutObjectRequest(bucket, "songge.jpg", fileInputStream, metadata));
         System.out.println(putObjectResult);
 
+    }
+    @Autowired
+    AliyunComponent aliyunComponent;
+    @Test
+    public void tets3(){
+        String mobile = "15388365292";
+        IAcsClient client = aliyunComponent.getIascClient();
+        CommonRequest request = new CommonRequest();
+        request.setMethod(MethodType.POST);
+        request.setDomain("dysmsapi.aliyuncs.com");
+        request.setVersion("2017-05-25");
+        request.setAction("SendSms");
+        request.putQueryParameter("RegionId", aliyunComponent.getSms().getRegionId());
+        request.putQueryParameter("PhoneNumbers", mobile);
+        request.putQueryParameter("SignName", aliyunComponent.getSms().getSignName());
+        request.putQueryParameter("TemplateCode", aliyunComponent.getSms().getTemplateCode());
+        int code = (int) (Math.random() * 10000);
+        System.out.println(code);
+        request.putQueryParameter("TemplateParam", "{\"code\": \""+code+"\"}");
+        try {
+            CommonResponse response = client.getCommonResponse(request);
+            System.out.println(response.getData());
+        } catch (ServerException e) {
+            e.printStackTrace();
+        } catch (ClientException e) {
+            e.printStackTrace();
+        }
     }
 }

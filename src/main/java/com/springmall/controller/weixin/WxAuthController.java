@@ -3,6 +3,7 @@ package com.springmall.controller.weixin;
 import com.springmall.bean.BaseReqVo;
 import com.springmall.bean.User;
 import com.springmall.bean.UserData;
+import com.springmall.component.AliyunComponent;
 import com.springmall.service.UserService;
 import com.springmall.shiro.CustomToken;
 import com.springmall.utils.RandomUtil;
@@ -29,7 +30,7 @@ import java.util.Random;
 public class WxAuthController {
     @Autowired
     UserService userService;
-
+    HashMap<String, String> codeMap = new HashMap<>();
     /**
      * 微信端账号登录，进行shiro认证
      */
@@ -68,19 +69,19 @@ public class WxAuthController {
     }
 
 
-
+    @Autowired
+    AliyunComponent aliyunComponent;
     /**
      * 短信验证码
-     * @param mobile
+     * @param map:key=mobile封装了电话号码
      * @return
      */
     @RequestMapping("regCaptcha")
-    public BaseReqVo regCaptcha(@RequestBody String mobile) {
-        System.out.println("mobile = " + mobile);
-        String vericode = RandomUtil.randomVericode();
-        HashMap<String, String> stringStringHashMap = new HashMap<>();
-
-        return BaseReqVo.error(701, "验证码为" + vericode);
+    public BaseReqVo regCaptcha(@RequestBody Map<String,String> map) {
+        String mobile = map.get("mobile");
+        String code = aliyunComponent.sendSms(mobile);
+        codeMap.put(mobile,code);
+        return BaseReqVo.ok();
     }
 
     /**
@@ -98,7 +99,10 @@ public class WxAuthController {
     @RequestMapping("register")
     public BaseReqVo register(@RequestBody HashMap<String, String> userInfoMap) {
         // 判断验证码是否相同
-
+        String userCode = userInfoMap.get("code");
+        if (!isCodeEquals(userCode)){
+            return BaseReqVo.error(500,"验证码不正确");
+        }
         // 判断是否已经存在该用户,0表示不存在，否则存在
         int isUserExist = userService.isUserExist(userInfoMap.get("username"));
         if (isUserExist != 0) {
@@ -134,6 +138,14 @@ public class WxAuthController {
         return BaseReqVo.ok(userData);
     }
 
+    private boolean isCodeEquals(String userCode) {
+        String code = codeMap.get("mobile");
+        if (code != null && code.equals(userCode)){
+            return true;
+        }
+        return false;
+    }
+
     /**
      * 密码重置
      * 接收参数格式：
@@ -148,7 +160,10 @@ public class WxAuthController {
     @RequestMapping("reset")
     public BaseReqVo reset(@RequestBody Map<String,String> dataMap) {
         // 判断验证码是否相等
-
+        String userCode = dataMap.get("code");
+        if (!isCodeEquals(userCode)){
+            return BaseReqVo.error(500,"验证码不正确");
+        }
         // 判断数据库是否存在该手机号
         int isMobileExist = userService.isMobileExist(dataMap.get("mobile"));
         if (isMobileExist == 0) {

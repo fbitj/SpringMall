@@ -2,6 +2,7 @@ package com.springmall;
 
 import com.aliyun.oss.OSSClient;
 import com.aliyun.oss.internal.OSSBucketOperation;
+import com.springmall.utils.MD5Util;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
@@ -48,6 +49,24 @@ public class FileTest {
         OSSClient ossClient = new OSSClient(endPoint,accessKeyId,accessKeySecret);
         FileInputStream fileInputStream = new FileInputStream(file);
         ossClient.putObject(bucket,"test.jpg",fileInputStream);
+
+    }
+
+    @Test
+    public void test2(){
+        String tangyan = MD5Util.getMd5("tangyan");
+        //ffffff97643bffffff97ffffffe6184fffffffc5ffffff803bffffffae483301ffffffde14
+        //97643b97e6184fc5803bae483301de14
+        System.out.println(tangyan);
+        String tangyan1 = MD5Util.getMd5s("tangyan", "90077",0);
+        //6c81c05131b0dab3fff1497351e10de3
+        System.out.println(tangyan1);
+        String tangyan2 = MD5Util.getMd5Password("tangyan");
+        String tangyan3 = MD5Util.getMd5Password("tangyan");
+        System.out.println("tangyan3 = " + tangyan3);
+        System.out.println("tangyan2 = " + tangyan2);
+//        tangyan3 = 6c81c05131b0dab3fff1497351e10de3
+//        tangyan2 = 6c81c05131b0dab3fff1497351e10de3
 
     }
 }

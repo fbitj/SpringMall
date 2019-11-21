@@ -117,6 +117,7 @@ public class GoodsServiceImpl implements GoodsService {
         Integer categoryId = request.getCategoryId();
         String keyword = request.getKeyword();
         Integer brandId = request.getBrandId();
+        Boolean isHot = request.getIsHot();
         GoodsExample example = new GoodsExample();
 
         //如果id不为0则根据id查询
@@ -129,6 +130,17 @@ public class GoodsServiceImpl implements GoodsService {
         }
         if (brandId != null) {
             example.createCriteria().andBrandIdEqualTo(brandId).andDeletedEqualTo(false);
+        }
+        if (isHot != null) {
+            String order = request.getOrder();
+            String sort = request.getSort();
+            example.setOrderByClause(sort + " " + order);
+            if (categoryId == 0) {
+                example.createCriteria().andIsHotEqualTo(true).andDeletedEqualTo(false);
+            } else {
+                example.createCriteria().andCategoryIdEqualTo(categoryId).andDeletedEqualTo(false)
+                        .andIsHotEqualTo(true);
+            }
         }
 
         List<Goods> goods = goodsMapper.selectByExample(example);
@@ -144,7 +156,10 @@ public class GoodsServiceImpl implements GoodsService {
      */
     @Override
     public List<Goods> selectGoodsInSameCategory(Integer id) {
-        return goodsMapper.selectGoodsInSameCategory(id);
+        //return goodsMapper.selectGoodsInSameCategory(id);
+        GoodsExample example = new GoodsExample();
+        example.createCriteria().andCategoryIdEqualTo(id).andDeletedEqualTo(false);
+        return goodsMapper.selectByExample(example);
     }
 
     /**

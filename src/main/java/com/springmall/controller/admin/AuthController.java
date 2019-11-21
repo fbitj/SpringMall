@@ -6,6 +6,7 @@ import com.springmall.bean.InfoData;
 import com.springmall.service.AdminService;
 import com.springmall.shiro.CustomToken;
 import com.springmall.utils.DateUtils;
+import com.springmall.utils.Md5Utils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.UsernamePasswordToken;
@@ -36,6 +37,10 @@ public class AuthController {
     //鉴权登录
     @RequestMapping("login")
     public BaseReqVo<String> login(@RequestBody Admin admin, HttpSession session) {
+        // 对密码进行MD5加密
+        String encryptPwd = Md5Utils.getDefaultMd5Encrypt(admin.getPassword());
+        admin.setPassword(encryptPwd);
+        // Shiro登录
         Subject subject = SecurityUtils.getSubject();
         CustomToken token = new CustomToken(admin.getUsername(), admin.getPassword(), "admin");
         try {

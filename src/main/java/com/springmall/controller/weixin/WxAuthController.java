@@ -49,6 +49,7 @@ public class WxAuthController {
         UserData.UserInfoBean userInfo = new UserData.UserInfoBean();
         userInfo.setNickName(user.getUsername());
         userInfo.setAvatarUrl(principal.getAvatar());
+        userInfo.setAvatarUrl("https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif"); // 设置用户头像
         userData.setUserInfo(userInfo);
         userData.setToken(subject.getSession().getId().toString()); // 获取sessionid
         String tokenExpire = new Date(subject.getSession().getTimeout()).toString(); // 获取session的过期时间
@@ -137,6 +138,7 @@ public class WxAuthController {
         UserData.UserInfoBean userInfo = new UserData.UserInfoBean();
         userInfo.setNickName(principal.getUsername());
         userInfo.setAvatarUrl(principal.getAvatar());
+        userInfo.setAvatarUrl("https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif"); // 设置用户头像
         userData.setUserInfo(userInfo);
         userData.setToken(subject.getSession().getId().toString()); // 获取sessionid
         String tokenExpire = new Date(subject.getSession().getTimeout()).toString(); // 获取session的过期时间

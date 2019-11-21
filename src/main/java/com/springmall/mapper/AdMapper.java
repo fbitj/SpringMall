@@ -5,6 +5,7 @@ import com.springmall.bean.Ad;
 import com.springmall.bean.AdExample;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.Date;
 import java.util.List;
 
 public interface AdMapper {
@@ -32,7 +33,7 @@ public interface AdMapper {
 
     List<Ad> selectAllWithParm(PageRequest adRequest);
 
-    int delete(Integer id);
+    int delete(@Param("id") Integer id, @Param("time") Date time);
 
 //    查询未被删除、允许显示、指定数目的广告
     List<Ad> selectAvailAdvertise(int amountLimit);

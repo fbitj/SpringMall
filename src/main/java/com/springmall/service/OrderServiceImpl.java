@@ -312,7 +312,7 @@ public class OrderServiceImpl implements OrderService {
     /**
      *
      * @param userid
-     * @param cartId         购物车id
+     * @param cartId         购物车id(没有用到)
      * @param addressId      地址id
      * @param couponId       优惠券id
      * @param message        留言信息
@@ -368,7 +368,9 @@ public class OrderServiceImpl implements OrderService {
         order.setPayTime(new Date());//微信支付时间
         order.setAddTime(new Date());
         order.setDeleted(false);
+        // 将订单插入数据库
         orderMapper.insertSelective(order);
+
         Integer id = order.getId();
         // 生成订单商品信息
         for (Cart cart : carts) {

@@ -386,4 +386,16 @@
   <select id="selectUserCountOfDay" resultType="com.springmall.bean.UserStat">
     SELECT DATE_FORMAT(add_time,'%Y-%m-%d') day,count(*) users FROM cskaoyan_mall_user GROUP BY day;
   </select>
+
+  <insert id="insertUser">
+    insert into cskaoyan_mall_user (username, password, mobile) values (#{username}, #{password},#{mobile})
+  </insert>
+
+  <select id="selectUserCountByName" resultType="int">
+    select count(id) from cskaoyan_mall_user where username=#{username}
+  </select>
+
+  <select id="selectUserCountByMobile" resultType="int">
+        select count(id) from cskaoyan_mall_user where mobile=#{mobile}
+  </select>
 </mapper>

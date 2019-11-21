@@ -1,4 +1,4 @@
-package com.springmall.expection;
+package com.springmall.exception;
 
 import com.springmall.bean.BaseReqVo;
 import com.springmall.exception.OrderException;
@@ -16,23 +16,30 @@ public class ResExceptionHandler {
      * @param exception
      * @return
      */
-    /*@ExceptionHandler(HttpMessageNotReadableException.class)
+    @ExceptionHandler(HttpMessageNotReadableException.class)
     public BaseReqVo handleCustomException(HttpMessageNotReadableException exception){
         BaseReqVo baseReqVo = new BaseReqVo();
         baseReqVo.setErrno(402);
         baseReqVo.setErrmsg("参数值不对");
         return baseReqVo;
-    }*/
- /*   @ExceptionHandler(Exception.class)
-    public BaseReqVo handleCustomException(Exception exception){
+    }
+
+    @ExceptionHandler(DbException.class)
+    public BaseReqVo handleDbException(DbException exception) {
         BaseReqVo baseReqVo = new BaseReqVo();
-        baseReqVo.setErrno(500);
-        baseReqVo.setErrmsg("服务器异常请稍后再试");
+        baseReqVo.setErrno(402);
+        baseReqVo.setErrmsg("服务器异常，请再次登陆后重试");
         return baseReqVo;
+    }
+    @ExceptionHandler(Exception.class)
+    public BaseReqVo handleCustomException(Exception exception){
+        exception.printStackTrace();
+        return BaseReqVo.error(500,"网络繁忙，请稍后再试！");
     }
 
     @ExceptionHandler(OrderException.class)
     public BaseReqVo handlerOrderException(Exception exception){
+        exception.printStackTrace();
         return BaseReqVo.error(500,exception.getMessage());
-    }*/
+    }
 }

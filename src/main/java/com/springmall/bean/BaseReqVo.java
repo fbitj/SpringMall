@@ -1,7 +1,6 @@
 package com.springmall.bean;
 
 import lombok.Data;
-import org.omg.CORBA.OBJECT_NOT_EXIST;
 
 @Data
 public class BaseReqVo<T> {

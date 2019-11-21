@@ -80,4 +80,6 @@ public interface GoodsService {
     List<Goods> selectGoodsInSameCategory(Integer id);
 
     Map selectGoodsDetailById(Integer id);
+
+    List<Goods> getHotGoods(int amountLimimt);
 }

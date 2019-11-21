@@ -6,6 +6,7 @@ import com.springmall.bean.AdExample;
 import com.springmall.bean.PageRequest;
 import com.springmall.bean.Ad;
 import com.springmall.bean.DataForPage;
+import com.springmall.exception.DbException;
 import com.springmall.mapper.AdMapper;
 import com.springmall.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,7 +54,10 @@ public class AdvertiseServiceImpl implements AdvertiseService {
 
         AdExample example = new AdExample();
         example.createCriteria().andIdEqualTo(advertise.getId());
-        advertiseMapper.updateByExampleSelective(advertise, example);
+        int update = advertiseMapper.updateByExampleSelective(advertise, example);
+        if (update == 0) {
+            throw new DbException();
+        }
         return advertise;
     }
 
@@ -67,7 +71,10 @@ public class AdvertiseServiceImpl implements AdvertiseService {
         Date date = new Date();
         advertise.setUpdateTime(date);
         advertise.setAddTime(date);
-        advertiseMapper.insertSelective(advertise);
+        int i = advertiseMapper.insertSelective(advertise);
+        if (i == 0) {
+            throw new DbException();
+        }
         return advertise;
     }
 
@@ -78,7 +85,10 @@ public class AdvertiseServiceImpl implements AdvertiseService {
      */
     @Override
     public void delete(Integer id) {
-        advertiseMapper.delete(id);
+        int delete = advertiseMapper.delete(id, new Date());
+        if (delete == 0) {
+            throw new DbException();
+        }
     }
 
     // 查询未被删除、允许显示、指定数目的广告

@@ -128,6 +128,24 @@ public class GrouponServiceImpl implements GrouponService {
     @Override
     public HashMap<String, Object> queryGrouponListByPage(String page, String size) {
         PageHelper.startPage(Integer.parseInt(page), Integer.parseInt(size));
+        Groupon_rulesExample grouponRulesExample = new Groupon_rulesExample();
+        grouponRulesExample.createCriteria().andExpireTimeGreaterThan(new Date()).andDeletedEqualTo(false);
+        List<Groupon_rules> grouponRulesList = grouponRulesMapper.selectByExample(grouponRulesExample);
+        List<HashMap<String,Object>> dataList = new ArrayList<>();
+        for (Groupon_rules rules : grouponRulesList) {
+            HashMap<String, Object> data = new HashMap<>();
+            Goods goods = goodsMapper.selectByPrimaryKey(rules.getGoodsId());
+            BigDecimal groupon_price = goods.getRetailPrice().subtract(rules.getDiscount());    //团购价格为商品零售价减团购优惠金额
+            data.put("groupon_price",groupon_price);
+            data.put("goods",goods);
+            data.put("groupon_member",rules.getDiscountMember());
+            dataList.add(data);
+        }
+        HashMap<String,Object> dataMap = new HashMap<>();
+        dataMap.put("data",dataList);
+        dataMap.put("count",dataList.size());
+        return dataMap;
+       /*
         GrouponExample grouponExample = new GrouponExample();
         grouponExample.createCriteria().andDeletedEqualTo(false);    //需过滤逻辑删除
         List<Groupon> grouponList = grouponMapper.selectByExample(grouponExample);
@@ -146,6 +164,7 @@ public class GrouponServiceImpl implements GrouponService {
         dataMap.put("data",dataList);
         dataMap.put("count",dataList.size());
         return dataMap;
+        */
     }
 
     /**

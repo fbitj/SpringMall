@@ -28,7 +28,7 @@ public class Order_goods {
 
     private BigDecimal retailPrice;
 
-    private String specifications;
+    private String[] specifications;
 
     private List<String> goodsSpecificationValues;
 

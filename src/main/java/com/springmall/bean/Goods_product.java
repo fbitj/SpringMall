@@ -62,13 +62,7 @@ public class Goods_product {
         this.number = number;
     }
 
-    public String getUrl() {
-        return url;
-    }
 
-    public void setUrl(String url) {
-        this.url = url == null ? null : url.trim();
-    }
 
     public Date getAddTime() {
         return addTime;

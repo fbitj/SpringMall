@@ -41,6 +41,8 @@ public interface AdminService {
 
     Map rolePermissions(int roleId);
 
+    int insertIntoOrUpdatePermission(int id, List<String> list);
+
     int sameToRoleName(Role role);
 
     int roleDelete(Role role);
@@ -53,5 +55,5 @@ public interface AdminService {
 
     int storageDelete(Storage storage);
 
-
+    void recordUserLoginInfo(String ip);
 }

@@ -2,6 +2,8 @@ package com.springmall.mapper;
 
 import com.springmall.bean.User;
 import com.springmall.bean.UserExample;
+
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -33,4 +35,10 @@ public interface UserMapper {
 
     // 查询用户增长的统计数据
     List<UserStat> selectUserCountOfDay();
+
+    int insertUser(HashMap<String, String> userInfoMap);
+
+    int selectUserCountByName(String username);
+
+    int selectUserCountByMobile(String mobile);
 }

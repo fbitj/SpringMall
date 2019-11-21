@@ -4,6 +4,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.springmall.bean.*;
 import com.springmall.mapper.AddressMapper;
+import com.springmall.exception.DbException;
 import com.springmall.mapper.CouponMapper;
 import com.springmall.mapper.Coupon_userMapper;
 import com.springmall.utils.RandomUtil;
@@ -47,7 +48,7 @@ public class CouponServiceImpl implements CouponService{
             criteria.andNameLike("%" + request.getName() + "%");
         }
         if (type != null) {
-            criteria.andGoodsTypeEqualTo(type);
+            criteria.andTypeEqualTo(type);
         }
         if (status != null) {
             criteria.andStatusEqualTo(status);
@@ -74,7 +75,13 @@ public class CouponServiceImpl implements CouponService{
             String code = RandomUtil.randomCode();
             coupon.setCode(code);
         }
-        couponMapper.insertSelective(coupon);
+        //判断优惠券有效期类型
+        Short timeType = coupon.getTimeType();
+        if (timeType == 1) {
+            coupon.setDays((short) 0);
+        }
+        int i = couponMapper.insertSelective(coupon);
+        if (i == 0) throw new DbException();
         return coupon;
     }
 
@@ -130,7 +137,14 @@ public class CouponServiceImpl implements CouponService{
         }
         Date date = new Date();
         coupon.setUpdateTime(date);
-        couponMapper.updateByPrimaryKey(coupon);
+        //判断优惠券有效期类型
+        Short timeType = coupon.getTimeType();
+        if (timeType == 1) {
+            coupon.setDays((short) 0);
+        }
+
+        int update = couponMapper.updateByPrimaryKey(coupon);
+        if (update == 0) throw new DbException();
         return coupon;
     }
 
@@ -145,8 +159,13 @@ public class CouponServiceImpl implements CouponService{
     public int deleteCoupon(Coupon coupon) {
         //删除优惠券
         Integer id = coupon.getId();
-        int i = couponMapper.deleteById(id);
-        i = coupon_userMapper.deleteByCouponId(id);
+        Date time = new Date();
+        int i = couponMapper.deleteById(id, time);
+        if (i != 0) {
+            //若用户
+            i = coupon_userMapper.deleteByCouponId(id, time);
+        }
+        if (i == 0) throw new DbException();
         return i;
     }
 

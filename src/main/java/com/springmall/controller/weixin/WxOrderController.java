@@ -1,12 +1,12 @@
 package com.springmall.controller.weixin;
 
 import com.github.pagehelper.PageInfo;
-import com.springmall.bean.BaseReqVo;
-import com.springmall.bean.OrderGoodsCommentReqVo;
-import com.springmall.bean.OrderRespVo;
-import com.springmall.bean.Order_goods;
+import com.springmall.bean.*;
 import com.springmall.service.CommentService;
 import com.springmall.service.OrderService;
+import com.springmall.utils.SubjectUtil;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,7 +33,10 @@ public class WxOrderController {
     @RequestMapping("list")
     public BaseReqVo orderList(int showType,int page, int size){
         // 获取用户信息
-        int userId = 1;
+        Subject subject = SecurityUtils.getSubject();
+        User user = (User) subject.getPrincipal();
+        Integer userId = user.getId();
+        // 查询用户订单
         ArrayList<OrderRespVo> orderRespVo = orderService.queryUserOrders(userId,showType,page,size);
        if (orderRespVo.size() == 0){
            return BaseReqVo.ok();
@@ -171,14 +174,16 @@ public class WxOrderController {
         int grouponRulesId = (int) map.get("grouponRulesId");
         int grouponLinkId = (int) map.get("grouponLinkId");
         // 固定的userid
-        int userid = 1;
-        int res = orderService.submitOrder(userid,cartId,addressId,couponId,message,grouponRulesId,grouponLinkId);
-
-        if (res == 1){
+        Integer userid = SubjectUtil.getUser().getId();
+        int orderId = orderService.submitOrder(userid,cartId,addressId,couponId,message,grouponRulesId,grouponLinkId);
+        HashMap<String, Integer> resMap = new HashMap<>();
+        resMap.put("orderId",orderId);
+        return BaseReqVo.ok(resMap);
+        /*if (res == 1){
             return BaseReqVo.ok();
         } else {
             return BaseReqVo.error(500, "服务器繁忙，请稍后再试!");
-        }
+        }*/
 
     }
 
@@ -191,25 +196,14 @@ public class WxOrderController {
     public BaseReqVo orderPrepay(@RequestBody Map<String,Integer> map){
         Integer orderId = map.get("orderId");
         orderService.orderPay(orderId);
-        return BaseReqVo.ok();
+        HashMap<String, String> map2 = new HashMap<>();
+        map2.put("timeStamp","timeStamp");
+        map2.put("nonceStr","nonceStr");
+        map2.put("packageValue","packageValue");
+        map2.put("signType","signType");
+        map2.put("paySign","paySign");
+        map2.put("sus","paySign");
+        map2.put("success","true");
+        return BaseReqVo.ok(map2);
     }
-    /**
-     * 用户订单支付
-     * {"errno":724,"errmsg":"订单不能支付"}
-     * @param orderId
-     * @return
-     */
-    /*@RequestMapping("prepay")
-    public BaseReqVo prepay(@RequestBody int orderId){
-        BaseReqVo baseReqVo = new BaseReqVo();
-        int res = orderService.updateOrderStatusById(orderId,101);
-        if (res == 1){
-            baseReqVo.setErrmsg("支付成功！");
-            baseReqVo.setErrno(0);
-        }else {
-            baseReqVo.setErrmsg("订单不能支付");
-            baseReqVo.setErrno(724);
-        }
-        return baseReqVo;
-    }*/
 }

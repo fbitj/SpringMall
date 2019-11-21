@@ -222,20 +222,33 @@ public class CategoryServiceImpl implements CategoryService {
         //查询当前类的信息
         Category current = categoryMapper.selectByPrimaryKey(id);
         Integer pid = current.getPid();
-
-        //查询与该类同属一个父类的类目信息
-        CategoryExample example = new CategoryExample();
-        example.createCriteria().andPidEqualTo(pid).andDeletedEqualTo(false);
-        List<Category> categories = categoryMapper.selectByExample(example);
-
-        //查询父类信息
-        Category parent = categoryMapper.selectByPrimaryKey(pid);
-
-        //封装信息
         Map<String,Object> map = new HashMap<>();
-        map.put("currentCategory", current);
-        map.put("brotherCategory", categories);
-        map.put("parentCategory", parent);
+        if (pid == 0) {
+            //该类为父类，则查询子类信息
+            CategoryExample example = new CategoryExample();
+            example.createCriteria().andPidEqualTo(id).andDeletedEqualTo(false);
+            List<Category> categories = categoryMapper.selectByExample(example);
+
+            //parentCategory为当前类，currentCategory为list[0]
+            map.put("currentCategory", categories.get(0));
+            map.put("brotherCategory", categories);
+            map.put("parentCategory", current);
+        } else {
+            //查询与该类同属一个父类的类目信息
+            CategoryExample example = new CategoryExample();
+            example.createCriteria().andPidEqualTo(pid).andDeletedEqualTo(false);
+            List<Category> categories = categoryMapper.selectByExample(example);
+
+            //查询父类信息
+            Category parent = categoryMapper.selectByPrimaryKey(pid);
+
+            //封装信息
+            map.put("currentCategory", current);
+            map.put("brotherCategory", categories);
+            map.put("parentCategory", parent);
+        }
+
+
         return map;
     }
 

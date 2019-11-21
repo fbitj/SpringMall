@@ -90,9 +90,19 @@
     from cskaoyan_mall_permission
     where id = #{id,jdbcType=INTEGER}
   </select>
+  <select id="selectByRoleId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from cskaoyan_mall_permission
+    where role_id = #{id,jdbcType=INTEGER}
+  </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from cskaoyan_mall_permission
     where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByRoleId" parameterType="java.lang.Integer">
+    delete from cskaoyan_mall_permission
+    where role_id = #{id,jdbcType=INTEGER}
   </delete>
   <delete id="deleteByExample" parameterType="com.springmall.bean.PermissionExample">
     delete from cskaoyan_mall_permission
@@ -101,10 +111,18 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.springmall.bean.Permission">
-    insert into cskaoyan_mall_permission (id, role_id, permission, 
+    insert into cskaoyan_mall_permission (id, role_id, permission,
       add_time, update_time, deleted
       )
-    values (#{id,jdbcType=INTEGER}, #{roleId,jdbcType=INTEGER}, #{permission,jdbcType=VARCHAR}, 
+    values (#{id,jdbcType=INTEGER}, #{roleId,jdbcType=INTEGER}, #{permission,jdbcType=VARCHAR},
+      #{addTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{deleted,jdbcType=BIT}
+      )
+  </insert>
+  <insert id="insert4" parameterType="com.springmall.bean.Permission4">
+    insert into cskaoyan_mall_permission (id, role_id, permission,
+      add_time, update_time, deleted
+      )
+    values (#{id,jdbcType=INTEGER}, #{roleId,jdbcType=INTEGER}, #{permission,jdbcType=VARCHAR},
       #{addTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{deleted,jdbcType=BIT}
       )
   </insert>
@@ -225,4 +243,21 @@
       deleted = #{deleted,jdbcType=BIT}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+
+  <select id="selectAllP1"  resultType="com.springmall.bean.Permission1">
+    select id,label
+    from cskaoyan_mall_permission1
+  </select>
+
+  <select id="selectAllP2"  resultType="com.springmall.bean.Permission2">
+    select id,label,p_id
+    from cskaoyan_mall_permission2
+  </select>
+
+  <select id="selectAllP3"  resultType="com.springmall.bean.Permission3">
+    select id,label,api,p_id
+    from cskaoyan_mall_permission3
+  </select>
+
 </mapper>

@@ -56,4 +56,8 @@ public class Coupon_user {
         this.updateTime = updateTime;
         this.deleted = deleted;
     }
+
+    public Coupon_user() {
+
+    }
 }

@@ -16,8 +16,14 @@ public class Admin2 {
     private Integer id;
     private String username;
     private String password;
+    private String lastLoginIp;
+    @JsonFormat(pattern = "yyyy-MM-dd",timezone = "GMT+8")
+    private Date lastLoginTime;
     private String avatar;
-    private int[] roleIds;
-    @JsonFormat(pattern = "yyyy-MM-dd HH-mm-ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
+    private Date addTime;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     private Date updateTime;
+    private int deleted;
+    private int[] roleIds;
 }

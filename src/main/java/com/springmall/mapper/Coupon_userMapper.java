@@ -2,6 +2,8 @@ package com.springmall.mapper;
 
 import com.springmall.bean.Coupon_user;
 import com.springmall.bean.Coupon_userExample;
+
+import java.util.Date;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
@@ -28,5 +30,5 @@ public interface Coupon_userMapper {
 
     int updateByPrimaryKey(Coupon_user record);
 
-    int deleteByCouponId(Integer id);
+    int deleteByCouponId(@Param("id") Integer id, @Param("time") Date time);
 }

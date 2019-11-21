@@ -1,4 +1,4 @@
-package com.springmall.expection;
+package com.springmall.exception;
 
 import com.springmall.bean.BaseReqVo;
 import org.apache.shiro.authz.AuthorizationException;

@@ -18,7 +18,7 @@ public class Goods_product {
 
     private Integer number;
 
-    private String url;
+    private String[] url;
 
     @JsonFormat(pattern = "yyyy-MM-dd hh:mm:ss")
     private Date addTime;
@@ -62,13 +62,7 @@ public class Goods_product {
         this.number = number;
     }
 
-    public String getUrl() {
-        return url;
-    }
 
-    public void setUrl(String url) {
-        this.url = url == null ? null : url.trim();
-    }
 
     public Date getAddTime() {
         return addTime;

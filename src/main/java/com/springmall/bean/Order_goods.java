@@ -32,7 +32,7 @@ public class Order_goods {
 
     private List<String> goodsSpecificationValues;
 
-    private String picUrl;
+    private String[] picUrl;
 
     private Integer comment;
 

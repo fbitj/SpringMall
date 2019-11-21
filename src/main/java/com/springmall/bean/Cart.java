@@ -1,10 +1,12 @@
 package com.springmall.bean;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.Data;
 
 import java.math.BigDecimal;
 import java.util.Date;
 
+@Data
 public class Cart {
     private Integer id;
 
@@ -26,7 +28,7 @@ public class Cart {
 
     private Boolean checked;
 
-    private String picUrl;
+    private String[] picUrl;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date addTime;
@@ -116,13 +118,7 @@ public class Cart {
         this.checked = checked;
     }
 
-    public String getPicUrl() {
-        return picUrl;
-    }
 
-    public void setPicUrl(String picUrl) {
-        this.picUrl = picUrl == null ? null : picUrl.trim();
-    }
 
     public Date getAddTime() {
         return addTime;

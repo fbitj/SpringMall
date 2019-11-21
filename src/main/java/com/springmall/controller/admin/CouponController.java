@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -120,14 +121,17 @@ public class CouponController {
         if (coupon.getLimit() == null || coupon.getLimit() < 0) {
             return "限领数量必须大于等于0";
         }
-        if (coupon.getTotal() == null || coupon.getTotal() < 0) {
-            return "优惠券数量必须大于等于0";
+        if (coupon.getTotal() == null || coupon.getTotal() <= 0) {
+            return "优惠券数量必须大于0";
         }
         if (coupon.getTimeType() == 0 && (coupon.getDays() == null || coupon.getDays() <= 0)) {
             return "相对天数必须大于0";
         }
         if (coupon.getTimeType() == 1 && (coupon.getEndTime().before(coupon.getStartTime()))) {
             return "日期选择有误";
+        }
+        if (coupon.getTimeType() == 1 && (coupon.getEndTime().getTime() - new Date().getTime() < 1000*60*60)) {
+            return "有效期最后时间最少要大于当前1小时";
         }
         return null;
     }

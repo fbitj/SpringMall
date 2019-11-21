@@ -4,6 +4,7 @@ import com.springmall.bean.Coupon;
 import com.springmall.bean.CouponExample;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.Date;
 import java.util.List;
 
 public interface CouponMapper {
@@ -29,7 +30,7 @@ public interface CouponMapper {
 
     int updateByPrimaryKey(Coupon record);
 
-    int deleteById(Integer id);
+    int deleteById(@Param("id") Integer id, @Param("time") Date time);
 
     List<Coupon> selectAllCoupon();
 

@@ -3,7 +3,7 @@
 <mapper namespace="com.springmall.mapper.Groupon_rulesMapper">
 
   <update id="deleteById">
-    update cskaoyan_mall_groupon_rules set deleted = true where id = #{id}
+    update cskaoyan_mall_groupon_rules set deleted = true, update_time = #{time} where id = #{id}
   </update>
 
   <resultMap id="BaseResultMap" type="com.springmall.bean.Groupon_rules">

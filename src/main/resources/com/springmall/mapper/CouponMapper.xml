@@ -3,7 +3,7 @@
 <mapper namespace="com.springmall.mapper.CouponMapper">
 
   <update id="deleteById">
-    update cskaoyan_mall_coupon set deleted = true, status = 2 where id = #{id}
+    update cskaoyan_mall_coupon set deleted = true, status = 2, update_time = #{time} where id = #{id}
   </update>
 
   <resultMap id="BaseResultMap" type="com.springmall.bean.Coupon">

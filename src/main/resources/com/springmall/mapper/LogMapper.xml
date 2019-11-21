@@ -115,6 +115,16 @@
       #{comment,jdbcType=VARCHAR}, #{addTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
       #{deleted,jdbcType=BIT})
   </insert>
+  <insert id="insertDetail"  parameterType="com.springmall.bean.Log2" >
+    insert into cskaoyan_mall_log (id, admin, ip,
+      `type`, `action`, status, result,
+      comment, add_time, update_time,
+      deleted)
+    values (#{id,jdbcType=INTEGER}, #{admin,jdbcType=VARCHAR}, #{ip,jdbcType=VARCHAR},
+      #{type,jdbcType=INTEGER}, #{action,jdbcType=VARCHAR}, #{status,jdbcType=BIT}, #{result,jdbcType=VARCHAR},
+      #{comment,jdbcType=VARCHAR}, #{addTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP},
+      #{deleted,jdbcType=BIT})
+  </insert>
   <insert id="insertSelective" parameterType="com.springmall.bean.Log">
     insert into cskaoyan_mall_log
     <trim prefix="(" suffix=")" suffixOverrides=",">

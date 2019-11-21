@@ -4,6 +4,7 @@ import com.springmall.bean.Topic;
 import com.springmall.bean.TopicExample;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.Date;
 import java.util.List;
 
 public interface TopicMapper {
@@ -35,5 +36,5 @@ public interface TopicMapper {
 
     int updateByPrimaryKey(Topic record);
 
-    int deleteById(Integer id);
+    int deleteById(@Param("id") Integer id, @Param("time") Date time);
 }

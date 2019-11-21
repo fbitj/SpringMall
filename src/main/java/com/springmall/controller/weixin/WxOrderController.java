@@ -4,6 +4,7 @@ import com.github.pagehelper.PageInfo;
 import com.springmall.bean.*;
 import com.springmall.service.CommentService;
 import com.springmall.service.OrderService;
+import com.springmall.utils.SubjectUtil;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -173,14 +174,16 @@ public class WxOrderController {
         int grouponRulesId = (int) map.get("grouponRulesId");
         int grouponLinkId = (int) map.get("grouponLinkId");
         // 固定的userid
-        int userid = 1;
-        int res = orderService.submitOrder(userid,cartId,addressId,couponId,message,grouponRulesId,grouponLinkId);
-
-        if (res == 1){
+        Integer userid = SubjectUtil.getUser().getId();
+        int orderId = orderService.submitOrder(userid,cartId,addressId,couponId,message,grouponRulesId,grouponLinkId);
+        HashMap<String, Integer> resMap = new HashMap<>();
+        resMap.put("orderId",orderId);
+        return BaseReqVo.ok(resMap);
+        /*if (res == 1){
             return BaseReqVo.ok();
         } else {
             return BaseReqVo.error(500, "服务器繁忙，请稍后再试!");
-        }
+        }*/
 
     }
 

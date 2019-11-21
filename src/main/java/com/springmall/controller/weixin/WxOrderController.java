@@ -1,12 +1,11 @@
 package com.springmall.controller.weixin;
 
 import com.github.pagehelper.PageInfo;
-import com.springmall.bean.BaseReqVo;
-import com.springmall.bean.OrderGoodsCommentReqVo;
-import com.springmall.bean.OrderRespVo;
-import com.springmall.bean.Order_goods;
+import com.springmall.bean.*;
 import com.springmall.service.CommentService;
 import com.springmall.service.OrderService;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,6 +32,8 @@ public class WxOrderController {
     @RequestMapping("list")
     public BaseReqVo orderList(int showType,int page, int size){
         // 获取用户信息
+        /*Subject subject = SecurityUtils.getSubject();
+        User user = (User) subject.getPrincipal();*/
         int userId = 1;
         ArrayList<OrderRespVo> orderRespVo = orderService.queryUserOrders(userId,showType,page,size);
        if (orderRespVo.size() == 0){
@@ -191,7 +192,15 @@ public class WxOrderController {
     public BaseReqVo orderPrepay(@RequestBody Map<String,Integer> map){
         Integer orderId = map.get("orderId");
         orderService.orderPay(orderId);
-        return BaseReqVo.ok();
+        HashMap<String, String> map2 = new HashMap<>();
+        map2.put("timeStamp","timeStamp");
+        map2.put("nonceStr","nonceStr");
+        map2.put("packageValue","packageValue");
+        map2.put("signType","signType");
+        map2.put("paySign","paySign");
+        map2.put("sus","paySign");
+        map2.put("success","true");
+        return BaseReqVo.ok(map2);
     }
     /**
      * 用户订单支付

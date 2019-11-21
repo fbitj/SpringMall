@@ -1,14 +1,13 @@
 package com.springmall.aop;
 import java.io.File;
+import java.lang.System;
 import java.util.Date;
 
 
-import com.springmall.bean.BaseReqVo;
-import com.springmall.bean.Log;
-import com.springmall.bean.Log2;
-import com.springmall.bean.Log3;
+import com.springmall.bean.*;
 import com.springmall.mapper.LogMapper;
 import com.springmall.utils.LogUtil;
+import com.springmall.utils.SubjectUtil;
 import org.apache.log4j.Logger;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -108,9 +107,10 @@ public class Myaspect {
         if(request != null){
             uri = request.getRequestURI();
             System.out.println(uri);
-            String username1 = (String) request.getSession().getAttribute("username");
-            username = username1;
         }
+        Admin admin = SubjectUtil.getAdmin();
+        username = admin.getUsername();
+
 
         String string = ip + "";
         int length = string.length();

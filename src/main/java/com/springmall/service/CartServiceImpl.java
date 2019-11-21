@@ -63,18 +63,12 @@ public class CartServiceImpl implements CartService {
         List<Cart> checkedCarts = cartMapper.selectByExample(checkedCartExample);
         //获取checkedGoodsCount
         int checkedGoodsCount = checkedGoodsCountCart();
-      /*  PageInfo<Cart> checkedCartPageInfo = new PageInfo<>(checkedCarts);
-        long checkedGoodsCount = checkedCartPageInfo.getTotal();*/
         //获取checkedGoodsAmount
         BigDecimal checkedGoodsAmount = new BigDecimal(0.00);
         for (Cart checkedCart : checkedCarts) {
             BigDecimal price = checkedCart.getPrice();
             //乘法，price x number
             price = price.multiply(BigDecimal.valueOf(checkedCart.getNumber()));
-           /* //同一件商品的总价（本质：price * number）
-            for (int i = 1; i < checkedCart.getNumber() ; i++) {
-                price = price.add(price);
-            }*/
             checkedGoodsAmount = checkedGoodsAmount.add(price);
         }
         //将所有的total封装成map
@@ -163,17 +157,18 @@ public class CartServiceImpl implements CartService {
 
     /**
      * 添加商品到购物车
+     * 查询goods表，获取goodsSn, goodsName,
+     * 查询goods_product表， 获取productId, price, specifications, pic_url
+     * 默认checked=true
      * 细节：productId存在（即为specifications(型号)相同），要调用update而不是insert
      * @param cart
      * @return购物车中商品总数
      */
     @Override
     public int addCart(Cart cart) {
-      //查询goods表，获取goodsSn, goodsName,
-        //查询goods_product表， 获取productId, price, specifications, pic_url
-        //默认checked=true
-        //生成一条购物车单据，并添加到数据库
-        Cart addCart = createCart(cart);
+        //生成一条购物车单据，并添加到数据库,createCart()方法在后面
+        String request = "addCart";
+        Cart addCart = createCart(cart, request);
         //返回购物车中商品总数
         int goodsCountCart = goodsCountCart();
         return goodsCountCart;
@@ -182,13 +177,15 @@ public class CartServiceImpl implements CartService {
     /**
      *  立即购买商品，点击即会生成购物车单据，付款后会删除（不用这里实现此功能）
      *  未付款退出，依然保留在购物车
+     *  表里有同类型商品，不会增加新数据，而是修改number
      *  细节：productId存在（即为specifications(型号)相同），要调用update而不是insert
      * @param cart
      * @return 购物车id
      */
     @Override
     public int fastAddCart(Cart cart) {
-        Cart fastAddCart = createCart(cart);
+        String request = "fastAddCart";
+        Cart fastAddCart = createCart(cart, request);
      //   int insert = cartMapper.insertSelective(fastAddCart);
         Integer cartId = fastAddCart.getId();
         return cartId;
@@ -249,16 +246,19 @@ public class CartServiceImpl implements CartService {
         //优惠券折扣金额
         BigDecimal couponPrice = new BigDecimal(0);
         //可用优惠券数量
-        int  availableCouponLength = 0;
+        Coupon_userExample coupon_userExample = new Coupon_userExample();
+        coupon_userExample.createCriteria().andUserIdEqualTo(userId).andStatusEqualTo((short) 0).andDeletedEqualTo(false);
+        List<Coupon_user> coupon_users = coupon_userMapper.selectByExample(coupon_userExample);
+        int availableCouponLength = coupon_users.size();
         //couponId不为0，根据couponId去coupon表搜索优惠金额，再用cpuponId和userId去coupon_user表搜索可用优惠券，并计算可用优惠券数量
         if(couponId != 0 ) {
             //搜索优惠金额
             Coupon coupon = couponMapper.selectByPrimaryKey(couponId);
             couponPrice = coupon.getDiscount();
-            Coupon_userExample coupon_userExample = new Coupon_userExample();
+          /*  Coupon_userExample coupon_userExample = new Coupon_userExample();
             coupon_userExample.createCriteria().andCouponIdEqualTo(couponId).andUserIdEqualTo(userId).andStatusEqualTo((short) 0).andDeletedEqualTo(false);
             List<Coupon_user> coupon_users = coupon_userMapper.selectByExample(coupon_userExample);
-             availableCouponLength = coupon_users.size();
+             availableCouponLength = coupon_users.size();*/
         }
         //运费，基础运费8元，满88包邮
         BigDecimal freightPrice = new BigDecimal(8);
@@ -316,7 +316,7 @@ public class CartServiceImpl implements CartService {
      * @param cart
      * @return
      */
-    public Cart createCart(Cart cart) {
+    public Cart createCart(Cart cart, String request) {
         //已知goodsId, number, productId
         //通过session获取userId
         int userId = getUserUtil.getUserId();
@@ -328,8 +328,16 @@ public class CartServiceImpl implements CartService {
         Cart selectCart = cartMapper.selectByUserIdAndProductId(userId, cart.getProductId());
         if(selectCart != null) {
             //存在同型号的商品，直接update。 number = oldNumber + newNumber
-            selectCart.setNumber((short) (selectCart.getNumber() + cart.getNumber()));
-            int update = cartMapper.updateByPrimaryKeySelective(selectCart);
+            //判断是添加购物车调用还是立即购买调用，对number的处理不同
+            if("addCart".equals(request)) {
+                //添加购物车，新旧数据合并
+                selectCart.setNumber((short) (selectCart.getNumber() + cart.getNumber()));
+                int update = cartMapper.updateByPrimaryKeySelective(selectCart);
+            } else if ("fastAddCart".equals(request)) {
+                //直接购买，数据更新为新数据
+                selectCart.setNumber(cart.getNumber());
+                int update = cartMapper.updateByPrimaryKeySelective(selectCart);
+            }
             return selectCart;
         } else {
             //封装数据
@@ -345,37 +353,9 @@ public class CartServiceImpl implements CartService {
             cart.setAddTime(date);
             cart.setUpdateTime(date);
             int insert = cartMapper.insertSelective(cart);
-//        System.out.println("insert:" + insert);
             return cart;
         }
     }
 
-    /**
-     * 生成一条订单
-     * @param cart
-     * @return
-     */
-    public Order createOrder(Cart cart) {
-        //已知goodsId, number, productId
-        //查询goods表，获取goodsSn, goodsName,
-        //查询goods_product表， 获取 price, specifications, pic_url
-        //默认checked=true
-        //计算实付金额
-        Goods goods = goodsMapper.selectByPrimaryKey(cart.getGoodsId());
-        Goods_product goods_product = goods_productMapper.selectByPrimaryKey(cart.getProductId());
-        Order order = new Order();
-        order.setOrderStatus((short) 101);
-        order.setGoodsPrice(goods_product.getPrice());
-        BigDecimal bigDecimal = new BigDecimal(1);
-        order.setFreightPrice(bigDecimal);//运费
-        order.setCouponPrice(bigDecimal);//优惠券减免
-        order.setIntegralPrice(bigDecimal);//用户积分减免
-        order.setGoodsPrice(bigDecimal);//团购优惠价减免
-         BigDecimal orderPrice = goods_product.getPrice().add(order.getFreightPrice()).add(order.getCouponPrice().negate());
-        order.setOrderPrice(orderPrice);//订单费用 = goods_price + freight_price - coupon_price
-        BigDecimal actualPrice = orderPrice.add(order.getIntegralPrice().negate());
-        order.setActualPrice(actualPrice);//实付费用 = order_price - integral_price
-        return order;
-    }
 
 }

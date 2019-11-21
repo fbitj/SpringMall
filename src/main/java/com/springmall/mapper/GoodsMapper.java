@@ -35,7 +35,7 @@ public interface GoodsMapper {
 
     int updateByPrimaryKey(Goods record);
 
-    List<Goods> selectGoodsInSameCategory(Integer id);
+    /*List<Goods> selectGoodsInSameCategory(Integer id);*/
 
     List<Goods> selectHotGoods(int amountLimimt);
 }

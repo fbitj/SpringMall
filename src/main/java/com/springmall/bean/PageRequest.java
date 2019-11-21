@@ -33,4 +33,5 @@ public class PageRequest {
     private String keyword;
     private Integer size;
     private Integer brandId;
+    private Boolean isHot;
 }

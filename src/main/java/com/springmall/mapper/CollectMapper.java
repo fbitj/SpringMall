@@ -4,6 +4,7 @@ import com.springmall.bean.Collect;
 import com.springmall.bean.CollectExample;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
+import org.aspectj.lang.annotation.Pointcut;
 
 public interface CollectMapper {
     long countByExample(CollectExample example);
@@ -17,6 +18,10 @@ public interface CollectMapper {
     int insertSelective(Collect record);
 
     List<Collect> selectByExample(CollectExample example);
+
+    List<Collect> selectByDetail(@Param("user_id") int id, @Param("types") int type,@Param("deleted") boolean deleted);
+
+    List<Collect> selectByDetailId(@Param("user_id") int id);
 
     Collect selectByPrimaryKey(Integer id);
 

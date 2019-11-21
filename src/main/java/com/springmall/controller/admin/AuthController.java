@@ -5,6 +5,7 @@ import com.springmall.bean.BaseReqVo;
 import com.springmall.bean.InfoData;
 import com.springmall.service.AdminService;
 import com.springmall.shiro.CustomToken;
+import com.springmall.utils.DateUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.UsernamePasswordToken;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -30,20 +32,6 @@ public class AuthController {
     @Autowired
     AdminService adminService;
 
-//    @RequestMapping("login")
-//    public BaseReqVo<String> login(@RequestBody Admin admin, HttpSession session) {
-//        BaseReqVo<String> baseReqVo = new BaseReqVo<>();
-//        if (adminService.login(admin) == 1) {
-//            baseReqVo.setErrno(0);
-//            baseReqVo.setData("6d182056-3821-4a75-ac59-1724a0707524");
-//            baseReqVo.setErrmsg("成功");
-//            session.setAttribute("username", admin.getUsername()); // 把用户名添加进Session中
-//        } else {
-//            baseReqVo.setErrno(605);
-//            baseReqVo.setErrmsg("用户账号或密码不正确");
-//        }
-//        return  baseReqVo;
-//    }
 
     //鉴权登录
     @RequestMapping("login")
@@ -61,6 +49,7 @@ public class AuthController {
         return BaseReqVo.ok(sessionId);
     }
 
+    // 返回当前管理员的信息
     @RequestMapping("info")
     public BaseReqVo getInfo(String token) {
         // 通过请求参数中sessionid获取到session中的管理员系信息
@@ -86,7 +75,11 @@ public class AuthController {
 
     // 登出操作
     @RequestMapping("logout")
-    public BaseReqVo logout() {
+    public BaseReqVo logout(HttpServletRequest request) {
+        // 记录登出时间和登陆的ip地址
+        String ip = request.getRemoteAddr();
+        adminService.recordUserLoginInfo(ip);
+        // Shiro登出
         Subject subject = SecurityUtils.getSubject();
         subject.logout();
         return BaseReqVo.ok();

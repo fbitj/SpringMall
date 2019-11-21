@@ -33,8 +33,8 @@ public class CartController {
     // 立即购买商品
     @RequestMapping("fastadd")
     public BaseReqVo fastAddCart(@RequestBody Cart cart) {
-        return BaseReqVo.ok();
-
+        int cartId = cartService.fastAddCart(cart);
+        return BaseReqVo.ok(cartId);
     }
 
     // 删除购物车的商品

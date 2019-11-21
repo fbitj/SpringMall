@@ -22,6 +22,8 @@ public interface CartMapper {
 
     Cart selectByProductId(Integer productId);
 
+    Cart selectByUserIdAndProductId(@Param("userId") Integer userId, @Param("productId")Integer productId);
+
     int updateByExampleSelective(@Param("record") Cart record, @Param("example") CartExample example);
 
     int updateByExample(@Param("record") Cart record, @Param("example") CartExample example);
@@ -37,6 +39,7 @@ public interface CartMapper {
      * @return
      */
     int logicDeleteCartById(Integer id);
+    int logicDeleteCartByUserIdAndProductId(@Param("userId") Integer userId, @Param("productId")Integer productId);
 
     int updateByProductIdSelective(int productId);
 }

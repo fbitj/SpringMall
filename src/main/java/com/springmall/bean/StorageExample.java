@@ -206,7 +206,7 @@ public class StorageExample {
         }
 
         public Criteria andKeyLike(String value) {
-            addCriterion("key like", value, "key");
+            addCriterion("`key` like", value, "key");
             return (Criteria) this;
         }
 
@@ -636,6 +636,11 @@ public class StorageExample {
         }
 
         public Criteria andDeletedEqualTo(Boolean value) {
+            addCriterion("deleted =", value, "deleted");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeletedEqualToInt(Integer value) {
             addCriterion("deleted =", value, "deleted");
             return (Criteria) this;
         }

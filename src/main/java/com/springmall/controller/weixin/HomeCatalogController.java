@@ -16,6 +16,9 @@ import java.util.Map;
  * Created by fwj on 2019-11-20.
  */
 
+/**
+ * 主页和分类页面的显示接口
+ */
 @RestController
 public class HomeCatalogController {
     @Autowired
@@ -32,6 +35,7 @@ public class HomeCatalogController {
     BrandService brandService;
     @Autowired
     GoodsService goodsService;
+
     // 首页显示数据
     @RequestMapping("/wx/home/index")
     @ResponseBody
@@ -41,10 +45,13 @@ public class HomeCatalogController {
         List<Category> categoryList = categoryService.getChannelCatagory();
         homePageData.setChannel(categoryList);
         // 设置首页优惠券
-        List<Coupon> couponList = couponService.getAllCoupon();
-        homePageData.setCouponList(couponList);
-        List<GrouponInfo> grouponInfoList = grouponService.getGrouponInfo();
-        homePageData.setGrouponList(grouponInfoList);
+        HashMap<String,Object> dataMap = couponService.queryCouponListByPage("0","4"); // 限制最多显示4张优惠券信息
+        List<Coupon> couponInfoList = (List<Coupon>) dataMap.get("data");
+        homePageData.setCouponList(couponInfoList);
+        // 设置团购列表
+        HashMap<String,Object> grouponDataMap = grouponService.queryGrouponListByPage("0", "5");
+        List<Groupon> grouponList = (List<Groupon>) grouponDataMap.get("data");
+        homePageData.setGrouponList(grouponList);
         // 设置专题列表
 //        homePageData.setTopicList();
         // 设置广告横幅

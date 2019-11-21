@@ -53,7 +53,6 @@ public class OrderRespVo extends Order {
                     delete = true;
                     break;
                 case 201://已付款
-                    confirm = true;
                     refund = true;
                     break;
                 case 202://申请退款

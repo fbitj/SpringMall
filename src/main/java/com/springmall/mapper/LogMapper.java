@@ -1,6 +1,7 @@
 package com.springmall.mapper;
 
 import com.springmall.bean.Log;
+import com.springmall.bean.Log2;
 import com.springmall.bean.LogExample;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
@@ -13,6 +14,8 @@ public interface LogMapper {
     int deleteByPrimaryKey(Integer id);
 
     int insert(Log record);
+
+    int insertDetail(Log2 record);
 
     int insertSelective(Log record);
 

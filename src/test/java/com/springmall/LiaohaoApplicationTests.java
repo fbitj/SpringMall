@@ -39,4 +39,10 @@ class LiaohaoApplicationTests {
         System.out.println(coupons);
     }
 
+    @Test
+    public void test1() {
+        double asdf = Double.parseDouble("10");
+        System.out.println(asdf);
+    }
+
 }

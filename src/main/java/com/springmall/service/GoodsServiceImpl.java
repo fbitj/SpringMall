@@ -1,5 +1,6 @@
 package com.springmall.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.github.pagehelper.PageHelper;
 import com.springmall.bean.*;
 import com.springmall.mapper.*;
@@ -190,7 +191,7 @@ public class GoodsServiceImpl implements GoodsService {
      * @return
      */
     @Override
-    public Map selectGoodsDetailById(Integer id) {
+    public Map selectGoodsDetailById(Integer id) throws JsonProcessingException {
         //查询商品团购信息
         List grouponRules = grouponService.selectRulesByGoodsId(id);
 
@@ -209,10 +210,14 @@ public class GoodsServiceImpl implements GoodsService {
 
         //查询商品的评论
         List comments = commentService.queryCommentsByGoodsId(id);
+        int size = comments.size();
+        if (size > 3) {
+            comments = comments.subList(0,3);
+        }
         //封装评论
         Map commentMap = new HashMap();
         commentMap.put("data", comments);
-        commentMap.put("count", comments.size());
+        commentMap.put("count", size);
 
         //查看用户是否收藏该商品
         Subject subject = SecurityUtils.getSubject();

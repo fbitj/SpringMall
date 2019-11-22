@@ -1,5 +1,6 @@
 package com.springmall.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.springmall.bean.Comment;
 
 import java.util.List;
@@ -44,5 +45,5 @@ public interface CommentService {
      */
     int commentSubmit(int userId, Integer orderGoodsId, String content, boolean hasPicture, short star, String[] picUrls);
 
-    List queryCommentsByGoodsId(Integer id);
+    List queryCommentsByGoodsId(Integer id) throws JsonProcessingException;
 }

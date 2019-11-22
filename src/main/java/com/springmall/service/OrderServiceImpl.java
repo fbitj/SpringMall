@@ -211,6 +211,11 @@ public class OrderServiceImpl implements OrderService {
     }
 
 
+    /**
+     * @param orderId 订单id
+     * @param status  101:未付款，102:用户取消
+     * @return
+     */
     @Override
     public int updateOrderStatusById(int orderId, int status) {
         Order order = new Order();
@@ -221,6 +226,9 @@ public class OrderServiceImpl implements OrderService {
         order.setId(orderId);
         order.setComments((short) order_goods.size());
         order.setOrderStatus((short) status);
+        if (status > 400) {
+            order.setConfirmTime(new Date());
+        }
         order.setUpdateTime(new Date());
         return orderMapper.updateByPrimaryKeySelective(order);
     }
@@ -244,7 +252,7 @@ public class OrderServiceImpl implements OrderService {
                 criteria.andOrderStatusEqualTo((short) 301);
                 break;
             case 4:
-                criteria.andOrderStatusBetween((short)401,(short)402);
+                criteria.andOrderStatusBetween((short)401,(short)402).andCommentsGreaterThan((short) 0);
                 break;
         }
         // 查询未删除订单
@@ -472,5 +480,10 @@ public class OrderServiceImpl implements OrderService {
         // 修改团购状态
         grouponMapper.updatePayedByOrderId(orderId);
         return i;
+    }
+
+    @Override
+    public int CommentSubOne(Integer orderGoodsId) {
+       return orderMapper.CommentSubOne(orderGoodsId);
     }
 }

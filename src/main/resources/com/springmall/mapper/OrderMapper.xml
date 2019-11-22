@@ -597,4 +597,8 @@
       update_time = now()
     where id = #{id}
   </update>
+  <update id="CommentSubOne">
+    update cskaoyan_mall_order set comments = comments - 1
+    where id = (select order_id from cskaoyan_mall_order_goods where id = #{orderGoodsId})
+  </update>
 </mapper>

@@ -315,6 +315,7 @@ public class CartServiceImpl implements CartService {
             }
 
             //优惠券折扣金额
+            int myCouponId = 0;
             BigDecimal couponPrice = new BigDecimal(0);
             //可用优惠券数量
             Coupon_userExample coupon_userExample = new Coupon_userExample();
@@ -323,24 +324,53 @@ public class CartServiceImpl implements CartService {
             int availableCouponLength = coupon_users.size();
             //couponId不为0，根据couponId去coupon表搜索优惠金额，再用couponId和userId去coupon_user表搜索可用优惠券，并计算可用优惠券数量
             //couponId==0 表示无优惠券可用，couponId==1 表示有优惠券可用
-            if (couponId != 0 ) {
+            Coupon coupon = null;
+            if (couponId == -1 ) {
                 //搜索优惠金额
-                Coupon coupon = null;
+              //  Coupon coupon = null;
                 for (Coupon_user coupon_user : coupon_users) {
                     coupon = couponMapper.selectByPrimaryKey(coupon_user.getCouponId());
                     //比较大小，左边比右边大，返回1。左边比右边小返回-1。相等返回0。
                     if(goodsTotalPrice.compareTo(coupon.getMin()) != -1) {
-                        couponId = coupon_user.getId();
-                        break;
+                        myCouponId = coupon_user.getId();
+                        couponPrice = coupon.getDiscount();
+                       // break;
                     }
                 }
+              //  couponPrice = coupon.getDiscount();
 //                Coupon coupon = couponMapper.selectByPrimaryKey(couponId);
-                couponPrice = coupon.getDiscount();
           /*  Coupon_userExample coupon_userExample = new Coupon_userExample();
             coupon_userExample.createCriteria().andCouponIdEqualTo(couponId).andUserIdEqualTo(userId).andStatusEqualTo((short) 0).andDeletedEqualTo(false);
             List<Coupon_user> coupon_users = coupon_userMapper.selectByExample(coupon_userExample);
              availableCouponLength = coupon_users.size();*/
             }
+            if(couponId ==1) {
+              //  Coupon coupon = null;
+                for (Coupon_user coupon_user : coupon_users) {
+                    coupon = couponMapper.selectByPrimaryKey(1);
+                    //比较大小，左边比右边大，返回1。左边比右边小返回-1。相等返回0。
+                    if (goodsTotalPrice.compareTo(coupon.getMin()) != -1) {
+                       myCouponId = coupon_user.getId();
+                        couponPrice = coupon.getDiscount();
+                    }
+                }
+//                couponPrice = coupon.getDiscount();
+            }
+                    if(couponId == 2) {
+                    //    Coupon coupon = null;
+                        for (Coupon_user coupon_user : coupon_users) {
+                            coupon = couponMapper.selectByPrimaryKey(2);
+                            //比较大小，左边比右边大，返回1。左边比右边小返回-1。相等返回0。
+                            if (goodsTotalPrice.compareTo(coupon.getMin()) != -1) {
+                                myCouponId = coupon_user.getId();
+                                couponPrice = coupon.getDiscount();
+                            }
+                        }
+//                        myCouponId = coupon.getId();
+//                        couponPrice = coupon.getDiscount();
+                    }
+//                    couponPrice = coupon.getDiscount();
+
             //运费，基础运费8元，满88包邮
             //搜索减免运费最小金额
             System express_freight_min = systemMapper.selectByPrimaryKey(5);
@@ -373,7 +403,7 @@ public class CartServiceImpl implements CartService {
             map.put("goodsTotalPrice", goodsTotalPrice);
             map.put("actualPrice", actualPrice);
             map.put("orderTotalPrice", orderTotalPrice);
-            map.put("couponId", couponId);
+            map.put("couponId", myCouponId);
             map.put("couponPrice", couponPrice);
             map.put("availableCouponLength", availableCouponLength);
             map.put("freightPrice", freightPrice);

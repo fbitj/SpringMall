@@ -185,6 +185,9 @@ public class WxAuthController {
         if (isMobileExist == 0) {
             return BaseReqVo.error(703, "该手机号未被注册"); //认证失败
         }
+        // 对密码进行MD5加密
+        String encryptPwd = Md5Utils.getDefaultMd5Encrypt(dataMap.get("password"));
+        dataMap.put("password", encryptPwd);
         // 根据手机号,重置数据库密码
         int res = userService.resetPassword(dataMap.get("password"), dataMap.get("mobile"));
         if (res == 0) {

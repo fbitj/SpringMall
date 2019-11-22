@@ -3,6 +3,7 @@ package com.springmall.controller.admin;
 import com.springmall.bean.BaseReqVo;
 import com.springmall.bean.Keyword;
 import com.springmall.service.KeywordService;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,6 +18,7 @@ public class KeyWordController {
     KeywordService keywordService;
 
     @RequestMapping("list")
+    @RequiresPermissions(value = {"admin:keyword:list"})
     public BaseReqVo keyWordList(Integer page, Integer limit, String keyword, String url) {
         BaseReqVo baseReqVo = new BaseReqVo();
 //        Map<String, Object> map = null;
@@ -33,6 +35,7 @@ public class KeyWordController {
     }
 
     @RequestMapping("create")
+    @RequiresPermissions(value = {"admin:keyword:create"})
     public BaseReqVo keyWordCreate(@RequestBody Keyword keyword) {
         BaseReqVo baseReqVo = new BaseReqVo();
         Keyword addKeyword = keywordService.addKeyword(keyword);
@@ -42,6 +45,7 @@ public class KeyWordController {
         return baseReqVo;
     }
     @RequestMapping("update")
+    @RequiresPermissions(value = {"admin:keyword:update"})
     public BaseReqVo keyWordUpdate(@RequestBody Keyword keyword) {
         BaseReqVo baseReqVo = new BaseReqVo();
         Keyword updateKeyword = keywordService.updateKeyword(keyword);
@@ -51,6 +55,7 @@ public class KeyWordController {
         return baseReqVo;
     }
     @RequestMapping("delete")
+    @RequiresPermissions(value = {"admin:keyword:delete"})
     public BaseReqVo keyWordDelete(@RequestBody Keyword keyword) {
         BaseReqVo baseReqVo = new BaseReqVo();
         int i = keywordService.deleteKeyword(keyword);

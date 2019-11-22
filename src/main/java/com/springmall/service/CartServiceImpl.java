@@ -121,11 +121,13 @@ public class CartServiceImpl implements CartService {
         int userId = getUserUtil.getUserId();
         if (userId != -1) {
             for (int productId : productIds) {
-                Cart cart = cartMapper.selectByUserIdAndProductId(userId, productId);
+                //注意逻辑删除，否则会查到逻辑删除的商品
+                Cart cart = cartMapper.selectByUserIdAndProductIdAndDeleted(userId, productId, false);
                 cart.setChecked(isChecked);
-                CartExample cartExample = new CartExample();
+                int checked = cartMapper.updateByPrimaryKeySelective(cart);
+              /*  CartExample cartExample = new CartExample();
                 cartExample.createCriteria().andProductIdEqualTo(productId).andUserIdEqualTo(userId);
-                int checked = cartMapper.updateByExampleSelective(cart, cartExample);
+                int checked = cartMapper.updateByExampleSelective(cart, cartExample);*/
             }
             Map<String, Object> cartTotal = cartTotal();
             return cartTotal;

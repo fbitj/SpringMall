@@ -283,7 +283,7 @@ public class CartServiceImpl implements CartService {
             //不管哪种方式，都会有一个addressId
             Address address = null;
             AddressExample addressExample = new AddressExample();
-            addressExample.createCriteria().andUserIdEqualTo(userId).andIsDefaultEqualTo(true).andDeletedEqualTo(false);
+            addressExample.createCriteria().andUserIdEqualTo(userId).andDeletedEqualTo(false);
             List<Address> addresses = addressMapper.selectByExample(addressExample);
             if (addresses.size() != 0) {
                 for (Address addr : addresses) {
@@ -314,15 +314,8 @@ public class CartServiceImpl implements CartService {
             coupon_userExample.createCriteria().andUserIdEqualTo(userId).andStatusEqualTo((short) 0).andDeletedEqualTo(false);
             List<Coupon_user> coupon_users = coupon_userMapper.selectByExample(coupon_userExample);
             int availableCouponLength = coupon_users.size();
-            if(couponId == -1 || couponId == 0) {
-                //取出一个id就可以
-                for (Coupon_user coupon_user : coupon_users) {
-                    couponId = coupon_user.getCouponId();
-                    break;
-                }
-            }
-            //couponId不为0，根据couponId去coupon表搜索优惠金额，再用cpuponId和userId去coupon_user表搜索可用优惠券，并计算可用优惠券数量
-            if (couponId != 0 && couponId != -1) {
+            //couponId不为0，根据couponId去coupon表搜索优惠金额，再用couponId和userId去coupon_user表搜索可用优惠券，并计算可用优惠券数量
+            if (couponId != -1 && couponId != 0) {
                 //搜索优惠金额
                 Coupon coupon = couponMapper.selectByPrimaryKey(couponId);
                 couponPrice = coupon.getDiscount();

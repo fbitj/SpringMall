@@ -2,6 +2,7 @@ package com.springmall.service;
 
 
 import com.springmall.bean.*;
+import com.springmall.bean.System;
 import com.springmall.mapper.*;
 import com.springmall.utils.GetUserUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +31,8 @@ public class CartServiceImpl implements CartService {
     CouponMapper couponMapper;
     @Autowired
     Groupon_rulesMapper grouponRulesMapper;
+    @Autowired
+    SystemMapper systemMapper;
 
     /**
      * 显示所有购物车内数据，deleted = false
@@ -121,11 +124,13 @@ public class CartServiceImpl implements CartService {
         int userId = getUserUtil.getUserId();
         if (userId != -1) {
             for (int productId : productIds) {
-                Cart cart = cartMapper.selectByUserIdAndProductId(userId, productId);
+                //注意逻辑删除，否则会查到逻辑删除的商品
+                Cart cart = cartMapper.selectByUserIdAndProductIdAndDeleted(userId, productId, false);
                 cart.setChecked(isChecked);
-                CartExample cartExample = new CartExample();
+                int checked = cartMapper.updateByPrimaryKeySelective(cart);
+              /*  CartExample cartExample = new CartExample();
                 cartExample.createCriteria().andProductIdEqualTo(productId).andUserIdEqualTo(userId);
-                int checked = cartMapper.updateByExampleSelective(cart, cartExample);
+                int checked = cartMapper.updateByExampleSelective(cart, cartExample);*/
             }
             Map<String, Object> cartTotal = cartTotal();
             return cartTotal;
@@ -286,9 +291,11 @@ public class CartServiceImpl implements CartService {
             addressExample.createCriteria().andUserIdEqualTo(userId).andDeletedEqualTo(false);
             List<Address> addresses = addressMapper.selectByExample(addressExample);
             if (addresses.size() != 0) {
+              //  int mark = 0;
                 for (Address addr : addresses) {
-                    if (addr.getId() != addressId) {
-                        addressId = addr.getId();
+                    if (addr.getId() == addressId) {
+                   //     mark = 1;
+                        break;
                     }
                 }
                 address = addressMapper.selectByPrimaryKey(addressId);
@@ -315,9 +322,19 @@ public class CartServiceImpl implements CartService {
             List<Coupon_user> coupon_users = coupon_userMapper.selectByExample(coupon_userExample);
             int availableCouponLength = coupon_users.size();
             //couponId不为0，根据couponId去coupon表搜索优惠金额，再用couponId和userId去coupon_user表搜索可用优惠券，并计算可用优惠券数量
-            if (couponId != -1 && couponId != 0) {
+            //couponId==0 表示无优惠券可用，couponId==1 表示有优惠券可用
+            if (couponId != 0 ) {
                 //搜索优惠金额
-                Coupon coupon = couponMapper.selectByPrimaryKey(couponId);
+                Coupon coupon = null;
+                for (Coupon_user coupon_user : coupon_users) {
+                    coupon = couponMapper.selectByPrimaryKey(coupon_user.getCouponId());
+                    //比较大小，左边比右边大，返回1。左边比右边小返回-1。相等返回0。
+                    if(goodsTotalPrice.compareTo(coupon.getMin()) != -1) {
+                        couponId = coupon_user.getId();
+                        break;
+                    }
+                }
+//                Coupon coupon = couponMapper.selectByPrimaryKey(couponId);
                 couponPrice = coupon.getDiscount();
           /*  Coupon_userExample coupon_userExample = new Coupon_userExample();
             coupon_userExample.createCriteria().andCouponIdEqualTo(couponId).andUserIdEqualTo(userId).andStatusEqualTo((short) 0).andDeletedEqualTo(false);
@@ -325,8 +342,15 @@ public class CartServiceImpl implements CartService {
              availableCouponLength = coupon_users.size();*/
             }
             //运费，基础运费8元，满88包邮
-            BigDecimal freightPrice = new BigDecimal(8);
-            BigDecimal criterion = new BigDecimal(88);
+            //搜索减免运费最小金额
+            System express_freight_min = systemMapper.selectByPrimaryKey(5);
+            String minCost = express_freight_min.getKeyValue();
+            //基础运费
+            System express_freight_value = systemMapper.selectByPrimaryKey(7);
+            String carriage = express_freight_value.getKeyValue();
+
+            BigDecimal freightPrice = new BigDecimal(carriage);
+            BigDecimal criterion = new BigDecimal(minCost);
             //比较大小，左边比右边大，返回1。左边比右边小返回-1。相等返回0。
             if (goodsTotalPrice.compareTo(criterion) == 1) {
                 freightPrice = BigDecimal.valueOf(0);

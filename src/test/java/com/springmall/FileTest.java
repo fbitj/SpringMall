@@ -73,7 +73,7 @@ public class FileTest {
 
     @Test
     public void test3(){
-        String encryptPwd = Md5Utils.getDefaultMd5Encrypt("admin123");
+        String encryptPwd = Md5Utils.getDefaultMd5Encrypt("promotion123");
         System.out.println("encryptPwd = " + encryptPwd);
     }
 }

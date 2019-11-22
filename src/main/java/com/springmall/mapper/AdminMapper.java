@@ -41,4 +41,5 @@ public interface AdminMapper {
     List<String> selectAllPermission();
 
     List<String> selectPermissionByRoldId(Integer roleId);
+
 }

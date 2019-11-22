@@ -332,4 +332,10 @@
   <update id="updateDefault" parameterType="int">
     update cskaoyan_mall_address set is_default=0;
   </update>
+  <select id="selectById" resultType="int">
+    select code from cskaoyan_mall_region where id=#{id};
+  </select>
+  <select id="queryRegionName" resultType="string">
+    select `name` from cskaoyan_mall_region where id=#{id};
+  </select>
 </mapper>

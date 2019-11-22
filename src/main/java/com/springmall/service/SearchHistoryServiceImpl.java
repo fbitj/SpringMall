@@ -2,10 +2,12 @@ package com.springmall.service;
 
 import com.springmall.bean.Search_history;
 import com.springmall.bean.Search_historyExample;
+import com.springmall.exception.DbException;
 import com.springmall.mapper.Search_historyMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -54,9 +56,23 @@ public class SearchHistoryServiceImpl implements SearchHistoryService {
     @Override
     public int addUserSearchHistory(Integer userId, String keyword) {
         Search_history history = new Search_history();
+        //如果用户搜索过该关键词则直接更新
+        Search_historyExample example = new Search_historyExample();
+        example.createCriteria().andUserIdEqualTo(userId).andKeywordEqualTo(keyword);
+        List<Search_history> searchHistories = search_historyMapper.selectByExample(example);
+        if (searchHistories.size() > 0) {
+            //说明用户搜索过该关键词
+            Search_history record = new Search_history();
+            record.setUpdateTime(new Date());
+            int update = search_historyMapper.updateByExampleSelective(record, example);
+            if (update == 0) throw new DbException();
+            return update;
+        }
         history.setUserId(userId);
         history.setKeyword(keyword);
         history.setFrom("wx");
-        return search_historyMapper.insertSelective(history);
+        int i = search_historyMapper.insertSelective(history);
+        if (i == 0) throw new DbException();
+        return i;
     }
 }

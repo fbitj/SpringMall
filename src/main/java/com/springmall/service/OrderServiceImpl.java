@@ -211,6 +211,11 @@ public class OrderServiceImpl implements OrderService {
     }
 
 
+    /**
+     * @param orderId 订单id
+     * @param status  101:未付款，102:用户取消
+     * @return
+     */
     @Override
     public int updateOrderStatusById(int orderId, int status) {
         Order order = new Order();
@@ -221,6 +226,9 @@ public class OrderServiceImpl implements OrderService {
         order.setId(orderId);
         order.setComments((short) order_goods.size());
         order.setOrderStatus((short) status);
+        if (status > 400) {
+            order.setConfirmTime(new Date());
+        }
         order.setUpdateTime(new Date());
         return orderMapper.updateByPrimaryKeySelective(order);
     }

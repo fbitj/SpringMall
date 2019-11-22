@@ -52,7 +52,7 @@ public class AliyunComponent {
         String code = String.valueOf(Math.random()*10+1).substring(2,8);
         System.out.println(mobile + ": " + code);
         request.putQueryParameter("TemplateParam", "{\"code\": \"" + code + "\"}");
-        CommonResponse response = null;
+        CommonResponse response;
         try {
             response = client.getCommonResponse(request);
             System.out.println(response.getHttpStatus());
@@ -63,6 +63,6 @@ public class AliyunComponent {
             e.printStackTrace();
         }
         HashMap<String, String> resMap = new HashMap<>();
-        return String.valueOf(code);
+        return code;
     }
 }

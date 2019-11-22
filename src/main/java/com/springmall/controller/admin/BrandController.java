@@ -49,6 +49,7 @@ public class BrandController {
     }
     //编辑
     @RequestMapping("update")
+    @RequiresPermissions(value = {"admin:brand:update"})
     public BaseReqVo updateBrand(@RequestBody Brand brand) {
         BaseReqVo baseReqVo = new BaseReqVo();
         Brand updateBrand = brandService.updateBrand(brand);
@@ -61,6 +62,7 @@ public class BrandController {
     }
     //删除
     @RequestMapping("delete")
+    @RequiresPermissions(value = {"admin:brand:delete"})
     public BaseReqVo deleteBrand(@RequestBody Brand brand) {
         BaseReqVo baseReqVo = new BaseReqVo();
         int deleteBrand = brandService.deleteBrand(brand);

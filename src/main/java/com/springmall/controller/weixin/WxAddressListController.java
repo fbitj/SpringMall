@@ -3,11 +3,13 @@ package com.springmall.controller.weixin;
 import com.springmall.bean.Address;
 import com.springmall.bean.BaseReqVo;
 import com.springmall.bean.User;
+import com.springmall.exception.ResExceptionHandler;
 import com.springmall.service.AddressService;
 import com.springmall.service.RegionService;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -68,11 +70,35 @@ public class WxAddressListController {
         Integer id = address.getId();
         address.setDeleted(false);
         if(id==0) {
+            //需要先进行查一次表，如果addressList的长度为0，则必须将收获地址设置为默认的收获地址
+            List<Address> addressList=addressService.queryAddressList(userId,false);
+            if(addressList.size()==0){
+                //这个是第一次进行插入收获地址
+                Date addTime = new Date();
+                address.setAddTime(addTime);
+                address.setUserId(userId);
+                if(address.getIsDefault().equals(false)){
+                    //ResExceptionHandler resExceptionHandler = new ResExceptionHandler();
+                    //return resExceptionHandler.handleCustomException(new HttpMessageNotReadableException("第一次设置的收货地址必须为默认值"));
+                    address.setIsDefault(true);
+                    addressService.saveAddress(address);
+                    objectBaseReqVo.setErrno(0);
+                    objectBaseReqVo.setData(address.getId());
+                    objectBaseReqVo.setErrmsg("成功");
+                    return objectBaseReqVo;
+
+                }
+                addressService.saveAddress(address);
+                objectBaseReqVo.setErrno(0);
+                objectBaseReqVo.setData(address.getId());
+                objectBaseReqVo.setErrmsg("成功");
+                return objectBaseReqVo;
+            }
             //进行添加时候的时间
             Date addTime = new Date();
             address.setAddTime(addTime);
             address.setUserId(userId);
-            //添加的时候也要进行判断是否是默认的地址
+            //添加的时候也要进行判断是否设置为默认的地址
             if(address.getIsDefault().equals(true)){
                 //将所有的设置为非默认地址
                 addressService.setDefault();

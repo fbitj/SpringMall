@@ -43,8 +43,13 @@ public class CouponServiceImpl implements CouponService{
 
         Short type = request.getType();
         Short status = request.getStatus();
+        String order = request.getOrder();
+        String sort = request.getSort();
 
         CouponExample couponExample = new CouponExample();
+        if (order != null && sort != null) {
+            couponExample.setOrderByClause(sort + " " + order);
+        }
         CouponExample.Criteria criteria = couponExample.createCriteria();
         //判空，若不为空则添加条件
         if (!StringUtils.isEmpty(request.getName())) {

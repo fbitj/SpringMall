@@ -88,6 +88,14 @@ public class GrouponServiceImpl implements GrouponService {
         PageHelper.startPage(request.getPage(), request.getLimit());
 
         List<GrouponResult> result = grouponMapper.selectWholesale(request);
+        if (result.size() > 0) {
+            for (GrouponResult grouponResult : result) {
+                //添加发起者订单信息
+                Groupon groupon = grouponResult.getGroupon();
+                List subGroupons = grouponResult.getSubGroupons();
+                subGroupons.add(0, groupon);
+            }
+        }
         /*//sub暂定
         for (GrouponResult grouponResult : result) {
             grouponResult.setSubGroupons(new ArrayList());

@@ -51,7 +51,7 @@
       <result column = "good_update" property = "updateTime"/>
       <result column = "good_del" property = "deleted"/>
     </collection>
-    <collection property="subGroupons" column="groupon_id" select="com.springmall.mapper.GrouponMapper.selectGrouponByGid"/>
+    <collection property="subGroupons" column="id" select="com.springmall.mapper.GrouponMapper.selectGrouponByGid"/>
   </resultMap>
 
   <select id="selectWholesale" resultMap="wholesale">
@@ -102,7 +102,8 @@
     LEFT JOIN cskaoyan_mall_groupon_rules as r ON gro.rules_id = r.id
     LEFT JOIN cskaoyan_mall_goods as g on r.goods_id = g.id
     <where>
-      gro.deleted = false and gro.id = gro.groupon_id
+      <!--gro.deleted = false and gro.id = gro.groupon_id-->
+      gro.deleted = false and gro.groupon_id = 0
       <if test="goodsId != null">
         and goods_id = #{goodsId}
       </if>

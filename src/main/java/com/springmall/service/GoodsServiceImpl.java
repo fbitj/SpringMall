@@ -210,10 +210,14 @@ public class GoodsServiceImpl implements GoodsService {
 
         //查询商品的评论
         List comments = commentService.queryCommentsByGoodsId(id);
+        int size = comments.size();
+        if (size > 3) {
+            comments = comments.subList(0,3);
+        }
         //封装评论
         Map commentMap = new HashMap();
         commentMap.put("data", comments);
-        commentMap.put("count", comments.size());
+        commentMap.put("count", size);
 
         //查看用户是否收藏该商品
         Subject subject = SecurityUtils.getSubject();

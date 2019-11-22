@@ -24,13 +24,16 @@ public class SearchKeyWordController {
     public BaseReqVo<Map<String,Object>> querySearchList(){
         Subject subject = SecurityUtils.getSubject();
         User user= (User) subject.getPrincipal();
-        Integer id = user.getId();
+        List<Search_history> searchHistoryList=null;
+        if(user!=null){
+            Integer id = user.getId();
+            //历史搜索按照用户的id进行搜索的进行显示
+            searchHistoryList=keywordService.querySearchHistoryList(id);
+        }
         BaseReqVo<Map<String, Object>> mapBaseReqVo = new BaseReqVo<>();
         HashMap<String, Object> map = new HashMap<>();
         //进行热门搜索进行显示
         List<Keyword> keywordList = keywordService.queryKeyWordList();
-        //历史搜索按照用户的id进行搜索的进行显示
-        List<Search_history> searchHistoryList=keywordService.querySearchHistoryList(id);
         //将热门搜索的第一个KeyWord进行显示在输入框中
         map.put("defaultKeyword",keywordList.get(0));
         map.put("hotKeywordList",keywordList);

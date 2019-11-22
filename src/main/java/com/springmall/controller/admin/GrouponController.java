@@ -126,8 +126,8 @@ public class GrouponController {
         if (discount == null || discount.compareTo(BigDecimal.ZERO) != 1) {
             return "团购折扣必须大于0";
         }
-        if (discountMember == null || discountMember < 0) {
-            return "团购人数必须大于0";
+        if (discountMember == null || discountMember < 1) {
+            return "参团人数最低为2人";
         }
         if (expireTime == null || expireTime.before(new Date())) {
             return "过期时间必须在当前之后";

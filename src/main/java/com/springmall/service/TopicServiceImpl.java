@@ -24,8 +24,13 @@ public class TopicServiceImpl implements TopicService {
     @Override
     public DataForPage<Topic> showListUserByPage(PageRequest request) {
         PageHelper.startPage(request.getPage(), request.getLimit());
+        String sort = request.getSort();
+        String order = request.getOrder();
 
         TopicExample example = new TopicExample();
+        if (order != null && sort != null) {
+            example.setOrderByClause(sort + " " + order);
+        }
         TopicExample.Criteria criteria = example.createCriteria();
         if (!StringUtils.isEmpty(request.getTitle())) {
             criteria.andTitleLike("%" + request.getTitle() + "%");

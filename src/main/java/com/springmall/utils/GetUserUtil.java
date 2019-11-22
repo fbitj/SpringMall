@@ -18,7 +18,11 @@ public class GetUserUtil {
     public int getUserId() {
         Subject subject = SecurityUtils.getSubject();
         User principal = (User) subject.getPrincipal();
-        Integer userId = principal.getId();
-        return userId;
+        if(principal != null) {
+            Integer userId = principal.getId();
+            return userId;
+        }
+            return -1;
+        }
     }
-}
+

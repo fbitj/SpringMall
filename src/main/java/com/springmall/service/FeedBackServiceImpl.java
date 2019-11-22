@@ -12,6 +12,7 @@ import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -59,8 +60,12 @@ public class FeedBackServiceImpl implements FeedBackService {
         Subject subject = SecurityUtils.getSubject();
         User principal = (User) subject.getPrincipal();
         if (principal != null) {
+            /*Date date = new Date();
+            feedback.setAddTime(date);
+            feedback.setUpdateTime(date);*/
             feedback.setUserId(principal.getId());
             feedback.setUsername(principal.getUsername());
+
             return feedbackMapper.insertSelective(feedback);
         }
         return 0;

@@ -21,20 +21,29 @@ public class CartController {
     @RequestMapping("index")
     public BaseReqVo indexCart() {
         Map<String, Object> map = cartService.cartTotal();
-         return BaseReqVo.ok(map);
+        if (map != null) {
+            return BaseReqVo.ok(map);
+    }
+    return BaseReqVo.error(404,"请先登录");
     }
 
     // 添加商品到购物车
     @RequestMapping("add")
     public BaseReqVo addCart(@RequestBody Cart cart) {
         int goodsCount = cartService.addCart(cart);
-        return BaseReqVo.ok(goodsCount);
+        if(goodsCount != 0) {
+            return BaseReqVo.ok(goodsCount);
+        }
+        return BaseReqVo.error(404,"请先登录");
     }
     // 立即购买商品
     @RequestMapping("fastadd")
     public BaseReqVo fastAddCart(@RequestBody Cart cart) {
         int cartId = cartService.fastAddCart(cart);
-        return BaseReqVo.ok(cartId);
+        if(cartId != 0) {
+            return BaseReqVo.ok(cartId);
+        }
+        return BaseReqVo.error(404,"请先登录");
     }
 
     // 删除购物车的商品
@@ -42,7 +51,10 @@ public class CartController {
     public BaseReqVo deleteCart(@RequestBody Map<String,List<Integer>> mapPid) {
         List<Integer> productIds = mapPid.get("productIds");
         Map<String, Object> map = cartService.deleteCart(productIds);
-        return BaseReqVo.ok(map);
+        if(map != null) {
+            return BaseReqVo.ok(map);
+        }
+        return BaseReqVo.error(404,"请先登录");
     }
 
     //选择或取消选择
@@ -55,7 +67,10 @@ public class CartController {
             checked = true;
         }
         Map<String, Object> map = cartService.checkedCart(productIds, checked);
-        return BaseReqVo.ok(map);
+        if(map != null) {
+            return BaseReqVo.ok(map);
+        }
+       return BaseReqVo.error(404, "请先登录");
     }
 
      //更新购物车的商品(只能改变数量)
@@ -79,6 +94,9 @@ public class CartController {
     @RequestMapping("checkout")
     public BaseReqVo checkoutCart(Integer cartId, Integer addressId, Integer couponId, Integer grouponRulesId) {
         Map<String, Object> map = cartService.checkOutBeforePay(cartId, addressId, couponId, grouponRulesId);
-        return BaseReqVo.ok(map);
+        if(map != null) {
+            return BaseReqVo.ok(map);
+        }
+        return BaseReqVo.error(404, "请先登录");
     }
 }

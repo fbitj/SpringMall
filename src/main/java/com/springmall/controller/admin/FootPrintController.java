@@ -32,7 +32,7 @@ public class FootPrintController {
         List<Footprint> footprintList = footPrintService.queryFootPrintList(userId, goodsId);
         //分頁
         PageInfo<Footprint> footprintPageInfo=new PageInfo<>(footprintList);
-        map.put("total", footprintList.size());
+        map.put("total", footprintPageInfo.getTotal());
         map.put("items", footprintList);
         mapBaseReqVo.setErrno(0);
         mapBaseReqVo.setData(map);

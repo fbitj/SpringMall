@@ -5,6 +5,7 @@ import com.springmall.bean.Category;
 import com.springmall.bean.CategoryL1;
 import com.springmall.bean.CategoryResp;
 import com.springmall.service.CategoryService;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,6 +24,7 @@ public class CategoryController {
      * @return
      */
     @RequestMapping({"list"})
+    @RequiresPermissions(value = {"admin:category:list"})
     public BaseReqVo listCategory() {
         BaseReqVo baseReqVo = new BaseReqVo();
         List<CategoryResp> categories = categoryService.queryCategory();
@@ -48,6 +50,7 @@ public class CategoryController {
      * @return
      */
    @RequestMapping("delete")
+   @RequiresPermissions(value = {"admin:category:delete"})
     public BaseReqVo deleteCategory(@RequestBody CategoryResp categoryResp) {
        BaseReqVo baseReqVo = new BaseReqVo();
        int deleteCategory = categoryService.deleteCategory(categoryResp);
@@ -64,6 +67,7 @@ public class CategoryController {
      * @return
      */
    @RequestMapping("create")
+   @RequiresPermissions(value = {"admin:category:create"})
     public BaseReqVo createCategory(@RequestBody Category category) {
        BaseReqVo baseReqVo = new BaseReqVo();
        int newCategory = categoryService.addCategory(category);
@@ -76,6 +80,7 @@ public class CategoryController {
        return baseReqVo;
    }
    @RequestMapping("update")
+   @RequiresPermissions(value = {"admin:category:update"})
     public BaseReqVo updateCategory(@RequestBody Category category) {
        BaseReqVo baseReqVo = new BaseReqVo();
        int updateCategory = categoryService.updateCategory(category);

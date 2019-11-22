@@ -5,6 +5,7 @@ import com.springmall.bean.*;
 import com.springmall.service.CouponService;
 import com.springmall.utils.ResultUtil;
 import com.springmall.utils.StringUtils;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,6 +30,7 @@ public class CouponController {
      * @return
      */
     @RequestMapping("list")
+    @RequiresPermissions(value = {"admin:coupon:list"})
     public BaseReqVo<Map<String,Object>> couponlistByPage(PageRequest request) {
         List<Coupon> coupons = couponService.totalCoupons(request);
         PageInfo<Coupon> pageInfo = new PageInfo<>(coupons);
@@ -46,6 +48,7 @@ public class CouponController {
      * @return
      */
     @RequestMapping("create")
+    @RequiresPermissions(value = {"admin:coupon:create"})
     public BaseReqVo<Coupon> addCoupon(@RequestBody Coupon coupon) {
         String illegal = isIllegal(coupon);
         if (illegal != null) {
@@ -61,6 +64,7 @@ public class CouponController {
      * @return
      */
     @RequestMapping("read")
+    @RequiresPermissions(value = {"admin:coupon:read"})
     public BaseReqVo<Coupon> showInfo(Integer id) {
         Coupon coupon = couponService.showInfo(id);
         return ResultUtil.success(coupon);
@@ -72,6 +76,7 @@ public class CouponController {
      * @return
      */
     @RequestMapping("listuser")
+    @RequiresPermissions(value = {"admin:coupon:listuser"})
     public BaseReqVo showListUserByPage(PageRequest request) {
         DataForPage<Coupon_user> couponUsers = couponService.showListUserByPage(request);
         return ResultUtil.success(couponUsers);
@@ -83,6 +88,7 @@ public class CouponController {
      * @return
      */
     @RequestMapping("update")
+    @RequiresPermissions(value = {"admin:coupon:update"})
     public BaseReqVo updateListUser(@RequestBody Coupon coupon) {
         String illegal = isIllegal(coupon);
         if (illegal != null) {
@@ -98,6 +104,7 @@ public class CouponController {
      * @return
      */
     @RequestMapping("delete")
+    @RequiresPermissions(value = {"admin:coupon:delete"})
     public BaseReqVo deleteCoupon(@RequestBody Coupon coupon) {
         couponService.deleteCoupon(coupon);
         return ResultUtil.success(null);

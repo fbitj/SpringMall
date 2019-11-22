@@ -140,17 +140,18 @@ public class Myaspect {
         Class[] parameterTypes = msig.getMethod().getParameterTypes();
 
 
-        if (null != methodName) {
-            if (methodName.contains("user/")) {
-                type = 0;
+        if (null != uri) {
+            if (uri.contains("user") || (uri.contains("/admin/address/list"))
+                || (uri.equals("/admin/collect/list")) || (uri.equals("/admin/footprint/list"))
+                || ("/admin/history/list".equals(uri)) || ("/admin/feedback/list".equals(uri))) {
+                type = 0;       //一般操作  user
+            }else if (uri.contains("login")) {
+                type = 1;       //安全操作
             }
-            if (methodName.contains("login")) {
-                type = 1;
-            }
-            if (methodName.contains("/order")) {
-                type = 2;
-            } else{
-                type = 3;
+            else if (uri.contains("order")) {
+                type = 2;       //订单操作
+            } else {
+                type = 3;       //其他操作
             }
         }
 

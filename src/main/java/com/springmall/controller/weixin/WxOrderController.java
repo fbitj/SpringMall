@@ -3,6 +3,7 @@ package com.springmall.controller.weixin;
 import com.github.pagehelper.PageInfo;
 import com.springmall.bean.*;
 import com.springmall.service.CommentService;
+import com.springmall.service.GrouponService;
 import com.springmall.service.OrderService;
 import com.springmall.utils.SubjectUtil;
 import org.apache.shiro.SecurityUtils;
@@ -173,8 +174,9 @@ public class WxOrderController {
         // 团购规则预留
         int grouponRulesId = (int) map.get("grouponRulesId");
         int grouponLinkId = (int) map.get("grouponLinkId");
-        // 固定的userid
+        // 获取用户信息
         Integer userid = SubjectUtil.getUser().getId();
+        // 提价（生成）订单
         int orderId = orderService.submitOrder(userid,cartId,addressId,couponId,message,grouponRulesId,grouponLinkId);
         HashMap<String, Integer> resMap = new HashMap<>();
         resMap.put("orderId",orderId);

@@ -3,6 +3,7 @@ package com.springmall.controller.admin;
 import com.springmall.bean.*;
 import com.springmall.service.TopicService;
 import com.springmall.utils.ResultUtil;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,6 +25,7 @@ public class TopicController {
      * @return
      */
     @RequestMapping("list")
+    @RequiresPermissions(value = {"admin:topic:list"})
     public BaseReqVo showTopicByPage(PageRequest request) {
         DataForPage<Topic> result = topicService.showListUserByPage(request);
         return ResultUtil.success(result);
@@ -35,6 +37,7 @@ public class TopicController {
      * @return
      */
     @RequestMapping("create")
+    @RequiresPermissions(value = {"admin:topic:list"})
     public BaseReqVo addTopic(@RequestBody Topic topic) {
         //底价不能为null且必须大于等于0
         String illegal = isIllegal(topic);
@@ -50,6 +53,7 @@ public class TopicController {
      * @return
      */
     @RequestMapping("update")
+    @RequiresPermissions(value = {"admin:topic:update"})
     public BaseReqVo updateTopicById(@RequestBody Topic topic) {
         String illegal = isIllegal(topic);
         if (illegal != null) {
@@ -65,6 +69,7 @@ public class TopicController {
      * @return
      */
     @RequestMapping("delete")
+    @RequiresPermissions(value = {"admin:topic:delete"})
     public BaseReqVo deleteTopicById(@RequestBody Topic topic) {
         topicService.deleteTopicById(topic);
         return ResultUtil.success(null);

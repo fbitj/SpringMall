@@ -26,4 +26,14 @@ public interface GrouponService {
     List<GrouponInfo> getGrouponInfo();
 
     List selectRulesByGoodsId(Integer id);
+
+    /**
+     * 发起团购
+     * @param userid 发起用户
+     * @param orderId 订单id
+     * @param grouponRulesId 团购规则id
+     * @return
+     */
+    int startGroupon(int userid, Integer orderId, int grouponRulesId);
+
 }

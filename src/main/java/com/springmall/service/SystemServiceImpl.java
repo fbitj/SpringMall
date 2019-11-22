@@ -3,6 +3,7 @@ package com.springmall.service;
 import com.springmall.bean.*;
 import com.springmall.bean.System;
 import com.springmall.mapper.SystemMapper;
+import com.springmall.utils.RegexUtil;
 import com.springmall.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -51,6 +52,7 @@ public class SystemServiceImpl implements SystemService {
      * 0表示更新失败，
      * 1表示更新成功，
      * 2表示更新条件输入不完整。
+     * 3表示商场电话不正确，既不是手机号也不是座机号。
      */
     @Override
     public int updateMallConfig(List<Map<String,String>> paramMapList) {
@@ -59,6 +61,11 @@ public class SystemServiceImpl implements SystemService {
             String paramValue = paramMap.get("paramValue");
             if(StringUtils.isEmpty(paramValue)){    //修改条件不完整
                 return 2;
+            }
+            if ("cskaoyan_mall_mall_phone".equals(paramName)){
+                if (!(RegexUtil.checkMobilePhone(paramValue)) && (!RegexUtil.checkTelephone(paramValue))){
+                    return 3;
+                }
             }
             System system = new System();    //set更新数据
             system.setKeyName(paramName);

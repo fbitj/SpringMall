@@ -58,7 +58,7 @@ public class WxGoodsController {
         return ResultUtil.success(result);
     }
 
-    /**
+     /**
      * 若categoryId不为0获取当前类目下的商品信息和所有二级类目信息
      * 为0则搜索关键词
      * @param

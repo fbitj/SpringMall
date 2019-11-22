@@ -322,7 +322,7 @@
   </update>
 
   <select id="selectChannelCatagory" resultType="com.springmall.bean.Category">
-    select id,name,icon_url as iconUrl from cskaoyan_mall_category where level='L1'
+    select id,name,icon_url as iconUrl from cskaoyan_mall_category where level='L1' and deleted=false
   </select>
 
 <!--  根据一级分类id查询该类别的指定数目的商品数据-->

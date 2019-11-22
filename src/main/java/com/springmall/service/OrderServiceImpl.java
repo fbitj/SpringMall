@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.lang.System;
 import java.math.BigDecimal;
 import java.util.*;
 
@@ -55,7 +56,6 @@ public class OrderServiceImpl implements OrderService {
 
     /**
      * 条件查询
-     *
      * @param page
      * @param limit
      * @param userId
@@ -157,15 +157,15 @@ public class OrderServiceImpl implements OrderService {
     public int refund(Map<String, Object> map) {
         int orderId = (int) map.get("orderId");
         Order order = orderMapper.selectByPrimaryKey(orderId);
-        Object refundMoney = map.get("refundMoney");
-        if (refundMoney == order.getActualPrice()) {
+        Object refundMoney =map.get("refundMoney");
+        BigDecimal actualPrice = order.getActualPrice();
+//        if (order.getActualPrice().compareTo(refundMoney)) {
             order.setOrderStatus((short) 203);
             Date date = new Date();
             order.setUpdateTime(date);
             int refunded = orderMapper.updateByPrimaryKeySelective(order);
             return refunded;
-        }
-        return 0;
+//        return 0;
     }
 
     /**

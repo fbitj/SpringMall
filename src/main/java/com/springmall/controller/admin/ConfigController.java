@@ -92,6 +92,10 @@ public class ConfigController {
             baseReqVo.setErrmsg("请输入完整的修改信息！");
             return baseReqVo;
         }
+        if(result==3){
+            baseReqVo.setErrmsg("请输入正确的商场电话（手机或座机）！");
+            return baseReqVo;
+        }
         baseReqVo.setErrmsg("修改商场配置信息失败！");
         return baseReqVo;
     }

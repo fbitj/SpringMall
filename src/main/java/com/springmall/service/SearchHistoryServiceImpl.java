@@ -60,10 +60,11 @@ public class SearchHistoryServiceImpl implements SearchHistoryService {
         Search_historyExample example = new Search_historyExample();
         example.createCriteria().andUserIdEqualTo(userId).andKeywordEqualTo(keyword);
         List<Search_history> searchHistories = search_historyMapper.selectByExample(example);
+        //Date updateTime = new Date();
         if (searchHistories.size() > 0) {
             //说明用户搜索过该关键词
             Search_history record = new Search_history();
-            record.setUpdateTime(new Date());
+            //record.setUpdateTime(updateTime);
             int update = search_historyMapper.updateByExampleSelective(record, example);
             if (update == 0) throw new DbException();
             return update;
@@ -71,6 +72,8 @@ public class SearchHistoryServiceImpl implements SearchHistoryService {
         history.setUserId(userId);
         history.setKeyword(keyword);
         history.setFrom("wx");
+        /*history.setAddTime(updateTime);
+        history.setAddTime(updateTime);*/
         int i = search_historyMapper.insertSelective(history);
         if (i == 0) throw new DbException();
         return i;

@@ -70,6 +70,9 @@ public class FootPrintServiceImpl implements FootPrintService {
     @Override
     public int addUserFoot(Integer goodsId, Integer userId) {
         Footprint footprint = new Footprint();
+        /*Date date = new Date();
+        footprint.setAddTime(date);
+        footprint.setUpdateTime(date);*/
         footprint.setGoodsId(goodsId);
         footprint.setUserId(userId);
         return footprintMapper.insertSelective(footprint);

@@ -16,6 +16,9 @@
       <if test="content != null">
         and content like concat('%', #{content}, '%')
       </if>
+      <if test="order != null &amp; sort != null">
+        order by #{sort} #{order}
+      </if>
     </where>
   </select>
 

@@ -59,6 +59,22 @@ public class UserController {
         HashMap<String, Object> map = new HashMap<>();
         PageHelper.startPage(page, limit);
         List<Address> addresses = addressService.queryAddressList(userId, name);
+/*        for (Address address : addresses) {
+              int provinceId=addressService.selectRegionCode(address.getProvinceId());
+              address.setProvinceId(provinceId);
+              int cityId=addressService.selectRegionCode(address.getCityId());
+              address.setCityId(cityId);
+              int areaId=addressService.selectRegionCode(address.getAreaId());
+              address.setAreaId(areaId);
+        }*/
+        for (Address address : addresses) {
+             String provice=addressService.selectRegionName(address.getProvinceId());
+             address.setProvince(provice);
+             String city=addressService.selectRegionName(address.getCityId());
+             address.setCity(city);
+             String area=addressService.selectRegionName(address.getAreaId());
+             address.setArea(area);
+        }
         //分頁
         PageInfo<Address> addressPageInfo=new PageInfo<>(addresses);
         long total = addressPageInfo.getTotal();

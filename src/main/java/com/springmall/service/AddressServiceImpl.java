@@ -109,4 +109,16 @@ public class AddressServiceImpl implements AddressService {
     public void setDefault() {
        int update=addressMapper.updateDefault();
     }
+
+    @Override
+    public int selectRegionCode(Integer id) {
+        int code=addressMapper.selectById(id);
+        return code;
+    }
+
+    @Override
+    public String selectRegionName(Integer id) {
+       String name= addressMapper.queryRegionName(id);
+       return  name;
+    }
 }

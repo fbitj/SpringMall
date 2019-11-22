@@ -118,14 +118,18 @@ public class GoodsServiceImpl implements GoodsService {
         String keyword = request.getKeyword();
         Integer brandId = request.getBrandId();
         Boolean isHot = request.getIsHot();
-        GoodsExample example = new GoodsExample();
+        Boolean isNew = request.getIsNew();
         String order = request.getOrder();
         String sort = request.getSort();
+
+        GoodsExample example = new GoodsExample();
+        if (order != null && sort != null) {
+            example.setOrderByClause(sort + " " + order);
+        }
 
         //如果id不为0则根据id查询
         if (keyword != null){
             //否则根据关键词查询
-            example.setOrderByClause(sort + " " + order);
             if (categoryId == 0) {
                 example.createCriteria().andNameLike("%" + keyword + "%").andDeletedEqualTo(false);
             } else {
@@ -134,8 +138,16 @@ public class GoodsServiceImpl implements GoodsService {
             }
         }
 
+        if (isNew != null) {
+            if (categoryId == 0) {
+                example.createCriteria().andIsNewEqualTo(true).andDeletedEqualTo(false);
+            } else {
+                example.createCriteria().andCategoryIdEqualTo(categoryId).andDeletedEqualTo(false)
+                        .andIsNewEqualTo(true);
+            }
+        }
+
         if (isHot != null) {
-            example.setOrderByClause(sort + " " + order);
             if (categoryId == 0) {
                 example.createCriteria().andIsHotEqualTo(true).andDeletedEqualTo(false);
             } else {

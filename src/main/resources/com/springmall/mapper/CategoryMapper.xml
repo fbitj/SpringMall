@@ -95,7 +95,7 @@
     select
     <include refid="Base_Column_List" />
     from cskaoyan_mall_category
-    where id = #{id,jdbcType=INTEGER} and deleted = false
+    where id = #{id,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from cskaoyan_mall_category

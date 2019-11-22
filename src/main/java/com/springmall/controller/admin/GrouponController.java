@@ -63,6 +63,12 @@ public class GrouponController {
         if (illegal != null) {
             return ResultUtil.fail(402, illegal);
         }
+        //团购折扣不能超过商品价格
+        BigDecimal discount = rules.getDiscount();
+        BigDecimal retailPrice = goods.getRetailPrice();
+        if (discount.compareTo(retailPrice) == 1) {
+            return ResultUtil.fail(402, "团购折扣价格不能高于商品本身价格");
+        }
 
         //封装商品相关属性
         rules.setGoodsName(goods.getName());
@@ -120,8 +126,8 @@ public class GrouponController {
         if (discount == null || discount.compareTo(BigDecimal.ZERO) != 1) {
             return "团购折扣必须大于0";
         }
-        if (discountMember == null || discountMember < 0) {
-            return "团购人数必须大于0";
+        if (discountMember == null || discountMember < 1) {
+            return "参团人数最低为2人";
         }
         if (expireTime == null || expireTime.before(new Date())) {
             return "过期时间必须在当前之后";

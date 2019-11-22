@@ -117,19 +117,53 @@ public class GoodsServiceImpl implements GoodsService {
         Integer categoryId = request.getCategoryId();
         String keyword = request.getKeyword();
         Integer brandId = request.getBrandId();
+        Boolean isHot = request.getIsHot();
+        Boolean isNew = request.getIsNew();
+        String order = request.getOrder();
+        String sort = request.getSort();
+
         GoodsExample example = new GoodsExample();
+        if (order != null && sort != null) {
+            example.setOrderByClause(sort + " " + order);
+        }
 
         //如果id不为0则根据id查询
+        if (keyword != null){
+            //否则根据关键词查询
+            if (categoryId == 0) {
+                example.createCriteria().andNameLike("%" + keyword + "%").andDeletedEqualTo(false);
+            } else {
+                example.createCriteria().andCategoryIdEqualTo(categoryId).andDeletedEqualTo(false)
+                        .andNameLike("%" + keyword + "%");
+            }
+        }
+
+        if (isNew != null) {
+            if (categoryId == 0) {
+                example.createCriteria().andIsNewEqualTo(true).andDeletedEqualTo(false);
+            } else {
+                example.createCriteria().andCategoryIdEqualTo(categoryId).andDeletedEqualTo(false)
+                        .andIsNewEqualTo(true);
+            }
+        }
+
+        if (isHot != null) {
+            if (categoryId == 0) {
+                example.createCriteria().andIsHotEqualTo(true).andDeletedEqualTo(false);
+            } else {
+                example.createCriteria().andCategoryIdEqualTo(categoryId).andDeletedEqualTo(false)
+                        .andIsHotEqualTo(true);
+            }
+        }
+
         if (categoryId != null && categoryId != 0) {
             example.createCriteria().andCategoryIdEqualTo(categoryId).andDeletedEqualTo(false);
         }
-        if (keyword != null){
-            //否则根据关键词查询
-            example.createCriteria().andNameLike("%" + keyword + "%").andDeletedEqualTo(false);
-        }
+
         if (brandId != null) {
             example.createCriteria().andBrandIdEqualTo(brandId).andDeletedEqualTo(false);
         }
+
 
         List<Goods> goods = goodsMapper.selectByExample(example);
 
@@ -144,7 +178,10 @@ public class GoodsServiceImpl implements GoodsService {
      */
     @Override
     public List<Goods> selectGoodsInSameCategory(Integer id) {
-        return goodsMapper.selectGoodsInSameCategory(id);
+        //return goodsMapper.selectGoodsInSameCategory(id);
+        GoodsExample example = new GoodsExample();
+        example.createCriteria().andCategoryIdEqualTo(id).andDeletedEqualTo(false);
+        return goodsMapper.selectByExample(example);
     }
 
     /**

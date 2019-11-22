@@ -1,5 +1,6 @@
 package com.springmall.utils;
 
+import com.springmall.bean.Admin;
 import com.springmall.bean.User;
 import lombok.Data;
 import org.apache.shiro.SecurityUtils;
@@ -19,6 +20,12 @@ public class SubjectUtil {
 //        Serializable id1 = subject.getSession().getId();
         User user = (User) subject.getPrincipal();
         return user;
+    }
+
+    public static Admin getAdmin(){
+        Subject subject = SecurityUtils.getSubject();
+        Admin admin = (Admin) subject.getPrincipal();
+        return admin;
     }
 
 }

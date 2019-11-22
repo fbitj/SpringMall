@@ -2,14 +2,14 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.springmall.mapper.CommentMapper">
 
-  <select id="queryCommentsByGoodsId" resultType="com.springmall.bean.Comment">
+  <!--<select id="queryCommentsByGoodsId" resultType="com.springmall.bean.Comment">
     select
     c.id, c.value_id, c.`type`, c.content, c.user_id, c.has_picture, c.pic_urls, c.star, c.add_time, c.update_time,
     c.deleted
     from cskaoyan_mall_order_goods od
     left join cskaoyan_mall_comment c on c.id = od.comment
     where od.goods_id = #{id} and c.deleted = false
-  </select>
+  </select>-->
 
   <resultMap id="BaseResultMap" type="com.springmall.bean.Comment">
     <id column="id" jdbcType="INTEGER" property="id" />

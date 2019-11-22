@@ -69,7 +69,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, user_id, value_id, type, add_time, update_time, deleted
+    id, user_id, value_id, `type`, add_time, update_time, deleted
   </sql>
   <select id="selectByExample" parameterType="com.springmall.bean.CollectExample" resultMap="BaseResultMap">
     select
@@ -84,6 +84,18 @@
     <if test="orderByClause != null">
       order by ${orderByClause}
     </if>
+  </select>
+  <select id="selectByDetail" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from cskaoyan_mall_collect
+    where user_id = #{user_id} and `type` = #{types} and deleted = #{deleted}
+  </select>
+  <select id="selectByDetailId" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from cskaoyan_mall_collect
+    where user_id = #{user_id}
   </select>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 

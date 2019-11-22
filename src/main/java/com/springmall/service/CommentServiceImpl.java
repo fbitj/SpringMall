@@ -36,7 +36,9 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public List queryCommentsByGoodsId(Integer id) {
-        return commentMapper.queryCommentsByGoodsId(id);
+        CommentExample example = new CommentExample();
+        example.createCriteria().andTypeEqualTo((byte) 0).andValueIdEqualTo(id).andDeletedEqualTo(false);
+        return commentMapper.selectByExample(example);
     }
 
     @Override
@@ -48,11 +50,15 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public List<Comment> queryCommentsByPage(int page, int limit, String sortField, String order) {
+    public List<Comment> queryCommentsByPage(int page, int limit, Integer valueId, String sortField, String order) {
         PageHelper.startPage(page, limit);
         CommentExample commentExample = new CommentExample();
+        CommentExample.Criteria criteria = commentExample.createCriteria();
         commentExample.setOrderByClause(sortField + " " + order);
-        commentExample.createCriteria().andDeletedEqualTo(false);
+        if (valueId != null && valueId >= 0){
+            criteria.andValueIdEqualTo(valueId);
+        }
+        criteria.andDeletedEqualTo(false);
         List<Comment> comments = commentMapper.selectByExample(commentExample);
         return comments;
     }

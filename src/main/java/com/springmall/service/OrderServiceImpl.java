@@ -228,7 +228,21 @@ public class OrderServiceImpl implements OrderService {
         OrderExample orderExample = new OrderExample();
         orderExample.setOrderByClause("id desc");// id倒序
         OrderExample.Criteria criteria = orderExample.createCriteria();
-        criteria.andOrderStatusGreaterThanOrEqualTo((short) (showType * 100)).andOrderStatusLessThan((short) ((showType + 1) * 100));
+//        criteria.andOrderStatusGreaterThanOrEqualTo((short) (showType * 100)).andOrderStatusLessThan((short) ((showType + 1) * 100));
+        switch (showType){
+            case 1:
+                criteria.andOrderStatusEqualTo((short) 101);
+                break;
+            case 2:
+                criteria.andOrderStatusBetween((short)201,(short)202);
+                break;
+            case 3:
+                criteria.andOrderStatusEqualTo((short) 301);
+                break;
+            case 4:
+                criteria.andOrderStatusBetween((short)401,(short)402);
+                break;
+        }
         // 查询未删除订单
         criteria.andUserIdEqualTo(userId).andDeletedEqualTo(false);
         List<Order> orders = orderMapper.selectByExample(orderExample);
@@ -275,8 +289,12 @@ public class OrderServiceImpl implements OrderService {
         String statusText = orderStatusMapper.queryStatusTextByStatusId(orderStatus);
         orderRespVo.setOrderStatusText(statusText);
         HashMap<String, Object> map = new HashMap<>();
+        HashMap<String, Object> expressInfo = new HashMap<>();
+        expressInfo.put("shipperName",orderRespVo.getShipChannel());
+        expressInfo.put("logisticCode",orderRespVo.getShipSn());
         map.put("orderInfo", orderRespVo);
         map.put("orderGoods", order_goods);
+        map.put("expressInfo", expressInfo);
         return map;
     }
 
@@ -315,7 +333,8 @@ public class OrderServiceImpl implements OrderService {
     SystemMapper systemMapper;
     @Autowired
     Goods_productMapper goodsProductMapper;
-
+    @Autowired
+    Coupon_userMapper couponUserMapper;
     /**
      * @param userid
      * @param cartId         购物车id(没有用到)
@@ -334,6 +353,8 @@ public class OrderServiceImpl implements OrderService {
         Address address = addressMapper.selectByPrimaryKey(addressId);
         // 根据couponId查询优惠券信息
         Coupon coupon = couponMapper.selectByPrimaryKey(couponId);
+       // 根据couponId修改用户的优惠卷使用状态
+        couponUserMapper.updateUserCouponStatusByCouponId(couponId,userid,1);
         // 购物车中查询商品信息
         CartExample cartExample = new CartExample();
         cartExample.createCriteria().andUserIdEqualTo(userid).andCheckedEqualTo(true).andDeletedEqualTo(false);
@@ -355,7 +376,11 @@ public class OrderServiceImpl implements OrderService {
         order.setMessage(message);// 订单留言
         BigDecimal goodPrice = new BigDecimal("0");
         for (Cart cart : carts) {
-            goodPrice.add(cart.getPrice().multiply(BigDecimal.valueOf(cart.getNumber())));
+            BigDecimal price = cart.getPrice();
+            Short number = cart.getNumber();
+            BigDecimal multiplicand = BigDecimal.valueOf(number);
+            BigDecimal multiply = price.multiply(multiplicand);
+            goodPrice = goodPrice.add(multiply);
         }
         order.setGoodsPrice(goodPrice);// 商品总费用
         // 查询配送规则
@@ -374,7 +399,7 @@ public class OrderServiceImpl implements OrderService {
         order.setIntegralPrice(new BigDecimal("0"));// 用户积分减免============没有不考虑！！！！！！！！！！！
         order.setGrouponPrice(new BigDecimal("0"));// 团购优惠减免============不考虑！！！！！！！！！！！
         order.setOrderPrice(order.getGoodsPrice().add(order.getFreightPrice()).subtract(discount));// 订单费用 goods_price + freight_price - coupon_price
-        order.setActualPrice(order.getGoodsPrice().subtract(order.getIntegralPrice()));// 实付费用 order_price - integral_price
+        order.setActualPrice(order.getOrderPrice().subtract(order.getIntegralPrice()));// 实付费用 order_price - integral_price
         order.setPayTime(new Date());//微信支付时间
         order.setAddTime(new Date());
         order.setDeleted(false);

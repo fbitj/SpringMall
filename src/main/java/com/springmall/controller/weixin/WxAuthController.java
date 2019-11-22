@@ -154,8 +154,8 @@ public class WxAuthController {
         return BaseReqVo.ok(userData);
     }
 
-    private boolean isCodeEquals(String userCode) {
-        String code = codeMap.get("mobile");
+    private boolean isCodeEquals(String userCode,String mobile) {
+        String code = codeMap.get(mobile);
         if (code != null && code.equals(userCode)){
             return true;
         }
@@ -177,7 +177,8 @@ public class WxAuthController {
     public BaseReqVo reset(@RequestBody Map<String,String> dataMap) {
         // 判断验证码是否相等
         String userCode = dataMap.get("code");
-        if (!isCodeEquals(userCode)){
+        String mobile = dataMap.get("mobile");
+        if (!isCodeEquals(userCode,mobile)){
             return BaseReqVo.error(500,"验证码不正确");
         }
         // 判断数据库是否存在该手机号

@@ -242,9 +242,11 @@ public class AdminServiceImpl implements AdminService{
         String[] arr = admin.getRoleIds().substring(1,admin.getRoleIds().length() - 1).split(",");
         ArrayList arrayList = new ArrayList();
         for (String s : arr) {
-            int parseInt = Integer.parseInt(s.trim());
-            arrayList.add(parseInt);
-            roleMapper.updateEnabledById(1,parseInt);
+            if(!"".equals(s) || s == null) {
+                int parseInt = Integer.parseInt(s.trim());
+                arrayList.add(parseInt);
+                roleMapper.updateEnabledById(1, parseInt);
+            }
         }
         map.put("roleIds",arrayList);
         return map;
@@ -253,7 +255,8 @@ public class AdminServiceImpl implements AdminService{
     @Override
     public int sameToAdminName(Admin admin) {
         AdminExample adminExample = new AdminExample();
-        adminExample.createCriteria().andUsernameEqualTo(admin.getUsername()).andDeletedEqualToInt(0);
+//        adminExample.createCriteria().andUsernameEqualTo(admin.getUsername()).andDeletedEqualToInt(0);
+        adminExample.createCriteria().andUsernameEqualTo(admin.getUsername()).andDeletedEqualTo(false);
         List<Admin> list = adminMapper.selectByExample(adminExample);
         if(list.size() > 0){
             return -1;

@@ -108,9 +108,12 @@ public class Myaspect {
             uri = request.getRequestURI();
             System.out.println(uri);
         }
+        //获取用户名
         if(!"/admin/auth/logout".equals(uri)) {
-            Admin admin = SubjectUtil.getAdmin();
-            username = admin.getUsername();
+            if(!("/admin/auth/login".equals(uri) && baseReqVo.getErrno() == 605)) {
+                Admin admin = SubjectUtil.getAdmin();
+                username = admin.getUsername();
+            }
         }
 
         String string = ip + "";

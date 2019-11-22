@@ -86,8 +86,14 @@ public class HomeCatalogController {
         }
         homePageData.setFloorGoodsList(floorGoodsList);
         // 设置新品首发
-
-//        homePageData.setNewGoodsList();
+        PageRequest newGoodsPageRequest = new PageRequest();
+        newGoodsPageRequest.setSize(6);
+        newGoodsPageRequest.setLimit(6);
+        newGoodsPageRequest.setPage(0);
+        newGoodsPageRequest.setIsHot(true);
+        newGoodsPageRequest.setCategoryId(0);
+        List<Goods> goods = goodsService.goodsListInCurrentCategory(newGoodsPageRequest);
+        homePageData.setNewGoodsList(goods);
         return BaseReqVo.ok(homePageData);
     }
 

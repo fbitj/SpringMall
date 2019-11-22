@@ -51,6 +51,9 @@ public class WxCouponController {
     public BaseReqVo receiveCouponByCouponId(@RequestBody HashMap<String,String> map) {
         int couponId = Integer.parseInt(map.get("couponId"));
         User user = (User) SecurityUtils.getSubject().getPrincipal();
+        if (user == null) {
+            return ResultUtil.fail(740,"请先登录账号！");
+        }
         int result = couponService.receiveCouponByCouponId(couponId, user.getId());
         if(result==0){
             return ResultUtil.fail(740,"领取失败！");

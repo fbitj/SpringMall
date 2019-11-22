@@ -1,5 +1,6 @@
 package com.springmall.controller.weixin;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.github.pagehelper.PageInfo;
 import com.springmall.bean.*;
 import com.springmall.service.CategoryService;
@@ -151,7 +152,7 @@ public class WxGoodsController {
      * @return
      */
     @RequestMapping("detail")
-    public BaseReqVo goodsDetail(Integer id) {
+    public BaseReqVo goodsDetail(Integer id) throws JsonProcessingException {
         Map result = goodsService.selectGoodsDetailById(id);
         //为用户添加商品足迹
         Subject subject = SecurityUtils.getSubject();

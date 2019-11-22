@@ -148,7 +148,7 @@ public class UserServiceImpl implements UserService {
                 commentCount += order.getComments();
             }
         }
-        map1.put("nurecv",recvCount);
+        map1.put("unrecv",recvCount);
         map1.put("uncomment",commentCount);
         map1.put("unpaid",paidCount);
         map1.put("unship",shipCount);
@@ -194,20 +194,29 @@ public class UserServiceImpl implements UserService {
         }
         int size1 = pageInfo.getSize();
         map.put("data",list);
-        map.put("count",size1);
+        if(showType == 0){  //全部
+            map.put("count",size1);
+        }else if(showType == 1){//有图片
+            commentExample.createCriteria().andHasPictureEqualTo(true);
+            long count = commentMapper.countByExample(commentExample);
+            map.put("count",(int)count);
+        }
+
         map.put("currentPage",page);
         return map;
     }
 
     @Override
     public Map commentCount(int valueId, int type) {
+        HashMap<Object, Object> map = new HashMap<>();
         CommentExample commentExample = new CommentExample();
-        commentExample.createCriteria().andValueIdEqualTo(valueId).andTypeEqualTo((byte)type);
-        long allCount = commentMapper.countByExample(commentExample);
         commentExample.createCriteria().andValueIdEqualTo(valueId).andTypeEqualTo((byte)type).andHasPictureEqualTo(true);
         long hasPicCount = commentMapper.countByExample(commentExample);
-        HashMap<Object, Object> map = new HashMap<>();
         map.put("hasPicCount",(int)hasPicCount);
+
+        CommentExample commentExample1 = new CommentExample();
+        commentExample1.createCriteria().andValueIdEqualTo(valueId).andTypeEqualTo((byte)type);
+        long allCount = commentMapper.countByExample(commentExample1);
         map.put("allCount",(int)allCount);
         return map;
     }

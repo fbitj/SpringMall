@@ -103,7 +103,7 @@ public class AdminController {
      * @throws IOException
      */
     @RequestMapping("storage/create")
-//    @RequiresPermissions("admin:storage:create")
+    @RequiresPermissions("admin:storage:create")
     public BaseReqVo storage(HttpServletRequest request, HttpServletResponse response, @RequestParam("file") MultipartFile file) throws IOException {
         BaseReqVo<Object> baseReqVo = new BaseReqVo<>();
         Storage storage = adminService.storageCreate(request, response, file);
@@ -371,7 +371,7 @@ public class AdminController {
      * @return
      */
     @RequestMapping(value = "role/permissions",method = RequestMethod.GET)
-    @RequiresPermissions("admin:role:permissions")
+    @RequiresPermissions("admin:role:permission:get")//[admin:role:permissions]
     public BaseReqVo rolePermissionsUpdate(int roleId){
         BaseReqVo<Object> baseReqVo = new BaseReqVo<>();
         Map map1 = adminService.rolePermissions(roleId);
@@ -392,7 +392,7 @@ public class AdminController {
      * @return
      */
     @RequestMapping(value = "role/permissions",method = RequestMethod.POST)
-    @RequiresPermissions("admin:role:permissions")
+    @RequiresPermissions("admin:role:permission:update")
     public BaseReqVo rolePermissionsUpdate(@RequestBody RolePermission rolePermission){
         BaseReqVo<Object> baseReqVo = new BaseReqVo<>();
         int roleId = rolePermission.getRoleId();

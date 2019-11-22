@@ -169,11 +169,9 @@ public class CouponServiceImpl implements CouponService{
         Integer id = coupon.getId();
         Date time = new Date();
         int i = couponMapper.deleteById(id, time);
-        if (i != 0) {
-            //若用户
-            i = coupon_userMapper.deleteByCouponId(id, time);
-        }
         if (i == 0) throw new DbException();
+            //若用户
+        i = coupon_userMapper.deleteByCouponId(id, time);
         return i;
     }
 

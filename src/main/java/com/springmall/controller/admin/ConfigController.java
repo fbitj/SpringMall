@@ -3,6 +3,7 @@ package com.springmall.controller.admin;
 import com.springmall.bean.*;
 
 import com.springmall.service.SystemService;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -43,6 +44,7 @@ public class ConfigController {
      * }
      */
     @RequestMapping(value = "mall", method = RequestMethod.GET)
+    @RequiresPermissions(value = {"admin:config:mall:list"})
     public BaseReqVo queryMallConfig(){
         BaseReqVo baseReqVo = new BaseReqVo();
         MallConfig queryMallConfig = systemService.queryMallConfig();
@@ -62,6 +64,7 @@ public class ConfigController {
      * }
      */
     @RequestMapping(value = "mall", method = RequestMethod.POST)
+    @RequiresPermissions(value = {"admin:config:mall:updateConfigs"})
     public BaseReqVo updateMallConfig(@RequestBody Map<String,String> requestMap){
         Map<String,String> map1 = new HashMap<>();
         Map<String,String> map2 = new HashMap<>();
@@ -113,6 +116,7 @@ public class ConfigController {
      * }
      */
     @RequestMapping(value = "express", method = RequestMethod.GET)
+    @RequiresPermissions(value = {"admin:config:express:list"})
     public BaseReqVo queryExpressConfig() {
         BaseReqVo baseReqVo = new BaseReqVo();
         ExpressConfig queryExpressConfig = systemService.queryExpressConfig();
@@ -132,6 +136,7 @@ public class ConfigController {
      * }
      */
     @RequestMapping(value = "express", method = RequestMethod.POST)
+    @RequiresPermissions(value = {"admin:config:express:updateConfigs"})
     public BaseReqVo updateExpressConfig(@RequestBody Map<String,String> requestMap) {
         Map<String,String> map1 = new HashMap<>();
         Map<String,String> map2 = new HashMap<>();
@@ -180,6 +185,7 @@ public class ConfigController {
      * }
      */
     @RequestMapping(value = "order", method = RequestMethod.GET)
+    @RequiresPermissions(value = {"admin:config:order:list"})
     public BaseReqVo queryOrderConfig() {
         BaseReqVo baseReqVo = new BaseReqVo();
         OrderConfig queryOrderConfig = systemService.queryOrderConfig();
@@ -199,6 +205,7 @@ public class ConfigController {
      * }
      */
     @RequestMapping(value = "order", method = RequestMethod.POST)
+    @RequiresPermissions(value = {"admin:config:order:updateConfigs"})
     public BaseReqVo updateOrderConfig(@RequestBody Map<String,String> requestMap) {
         Map<String,String> map1 = new HashMap<>();
         Map<String,String> map2 = new HashMap<>();
@@ -255,6 +262,7 @@ public class ConfigController {
      * }
      */
     @RequestMapping(value = "wx", method = RequestMethod.GET)
+    @RequiresPermissions(value = {"admin:config:wx:list"})
     public BaseReqVo queryWxConfig() {
         BaseReqVo baseReqVo = new BaseReqVo();
         WxConfig queryWxConfig = systemService.queryWxConfig();
@@ -274,6 +282,7 @@ public class ConfigController {
      * }
      */
     @RequestMapping(value = "wx", method = RequestMethod.POST)
+    @RequiresPermissions(value = {"admin:config:wx:updateConfigs"})
     public BaseReqVo updateWxConfig(@RequestBody Map<String,String> requestMap) {
         Map<String,String> map1 = new HashMap<>();
         Map<String,String> map2 = new HashMap<>();

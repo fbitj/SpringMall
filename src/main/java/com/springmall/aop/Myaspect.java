@@ -108,9 +108,10 @@ public class Myaspect {
             uri = request.getRequestURI();
             System.out.println(uri);
         }
-        Admin admin = SubjectUtil.getAdmin();
-        username = admin.getUsername();
-
+        if(!"/admin/auth/logout".equals(uri)) {
+            Admin admin = SubjectUtil.getAdmin();
+            username = admin.getUsername();
+        }
 
         String string = ip + "";
         int length = string.length();
@@ -166,7 +167,7 @@ public class Myaspect {
                 //return new Log3(action,status,result);
             }
         }else if("/admin/auth/info".equals(uri)){
-            action = "查看";
+            action = "查看当前管理员的信息";
             if(baseReqVo.getErrno() == 0){ //成功
                 status = 1;
                 result = baseReqVo.getErrmsg();

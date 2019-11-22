@@ -235,12 +235,18 @@ public class CartServiceImpl implements CartService {
             goodsTotalPrice = goodsTotalPrice.add(price.multiply(BigDecimal.valueOf(cart.getNumber())));
         }
         //不管哪种方式，都会有一个addressId
+/*        AddressExample addressExample = new AddressExample();
+        addressExample.createCriteria().andUserIdEqualTo(userId).andDeletedEqualTo(false);
+        List<Address> addresses = addressMapper.selectByExample(addressExample);*/
+
         Address address = addressMapper.selectByPrimaryKey(addressId);
         //团购,根据grouponRulesId,查询折扣金额
         BigDecimal grouponPrice = new BigDecimal(0);
         if(grouponRulesId != 0) {
             Groupon_rules grouponRules = grouponRulesMapper.selectByPrimaryKey(grouponRulesId);
             grouponPrice = grouponRules.getDiscount();
+            //减去团购优惠金额
+            goodsTotalPrice = goodsTotalPrice.add(grouponPrice.negate());
         }
 
         //优惠券折扣金额
@@ -251,7 +257,7 @@ public class CartServiceImpl implements CartService {
         List<Coupon_user> coupon_users = coupon_userMapper.selectByExample(coupon_userExample);
         int availableCouponLength = coupon_users.size();
         //couponId不为0，根据couponId去coupon表搜索优惠金额，再用cpuponId和userId去coupon_user表搜索可用优惠券，并计算可用优惠券数量
-        if(couponId != 0 ) {
+        if(couponId != 0 && couponId != -1) {
             //搜索优惠金额
             Coupon coupon = couponMapper.selectByPrimaryKey(couponId);
             couponPrice = coupon.getDiscount();
@@ -268,8 +274,7 @@ public class CartServiceImpl implements CartService {
             freightPrice = BigDecimal.valueOf(0);
         }
         //orderTotalPrice  订单费用 = goods_price + freight_price - coupon_price
-        BigDecimal orderTotalPrice = new BigDecimal(0);
-        orderTotalPrice = goodsTotalPrice.add(freightPrice).add(couponPrice.negate());
+        BigDecimal  orderTotalPrice = goodsTotalPrice.add(freightPrice).add(couponPrice.negate());
         //integralPrice 积分减免
         BigDecimal integralPrice = new BigDecimal(0);
         //actualPrice 实付金额 实付费用 = order_price - integral_price（积分减免）

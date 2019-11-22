@@ -259,5 +259,14 @@
     select id,label,api,p_id
     from cskaoyan_mall_permission3
   </select>
+    <select id="selectPermsByRolesId" resultType="java.lang.String">
+      select p3.api from cskaoyan_mall_permission p left join cskaoyan_mall_permission3 p3 on p.permission=p3.id
+      <where>
+        p.role_id in
+        <foreach collection="list" item="roleId" separator="," open="(" close=")">
+          #{roleId}
+        </foreach>
+      </where>
+    </select>
 
 </mapper>

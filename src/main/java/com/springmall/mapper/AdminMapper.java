@@ -1,6 +1,7 @@
 package com.springmall.mapper;
 
 import com.springmall.bean.Admin;
+import com.springmall.bean.Admin2;
 import com.springmall.bean.AdminExample;
 import org.apache.ibatis.annotations.Param;
 
@@ -36,5 +37,9 @@ public interface AdminMapper {
     int updateDeletedById(@Param("deleted") int value,@Param("id") int id);
 
     Admin selectAdminByUsername(String username);
+
+    List<String> selectAllPermission();
+
+    List<String> selectPermissionByRoldId(Integer roleId);
 
 }

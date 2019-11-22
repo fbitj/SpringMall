@@ -3,6 +3,7 @@ package com.springmall.controller.admin;
 import com.springmall.bean.Admin;
 import com.springmall.bean.BaseReqVo;
 import com.springmall.bean.InfoData;
+import com.springmall.bean.Role;
 import com.springmall.service.AdminService;
 import com.springmall.shiro.CustomToken;
 import com.springmall.utils.DateUtils;
@@ -10,6 +11,8 @@ import com.springmall.utils.Md5Utils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.authz.annotation.Logical;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +24,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -60,18 +64,32 @@ public class AuthController {
         // 通过请求参数中sessionid获取到session中的管理员系信息
         Subject subject = SecurityUtils.getSubject();
         Admin principal = (Admin) subject.getPrincipal(); // 为什么这个就是当前登录用户的信息?
-
         BaseReqVo baseReqVo = new BaseReqVo();
         InfoData data = new InfoData();
-//        data.setAvatar("https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif");
         data.setAvatar(principal.getAvatar());
         data.setName(principal.getUsername());
-        ArrayList<String> perms = new ArrayList<>();
-        perms.add("*"); //权限暂时写这个
-        data.setPerms(perms);
+        String roleIds = principal.getRoleIds();
+        // 将roleIds字符串转换为Integer类型的List
+        String[] splitRoles = roleIds.replace("[", "").replace("]", "").replaceAll(" ", "").split(",");
+        ArrayList<Integer> rolesIdList = new ArrayList<>();
+        for (String splitRole : splitRoles) {
+            rolesIdList.add(Integer.valueOf(splitRole));
+        }
+        // 根据roleIds查询该用户拥有的角色名
+        List<Role> rolesList = adminService.getRoles(rolesIdList);
         ArrayList<String> roles = new ArrayList<>();
-        roles.add("超级管理员"); // 角色暂时写这个
+        for (Role role : rolesList) {
+            roles.add(role.getName());
+        }
         data.setRoles(roles);
+        // 查询该管理员的所有权限
+        ArrayList<String> perms = new ArrayList<>();
+        if (roles.contains("超级管理员")) { // 若为超级管理员直接使用*
+            perms.add("*"); //权限暂时写这个
+        } else {  // 非超级管理员则查询所有权限API并返回
+            perms = adminService.getPermsByRolesId(rolesIdList);
+        }
+        data.setPerms(perms);
         baseReqVo.setData(data);
         baseReqVo.setErrmsg("成功");
         baseReqVo.setErrno(0);

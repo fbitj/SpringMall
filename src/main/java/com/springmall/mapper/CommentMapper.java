@@ -33,4 +33,6 @@ public interface CommentMapper {
     int updateByPrimaryKey(Comment record);
 
     List queryCommentsByGoodsId(Integer id);
+
+    //List queryCommentsByGoodsId(Integer id);
 }

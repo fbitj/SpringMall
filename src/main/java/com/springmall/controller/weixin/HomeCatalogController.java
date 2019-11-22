@@ -85,6 +85,9 @@ public class HomeCatalogController {
             floorGoodsList.add(goodsForCategory);
         }
         homePageData.setFloorGoodsList(floorGoodsList);
+        // 设置新品首发
+
+//        homePageData.setNewGoodsList();
         return BaseReqVo.ok(homePageData);
     }
 

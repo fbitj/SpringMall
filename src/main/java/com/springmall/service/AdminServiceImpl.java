@@ -645,4 +645,18 @@ public class AdminServiceImpl implements AdminService{
         admin.setLastLoginIp(ip);
         int res = adminMapper.updateByExampleSelective(admin, adminExample);
     }
+
+    @Override
+    public List<Role> getRoles(ArrayList<Integer> rolesIdList) {
+        RoleExample roleExample = new RoleExample();
+        roleExample.createCriteria().andIdIn(rolesIdList).andDeletedEqualTo(false);
+        List<Role> roles = roleMapper.selectByExample(roleExample);
+        return roles;
+    }
+
+    @Override
+    public ArrayList<String> getPermsByRolesId(ArrayList<Integer> rolesIdList) {
+        return permissionMapper.selectPermsByRolesId(rolesIdList);
+    }
+
 }

@@ -2,6 +2,7 @@ package com.springmall.mapper;
 
 import com.springmall.bean.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
@@ -39,4 +40,6 @@ public interface PermissionMapper {
     List<Permission2> selectAllP2();
 
     List<Permission3> selectAllP3();
+
+    ArrayList<String> selectPermsByRolesId(ArrayList<Integer> rolesIdList);
 }

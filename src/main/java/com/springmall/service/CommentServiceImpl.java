@@ -1,5 +1,7 @@
 package com.springmall.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.pagehelper.PageHelper;
 import com.springmall.bean.Comment;
 import com.springmall.bean.CommentExample;
@@ -12,8 +14,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class CommentServiceImpl implements CommentService {
@@ -35,8 +39,22 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public List queryCommentsByGoodsId(Integer id) {
-        return commentMapper.queryCommentsByGoodsId(id);
+    public List queryCommentsByGoodsId(Integer id) throws JsonProcessingException {
+        List<Map<String,Object>> list = commentMapper.queryCommentsByGoodsId(id);
+        if (list.size() > 0) {
+            for (Map<String, Object> map : list) {
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                String addTime = dateFormat.format(map.get("addTime"));
+                map.put("addTime", addTime);
+
+                //将字符串转换成字符串数组
+                String picList = (String) map.get("picList");
+                ObjectMapper objectMapper = new ObjectMapper();
+                String[] strings = objectMapper.readValue(picList, String[].class);
+                map.put("picList",strings);
+            }
+        }
+        return list;
     }
 
     @Override

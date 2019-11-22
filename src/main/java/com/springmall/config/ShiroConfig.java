@@ -43,7 +43,7 @@ public class ShiroConfig {
         // 一定要使用LinkedHashMap，否则，chain的顺序会有问题
         LinkedHashMap<String, String> filterChainMap = new LinkedHashMap<>();
         // 第一个参数是请求url，第二个参数是过滤器
-        filterChainMap.put("/admin/auth/login", "anon");
+        filterChainMap.put("/admin/auth/login", "anon");  // 放行管理员登录界面
 //        filterChainMap.put("/admin/auth/info", "anon");
         filterChainMap.put("/wx/auth/login", "anon");
         filterChainMap.put("/wx/**", "anon");

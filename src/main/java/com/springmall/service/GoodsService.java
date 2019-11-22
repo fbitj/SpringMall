@@ -1,5 +1,6 @@
 package com.springmall.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.springmall.bean.*;
 
 import java.util.List;
@@ -79,7 +80,7 @@ public interface GoodsService {
      */
     List<Goods> selectGoodsInSameCategory(Integer id);
 
-    Map selectGoodsDetailById(Integer id);
+    Map selectGoodsDetailById(Integer id) throws JsonProcessingException;
 
     List<Goods> getHotGoods(int amountLimimt);
 }

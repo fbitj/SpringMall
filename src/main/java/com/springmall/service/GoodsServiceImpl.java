@@ -1,5 +1,6 @@
 package com.springmall.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.github.pagehelper.PageHelper;
 import com.springmall.bean.*;
 import com.springmall.mapper.*;
@@ -190,7 +191,7 @@ public class GoodsServiceImpl implements GoodsService {
      * @return
      */
     @Override
-    public Map selectGoodsDetailById(Integer id) {
+    public Map selectGoodsDetailById(Integer id) throws JsonProcessingException {
         //查询商品团购信息
         List grouponRules = grouponService.selectRulesByGoodsId(id);
 

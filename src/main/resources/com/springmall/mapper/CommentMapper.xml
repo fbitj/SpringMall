@@ -2,6 +2,19 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.springmall.mapper.CommentMapper">
 
+  <select id="queryCommentsByGoodsId" resultType="map">
+    select
+    c.id,
+    c.content,
+    c.add_time as addTime,
+    c.pic_urls as picList,
+    u.username,
+    u.avatar
+    from cskaoyan_mall_comment c
+    left join cskaoyan_mall_user u on c.user_id = u.id
+    where c.type = 0 and c.value_id = ${id} and c.deleted = false
+  </select>
+
   <!--<select id="queryCommentsByGoodsId" resultType="com.springmall.bean.Comment">
     select
     c.id, c.value_id, c.`type`, c.content, c.user_id, c.has_picture, c.pic_urls, c.star, c.add_time, c.update_time,

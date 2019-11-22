@@ -36,7 +36,9 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public List queryCommentsByGoodsId(Integer id) {
-        return commentMapper.queryCommentsByGoodsId(id);
+        CommentExample example = new CommentExample();
+        example.createCriteria().andTypeEqualTo((byte) 0).andValueIdEqualTo(id).andDeletedEqualTo(false);
+        return commentMapper.selectByExample(example);
     }
 
     @Override

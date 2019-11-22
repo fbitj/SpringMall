@@ -14,7 +14,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class CustomExceptionHandler {
 
     @ExceptionHandler(AuthorizationException.class)
-    public BaseReqVo noPermission() {
+    public BaseReqVo noPermission(AuthorizationException e) {
+        e.printStackTrace();
 //        BaseReqVo fail = BaseReqVo.fail();
 //        fail.setErrmsg("没有权限");
         return BaseReqVo.error(605, "您没有该权限");

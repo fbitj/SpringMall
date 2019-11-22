@@ -34,4 +34,5 @@ public class PageRequest {
     private Integer size;
     private Integer brandId;
     private Boolean isHot;
+    private Boolean isNew;
 }

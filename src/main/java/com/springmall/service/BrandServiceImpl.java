@@ -123,11 +123,11 @@ public class BrandServiceImpl implements BrandService {
         //查询
         BrandExample brandExample = new BrandExample();
         if (id != null && name == null) {//id不为空，name为空
-            brandExample.createCriteria().andIdEqualTo(id);
+            brandExample.createCriteria().andDeletedEqualTo(false).andIdEqualTo(id);
         }else if(id != null && name != null) {//id不为空，name不为空
-            brandExample.createCriteria().andIdEqualTo(id).andNameLike("%" + name + "%");
+            brandExample.createCriteria().andDeletedEqualTo(false).andIdEqualTo(id).andNameLike("%" + name + "%");
         }else {//id为空，name不为空
-            brandExample.createCriteria().andNameLike( "%" + name + "%");
+            brandExample.createCriteria().andDeletedEqualTo(false).andNameLike( "%" + name + "%");
         }
 
         List<Brand> brands = brandMapper.selectByExample(brandExample);

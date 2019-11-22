@@ -22,21 +22,31 @@ public class KeywordServiceImpl implements KeywordService {
     @Autowired
     Search_historyMapper search_historyMapper;
 
+    /**
+     * 显示所有关键词
+     * @param page
+     * @param limit
+     * @param keyword
+     * @param url
+     * @return
+     */
     @Override
     public Map<String, Object> queryIssues(Integer page, Integer limit, String keyword, String url) {
         //分页
         PageHelper.startPage(page, limit);
         //查询
         KeywordExample keywordExample = new KeywordExample();
-        keywordExample.createCriteria().andDeletedEqualTo(false);
+//        keywordExample.createCriteria().andDeletedEqualTo(false);
         if (keyword != null && url != null) {
-            keywordExample.createCriteria().andKeywordLike("%" + keyword + "%").andUrlLike("%" + url + "%");
+            keywordExample.createCriteria().andDeletedEqualTo(false).andKeywordLike("%" + keyword + "%").andUrlLike("%" + url + "%");
         }
         if (keyword != null) {
-            keywordExample.createCriteria().andKeywordLike("%" + keyword + "%");
+            keywordExample.createCriteria().andDeletedEqualTo(false).andKeywordLike("%" + keyword + "%");
         }
         if (url != null) {
-            keywordExample.createCriteria().andUrlLike("%" + url + "%");
+            keywordExample.createCriteria().andDeletedEqualTo(false).andUrlLike("%" + url + "%");
+        } else {
+            keywordExample.createCriteria().andDeletedEqualTo(false);
         }
         List<Keyword> keywords = keywordMapper.selectByExample(keywordExample);
         PageInfo<Keyword> keywordPageInfo = new PageInfo<>(keywords);

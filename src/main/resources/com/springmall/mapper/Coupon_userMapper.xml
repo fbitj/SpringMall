@@ -308,4 +308,8 @@
       deleted = #{deleted,jdbcType=BIT}
     where id = #{id,jdbcType=INTEGER}
   </update>
+    <update id="updateUserCouponStatusByCouponId">
+      update cskaoyan_mall_coupon_user set status = #{status}, used_time = now()
+      where user_id = #{userId} and  coupon_id =#{couponId}
+    </update>
 </mapper>

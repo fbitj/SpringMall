@@ -18,6 +18,7 @@ public class ResExceptionHandler {
      */
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public BaseReqVo handleCustomException(HttpMessageNotReadableException exception){
+        exception.printStackTrace();
         BaseReqVo baseReqVo = new BaseReqVo();
         baseReqVo.setErrno(402);
         baseReqVo.setErrmsg("参数值不对");
@@ -26,6 +27,7 @@ public class ResExceptionHandler {
 
     @ExceptionHandler(DbException.class)
     public BaseReqVo handleDbException(DbException exception) {
+        exception.printStackTrace();
         BaseReqVo baseReqVo = new BaseReqVo();
         baseReqVo.setErrno(402);
         baseReqVo.setErrmsg("服务器异常，请再次登陆后重试");

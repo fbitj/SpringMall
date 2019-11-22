@@ -20,14 +20,16 @@ public class OrderController {
     @Autowired
     CommentService commentService;
 
-    //显示订单
+    //显示订单和条件查询
     @RequestMapping("list")
     public BaseReqVo orderList(Integer page, Integer limit, Integer userId, String orderSn, Short[] orderStatusArray) {
         BaseReqVo baseReqVo = new BaseReqVo();
         Map<String, Object> map = null;
         if(userId != null || orderSn != null || orderStatusArray != null) {
+            //条件查询
           map = orderService.queryOrders(page, limit, userId, orderSn, orderStatusArray);
         } else {
+            //显示订单
             map = orderService.queryOrders(page, limit);
         }
         baseReqVo.setData(map);
@@ -83,6 +85,5 @@ public class OrderController {
             return BaseReqVo.ok();
         }
         return BaseReqVo.error(621, "订单退款失败");
-
     }
 }

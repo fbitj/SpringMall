@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.lang.System;
 import java.math.BigDecimal;
 import java.util.*;
 
@@ -55,7 +56,6 @@ public class OrderServiceImpl implements OrderService {
 
     /**
      * 条件查询
-     *
      * @param page
      * @param limit
      * @param userId
@@ -157,15 +157,15 @@ public class OrderServiceImpl implements OrderService {
     public int refund(Map<String, Object> map) {
         int orderId = (int) map.get("orderId");
         Order order = orderMapper.selectByPrimaryKey(orderId);
-        Object refundMoney = map.get("refundMoney");
-        if (refundMoney == order.getActualPrice()) {
+        Object refundMoney =map.get("refundMoney");
+        BigDecimal actualPrice = order.getActualPrice();
+//        if (order.getActualPrice().compareTo(refundMoney)) {
             order.setOrderStatus((short) 203);
             Date date = new Date();
             order.setUpdateTime(date);
             int refunded = orderMapper.updateByPrimaryKeySelective(order);
             return refunded;
-        }
-        return 0;
+//        return 0;
     }
 
     /**
@@ -228,7 +228,21 @@ public class OrderServiceImpl implements OrderService {
         OrderExample orderExample = new OrderExample();
         orderExample.setOrderByClause("id desc");// id倒序
         OrderExample.Criteria criteria = orderExample.createCriteria();
-        criteria.andOrderStatusGreaterThanOrEqualTo((short) (showType * 100)).andOrderStatusLessThan((short) ((showType + 1) * 100));
+//        criteria.andOrderStatusGreaterThanOrEqualTo((short) (showType * 100)).andOrderStatusLessThan((short) ((showType + 1) * 100));
+        switch (showType){
+            case 1:
+                criteria.andOrderStatusEqualTo((short) 101);
+                break;
+            case 2:
+                criteria.andOrderStatusBetween((short)201,(short)202);
+                break;
+            case 3:
+                criteria.andOrderStatusEqualTo((short) 301);
+                break;
+            case 4:
+                criteria.andOrderStatusBetween((short)401,(short)402);
+                break;
+        }
         // 查询未删除订单
         criteria.andUserIdEqualTo(userId).andDeletedEqualTo(false);
         List<Order> orders = orderMapper.selectByExample(orderExample);
@@ -319,7 +333,8 @@ public class OrderServiceImpl implements OrderService {
     SystemMapper systemMapper;
     @Autowired
     Goods_productMapper goodsProductMapper;
-
+    @Autowired
+    Coupon_userMapper couponUserMapper;
     /**
      * @param userid
      * @param cartId         购物车id(没有用到)
@@ -338,6 +353,8 @@ public class OrderServiceImpl implements OrderService {
         Address address = addressMapper.selectByPrimaryKey(addressId);
         // 根据couponId查询优惠券信息
         Coupon coupon = couponMapper.selectByPrimaryKey(couponId);
+       // 根据couponId修改用户的优惠卷使用状态
+        couponUserMapper.updateUserCouponStatusByCouponId(couponId,userid,1);
         // 购物车中查询商品信息
         CartExample cartExample = new CartExample();
         cartExample.createCriteria().andUserIdEqualTo(userid).andCheckedEqualTo(true).andDeletedEqualTo(false);

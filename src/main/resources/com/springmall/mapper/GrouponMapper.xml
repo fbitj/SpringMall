@@ -241,6 +241,9 @@
       #{payed,jdbcType=BIT}, #{deleted,jdbcType=BIT})
   </insert>
   <insert id="insertSelective" parameterType="com.springmall.bean.Groupon">
+    <selectKey resultType="int" keyColumn="id" keyProperty="id" order="AFTER">
+      select LAST_INSERT_ID()
+    </selectKey>
     insert into cskaoyan_mall_groupon
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -426,5 +429,13 @@
       payed = #{payed,jdbcType=BIT},
       deleted = #{deleted,jdbcType=BIT}
     where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updatePayedByOrderId">
+    update cskaoyan_mall_groupon
+    set
+      update_time = now(),
+      payed = true
+    where
+      order_id = #{orderId}
   </update>
 </mapper>

@@ -36,12 +36,12 @@ public class ResExceptionHandler {
     @ExceptionHandler(Exception.class)
     public BaseReqVo handleCustomException(Exception exception){
         exception.printStackTrace();
-        return BaseReqVo.error(500,"网络繁忙，请稍后再试！");
+        return BaseReqVo.error(402,"网络繁忙，请稍后再试！");
     }
 
     @ExceptionHandler(OrderException.class)
     public BaseReqVo handlerOrderException(Exception exception){
         exception.printStackTrace();
-        return BaseReqVo.error(500,exception.getMessage());
+        return BaseReqVo.error(402,exception.getMessage());
     }
 }

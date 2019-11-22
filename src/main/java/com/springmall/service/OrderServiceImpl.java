@@ -1,16 +1,15 @@
 package com.springmall.service;
+import java.util.Date;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.springmall.bean.*;
 import com.springmall.exception.OrderException;
 import com.springmall.mapper.*;
-import com.springmall.utils.GetUserUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.lang.System;
 import java.math.BigDecimal;
 import java.util.*;
 
@@ -335,6 +334,14 @@ public class OrderServiceImpl implements OrderService {
     Goods_productMapper goodsProductMapper;
     @Autowired
     Coupon_userMapper couponUserMapper;
+    @Autowired
+    Groupon_rulesMapper grouponRulesMapper;
+    @Autowired
+    GrouponMapper grouponMapper;
+    @Autowired
+    GrouponService grouponService;
+
+
     /**
      * @param userid
      * @param cartId         购物车id(没有用到)
@@ -353,14 +360,17 @@ public class OrderServiceImpl implements OrderService {
         Address address = addressMapper.selectByPrimaryKey(addressId);
         // 根据couponId查询优惠券信息
         Coupon coupon = couponMapper.selectByPrimaryKey(couponId);
-       // 根据couponId修改用户的优惠卷使用状态
-        couponUserMapper.updateUserCouponStatusByCouponId(couponId,userid,1);
+        // 根据couponId修改用户的优惠卷使用状态
+        couponUserMapper.updateUserCouponStatusByCouponId(couponId, userid, 1);
+        // 查询团购信息
+        Groupon_rules groupon_rules = grouponRulesMapper.selectByPrimaryKey(grouponRulesId);
+
         // 购物车中查询商品信息
         CartExample cartExample = new CartExample();
         cartExample.createCriteria().andUserIdEqualTo(userid).andCheckedEqualTo(true).andDeletedEqualTo(false);
         List<Cart> carts = cartMapper.selectByExample(cartExample);
         if (carts.size() == 0) {
-            throw new OrderException("服务器异常");
+            throw new OrderException("下单失败，请稍后再试！");
         }
         // 生成订单编号
         String orderSn = UUID.randomUUID().toString().replaceAll("-", "");
@@ -397,14 +407,22 @@ public class OrderServiceImpl implements OrderService {
         }
         order.setCouponPrice(discount);// 优惠券减免
         order.setIntegralPrice(new BigDecimal("0"));// 用户积分减免============没有不考虑！！！！！！！！！！！
-        order.setGrouponPrice(new BigDecimal("0"));// 团购优惠减免============不考虑！！！！！！！！！！！
-        order.setOrderPrice(order.getGoodsPrice().add(order.getFreightPrice()).subtract(discount));// 订单费用 goods_price + freight_price - coupon_price
+        BigDecimal orderPrice = order.getGoodsPrice().add(order.getFreightPrice()).subtract(discount);
+        if (groupon_rules != null) {
+            order.setGrouponPrice(groupon_rules.getDiscount());// 团购优惠减免============不考虑！！！！！！！！！！！
+            orderPrice = order.getGoodsPrice().subtract(order.getGrouponPrice());
+        }else {
+            order.setGrouponPrice(new BigDecimal(0));
+        }
+        order.setOrderPrice(orderPrice);// 订单费用 goods_price + freight_price - coupon_price
         order.setActualPrice(order.getOrderPrice().subtract(order.getIntegralPrice()));// 实付费用 order_price - integral_price
         order.setPayTime(new Date());//微信支付时间
         order.setAddTime(new Date());
         order.setDeleted(false);
-        // 将订单插入数据库
+        // 将订单插入数据库，生成订单
         orderMapper.insertSelective(order);
+        // 生成团购订单
+        int grouponId = grouponService.startGroupon(userid,order.getId(),grouponRulesId);
 
         Integer id = order.getId();
         // 生成订单商品信息
@@ -436,16 +454,18 @@ public class OrderServiceImpl implements OrderService {
             orderGoodsMapper.updateNumberById(cart.getProductId(), number);
             // 购物车中逻辑删除
             cartMapper.logicDeleteCartById(cart.getId());
-
         }
         return order.getId();
     }
-
 
     @Override
     public int orderPay(int orderId) {
         short status = 201;
         String payId = UUID.randomUUID().toString().replaceAll("-", "");
-        return orderMapper.OrderPayById(orderId, status, payId);
+        // 订单支付
+        int i = orderMapper.OrderPayById(orderId, status, payId);
+        // 修改团购状态
+        grouponMapper.updatePayedByOrderId(orderId);
+        return i;
     }
 }

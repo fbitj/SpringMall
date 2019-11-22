@@ -1,4 +1,5 @@
 package com.springmall.service;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 import com.springmall.bean.User;
@@ -186,7 +187,9 @@ public class UserServiceImpl implements UserService {
                 map1.put("nickName", user.getUsername());
                 map1.put("avatarUrl", user.getAvatar());
                 map2.put("userInfo", map1);
-                map2.put("addTime", comment.getAddTime());
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                String format = simpleDateFormat.format(comment.getAddTime());
+                map2.put("addTime", format);
                 map2.put("picList", comment.getPicUrls());
                 map2.put("content", comment.getContent());
                 list.add(map2);

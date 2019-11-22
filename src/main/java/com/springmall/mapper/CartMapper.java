@@ -23,6 +23,7 @@ public interface CartMapper {
     Cart selectByProductId(Integer productId);
 
     Cart selectByUserIdAndProductId(@Param("userId") Integer userId, @Param("productId")Integer productId);
+    Cart selectByUserIdAndProductIdAndDeleted(@Param("userId") Integer userId, @Param("productId")Integer productId, @Param("deleted") boolean deleted);
 
     int updateByExampleSelective(@Param("record") Cart record, @Param("example") CartExample example);
 

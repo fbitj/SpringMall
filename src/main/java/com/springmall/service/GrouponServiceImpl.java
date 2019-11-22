@@ -47,9 +47,14 @@ public class GrouponServiceImpl implements GrouponService {
     public DataForPage<Groupon_rules> showWholesaleByPage(PageRequest request) {
         PageHelper.startPage(request.getPage(),request.getLimit());
 
+        String order = request.getOrder();
+        String sort = request.getSort();
         //判断是否有goodsId
         Integer goodsId = request.getGoodsId();
         Groupon_rulesExample example = new Groupon_rulesExample();
+        if (order != null && sort != null) {
+            example.setOrderByClause(sort + " " + order);
+        }
         Groupon_rulesExample.Criteria criteria = example.createCriteria();
         if (goodsId != null) {
             criteria.andGoodsIdEqualTo(goodsId);

@@ -107,6 +107,9 @@
         and goods_id = #{goodsId}
       </if>
     </where>
+    <if test="order != null &amp; sort != null">
+      order by #{sort} #{order}
+    </if>
   </select>
 
   <select id="selectGrouponByGid" resultType="com.springmall.bean.Groupon">

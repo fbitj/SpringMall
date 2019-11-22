@@ -138,14 +138,14 @@ public class UserServiceImpl implements UserService {
             if(orderStatus == 101){
                 paidCount ++;
             }
-            if(orderStatus == 201){
+            if(orderStatus == 201 || orderStatus == 202){
                 shipCount ++;
             }
             if(orderStatus == 301){
                 recvCount ++;
             }
-            if(orderStatus == 401){
-                commentCount ++;
+            if(orderStatus == 401 || orderStatus == 402){
+                commentCount += order.getComments();
             }
         }
         map1.put("nurecv",recvCount);
@@ -183,7 +183,7 @@ public class UserServiceImpl implements UserService {
                 HashMap<Object, Object> map2 = new HashMap<>();
                 HashMap<Object, Object> map1 = new HashMap<>();
                 User user = userMapper.selectByPrimaryKey(comment.getUserId());
-                map1.put("nickName", user.getNickname());
+                map1.put("nickName", user.getUsername());
                 map1.put("avatarUrl", user.getAvatar());
                 map2.put("userInfo", map1);
                 map2.put("addTime", comment.getAddTime());

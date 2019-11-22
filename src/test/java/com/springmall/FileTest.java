@@ -3,6 +3,7 @@ package com.springmall;
 import com.aliyun.oss.OSSClient;
 import com.aliyun.oss.internal.OSSBucketOperation;
 import com.springmall.utils.MD5Util;
+import com.springmall.utils.Md5Utils;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
@@ -68,5 +69,11 @@ public class FileTest {
 //        tangyan3 = 6c81c05131b0dab3fff1497351e10de3
 //        tangyan2 = 6c81c05131b0dab3fff1497351e10de3
 
+    }
+
+    @Test
+    public void test3(){
+        String encryptPwd = Md5Utils.getDefaultMd5Encrypt("admin123");
+        System.out.println("encryptPwd = " + encryptPwd);
     }
 }

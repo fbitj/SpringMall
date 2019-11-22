@@ -3,6 +3,7 @@ package com.springmall.controller.admin;
 import com.springmall.bean.BaseReqVo;
 import com.springmall.bean.Issue;
 import com.springmall.service.IssueService;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,6 +19,7 @@ public class IssueController {
 
     //显示and条件搜索
     @RequestMapping("list")
+    @RequiresPermissions(value = {"admin:issue:list"})
     public BaseReqVo issueList(Integer page, Integer limit, String question) {
         BaseReqVo baseReqVo = new BaseReqVo();
         Map<String, Object> map = issueService.queryIssues(page, limit, question);
@@ -28,6 +30,7 @@ public class IssueController {
     }
 
     @RequestMapping("create")
+    @RequiresPermissions(value = {"admin:issue:create"})
     public BaseReqVo issueCreate(@RequestBody Issue issue) {
         BaseReqVo baseReqVo = new BaseReqVo();
         Issue addIssue = issueService.addIssue(issue);
@@ -38,6 +41,7 @@ public class IssueController {
     }
 
     @RequestMapping("update")
+    @RequiresPermissions(value = {"admin:issue:update"})
     public BaseReqVo issueUpdate(@RequestBody Issue issue) {
         BaseReqVo baseReqVo = new BaseReqVo();
         Issue updateIssue = issueService.updateIssue(issue);
@@ -48,6 +52,7 @@ public class IssueController {
     }
 
     @RequestMapping("delete")
+    @RequiresPermissions(value = {"admin:issue:delete"})
     public BaseReqVo issueDelete(@RequestBody Issue issue) {
         BaseReqVo baseReqVo = new BaseReqVo();
         int i = issueService.deleteIssue(issue);

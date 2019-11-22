@@ -297,4 +297,21 @@ public class GrouponServiceImpl implements GrouponService {
         example.createCriteria().andGoodsIdEqualTo(id).andDeletedEqualTo(false);
         return grouponRulesMapper.selectByExample(example);
     }
+
+
+    @Override
+    public int startGroupon(int userid, Integer orderId, int grouponRulesId) {
+        Groupon groupon = new Groupon();
+        groupon.setOrderId(orderId);
+        groupon.setRulesId(grouponRulesId);
+        groupon.setUserId(userid);
+        groupon.setCreatorUserId(userid);
+        groupon.setAddTime(new Date());
+        groupon.setUpdateTime(new Date());
+        groupon.setShareUrl("");
+        groupon.setPayed(false);
+        groupon.setDeleted(false);
+        grouponMapper.insertSelective(groupon);
+        return groupon.getId();
+    }
 }

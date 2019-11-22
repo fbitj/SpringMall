@@ -32,4 +32,6 @@ public interface GrouponMapper {
     int updateByPrimaryKey(Groupon record);
 
     List<GrouponResult> selectWholesale(PageRequest request);
+
+    int updatePayedByOrderId(int orderId);
 }

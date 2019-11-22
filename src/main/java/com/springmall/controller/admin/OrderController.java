@@ -5,6 +5,7 @@ import com.springmall.bean.Category;
 import com.springmall.bean.Order;
 import com.springmall.service.CommentService;
 import com.springmall.service.OrderService;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,6 +23,7 @@ public class OrderController {
 
     //显示订单和条件查询
     @RequestMapping("list")
+    @RequiresPermissions(value = {"admin:order:list"})
     public BaseReqVo orderList(Integer page, Integer limit, Integer userId, String orderSn, Short[] orderStatusArray) {
         BaseReqVo baseReqVo = new BaseReqVo();
         Map<String, Object> map = null;
@@ -40,6 +42,7 @@ public class OrderController {
 
     //详情
     @RequestMapping("detail")
+    @RequiresPermissions(value = {"admin:order:read"})
     public BaseReqVo orderDetail(Integer id) {
         BaseReqVo baseReqVo = new BaseReqVo();
         Map<String, Object> map = orderService.viewOrderDetail(id);
@@ -51,6 +54,7 @@ public class OrderController {
 
 
     @RequestMapping("reply")
+    @RequiresPermissions(value = {"admin:order:reply"})
     public BaseReqVo replay(@RequestBody Map value){
         int commentId = (int) value.get("commentId");
         String content = (String) value.get("content");
@@ -69,6 +73,7 @@ public class OrderController {
 
     //发货
     @RequestMapping("ship")
+    @RequiresPermissions(value = {"admin:order:ship"})
     public BaseReqVo ship(@RequestBody Order order) {
         int shiped = orderService.shipGoods(order);
         if (shiped == 1) {
@@ -79,6 +84,7 @@ public class OrderController {
 
     //退款
     @RequestMapping("refund")
+    @RequiresPermissions(value = {"admin:order:refund"})
     public BaseReqVo refund(@RequestBody Map<String, Object> map) {
         int refunded = orderService.refund(map);
         if(refunded == 1) {

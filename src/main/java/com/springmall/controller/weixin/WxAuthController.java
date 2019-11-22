@@ -4,6 +4,7 @@ import com.springmall.bean.BaseReqVo;
 import com.springmall.bean.User;
 import com.springmall.bean.UserData;
 import com.springmall.component.AliyunComponent;
+import com.springmall.service.CouponService;
 import com.springmall.service.UserService;
 import com.springmall.shiro.CustomToken;
 import com.springmall.utils.Md5Utils;
@@ -24,8 +25,12 @@ import java.util.Map;
 @RestController
 @RequestMapping("wx/auth")
 public class WxAuthController {
+
     @Autowired
     UserService userService;
+    @Autowired
+    CouponService couponService;
+
     HashMap<String, String> codeMap = new HashMap<>();
     /**
      * 微信端账号登录，进行shiro认证
@@ -124,6 +129,8 @@ public class WxAuthController {
         int res = userService.register(userInfoMap);
         if (res == 0)
             return BaseReqVo.error(703, "注册失败，请稍后再试");
+        //分发注册赠券
+        couponService.sendRegistCoupon(userInfoMap.get("username"));
         //Shiro登录
         Subject subject = SecurityUtils.getSubject(); // 获取subject（主体）
         CustomToken token = new CustomToken(userInfoMap.get("username"), userInfoMap.get("password"), "user"); // 创建token

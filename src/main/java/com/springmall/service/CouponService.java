@@ -33,4 +33,6 @@ public interface CouponService {
     List<Coupon> queryOrderCouponList(int cartId, int grouponRulesId, int userId);
 
     List<Coupon> getAllCoupon();
+
+    void sendRegistCoupon (String username);
 }

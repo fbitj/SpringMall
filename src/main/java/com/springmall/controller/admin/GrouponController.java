@@ -4,6 +4,7 @@ import com.springmall.bean.*;
 import com.springmall.service.GoodsService;
 import com.springmall.service.GrouponService;
 import com.springmall.utils.ResultUtil;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,6 +30,7 @@ public class GrouponController {
      * @return
      */
     @RequestMapping("list")
+    @RequiresPermissions(value = {"admin:groupon:list"})
     public BaseReqVo showWholesaleRulesByPage(PageRequest request) {
         DataForPage<Groupon_rules> result = grouponService.showWholesaleByPage(request);
         return ResultUtil.success(result);
@@ -40,6 +42,7 @@ public class GrouponController {
      * @return
      */
     @RequestMapping("delete")
+    @RequiresPermissions(value = {"admin:groupon:delete"})
     public BaseReqVo deleteWholesaleRulesById(@RequestBody Groupon_rules rules) {
         grouponService.deleteRulesById(rules);
         return ResultUtil.success(null);
@@ -51,6 +54,7 @@ public class GrouponController {
      * @return
      */
     @RequestMapping("create")
+    @RequiresPermissions(value = {"admin:groupon:create"})
     public BaseReqVo addWholesaleRules(@RequestBody Groupon_rules rules) {
         //查看商品id是否存在
         Goods goods = goodsService.selectGoodsById(rules.getGoodsId());
@@ -83,6 +87,7 @@ public class GrouponController {
      * @return
      */
     @RequestMapping("update")
+    @RequiresPermissions(value = {"admin:groupon:update"})
     public BaseReqVo update(@RequestBody Groupon_rules rules) {
         //判断参数是否合法
         String illegal = isIllegal(rules);
@@ -106,6 +111,7 @@ public class GrouponController {
      * @return
      */
     @RequestMapping("listRecord")
+    @RequiresPermissions(value = {"admin:groupon:read"})
     public BaseReqVo showWholesaleByPage(PageRequest request) {
         DataForPage result = grouponService.showWholesale(request);
         return ResultUtil.success(result);

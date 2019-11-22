@@ -47,6 +47,7 @@ public class AdvertiseController {
      * @return
      */
     @RequestMapping("update")
+    @RequiresPermissions(value = {"admin:ad:update"})
     public BaseReqVo<Ad> update(@RequestBody Ad advertise) {
         Ad result = advertiseService.update(advertise);
 
@@ -60,6 +61,7 @@ public class AdvertiseController {
      * @return
      */
     @RequestMapping("create")
+    @RequiresPermissions(value = {"admin:ad:create"})
     public BaseReqVo<Ad> createAd(@RequestBody Ad advertise) {
         Ad result = advertiseService.create(advertise);
         BaseReqVo reqVo = ResultUtil.success(result);
@@ -72,6 +74,7 @@ public class AdvertiseController {
      * @return
      */
     @RequestMapping("delete")
+    @RequiresPermissions(value = {"admin:ad:delete"})
     public BaseReqVo deleteById(@RequestBody Ad advertise) {
         //暂定仅删除单表中的数据
         advertiseService.delete(advertise.getId());

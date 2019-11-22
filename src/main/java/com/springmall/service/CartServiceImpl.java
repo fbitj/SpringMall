@@ -314,6 +314,13 @@ public class CartServiceImpl implements CartService {
             coupon_userExample.createCriteria().andUserIdEqualTo(userId).andStatusEqualTo((short) 0).andDeletedEqualTo(false);
             List<Coupon_user> coupon_users = coupon_userMapper.selectByExample(coupon_userExample);
             int availableCouponLength = coupon_users.size();
+            if(couponId == -1 || couponId == 0) {
+                //取出一个id就可以
+                for (Coupon_user coupon_user : coupon_users) {
+                    couponId = coupon_user.getCouponId();
+                    break;
+                }
+            }
             //couponId不为0，根据couponId去coupon表搜索优惠金额，再用cpuponId和userId去coupon_user表搜索可用优惠券，并计算可用优惠券数量
             if (couponId != 0 && couponId != -1) {
                 //搜索优惠金额
@@ -397,8 +404,9 @@ public class CartServiceImpl implements CartService {
             //查询goods_product表， 获取productId, price, specifications, pic_url
             Goods_product goods_product = goods_productMapper.selectByPrimaryKey(cart.getProductId());
             //判单购物车是否有同款，有的话update
-            Cart selectCart = cartMapper.selectByUserIdAndProductId(userId, cart.getProductId());
-            if (selectCart != null && selectCart.getDeleted() == false) {
+           // boolean deleted = false;
+            Cart selectCart = cartMapper.selectByUserIdAndProductIdAndDeleted(userId, cart.getProductId(), false);
+            if (selectCart != null) {
                 //存在同型号的商品，直接update。 number = oldNumber + newNumber
                 //判断是添加购物车调用还是立即购买调用，对number的处理不同
                 if ("addCart".equals(request)) {

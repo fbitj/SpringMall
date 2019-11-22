@@ -33,7 +33,6 @@ public class WxUserController {
     UserService userService;
 
 
-
     //个人页面用户信息
     /**
      * request
@@ -68,7 +67,6 @@ public class WxUserController {
     }
 
     //商品收藏，取消收藏
-
     /**
      * request      //wx/collect/addordelete
      * {"type":0,"valueId":1181182}
@@ -194,7 +192,6 @@ public class WxUserController {
         return baseReqVo;
     }
 
-
     //发布评论
     /**
      * request
@@ -276,7 +273,6 @@ public class WxUserController {
         return baseReqVo;
     }
 
-
     //专题推荐
     /**
      * request
@@ -313,7 +309,7 @@ public class WxUserController {
         return baseReqVo;
     }
 
-
+    //专题列表
     /**
      * request
      * ///wx/topic/list?page=1&size=10

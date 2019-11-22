@@ -388,7 +388,7 @@
   </select>
 
   <insert id="insertUser">
-    insert into cskaoyan_mall_user (username, password, mobile) values (#{username}, #{password},#{mobile})
+    insert into cskaoyan_mall_user (username, password, mobile,nickname) values (#{username}, #{password},#{mobile},#{username})
   </insert>
 
   <select id="selectUserCountByName" resultType="int">

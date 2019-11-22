@@ -109,10 +109,10 @@ public class WxAuthController {
     @RequestMapping("register")
     public BaseReqVo register(@RequestBody HashMap<String, String> userInfoMap) {
         // 判断验证码是否相同
-//        String userCode = userInfoMap.get("code");
-//        if (!isCodeEquals(userCode)){
-//            return BaseReqVo.error(500,"验证码不正确");
-//        }
+        String userCode = userInfoMap.get("code");
+        if (!isCodeEquals(userCode)){
+            return BaseReqVo.error(500,"验证码不正确");
+        }
         // 判断是否已经存在该用户,0表示不存在，否则存在
         int isUserExist = userService.isUserExist(userInfoMap.get("username"));
         if (isUserExist != 0) {

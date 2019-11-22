@@ -252,7 +252,7 @@ public class OrderServiceImpl implements OrderService {
                 criteria.andOrderStatusEqualTo((short) 301);
                 break;
             case 4:
-                criteria.andOrderStatusBetween((short)401,(short)402);
+                criteria.andOrderStatusBetween((short)401,(short)402).andCommentsGreaterThan((short) 0);
                 break;
         }
         // 查询未删除订单
@@ -480,5 +480,10 @@ public class OrderServiceImpl implements OrderService {
         // 修改团购状态
         grouponMapper.updatePayedByOrderId(orderId);
         return i;
+    }
+
+    @Override
+    public int CommentSubOne(Integer orderGoodsId) {
+       return orderMapper.CommentSubOne(orderGoodsId);
     }
 }

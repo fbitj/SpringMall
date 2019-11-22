@@ -75,4 +75,12 @@ public interface OrderService {
      * @return
      */
     int orderPay(int orderId);
+
+    /**
+     * 待评价商品数量减一
+     * @return
+     * @param orderGoodsId
+     */
+    int CommentSubOne(Integer orderGoodsId);
+
 }

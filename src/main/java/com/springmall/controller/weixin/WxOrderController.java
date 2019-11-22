@@ -155,6 +155,8 @@ public class WxOrderController {
         if (res == 1){
             return BaseReqVo.error(577,"订单已评价！");
         } else if (res == 0){
+            // 修改订单待评价商品数量
+            orderService.CommentSubOne(orderGoodsCommentReqVo.getOrderGoodsId());
             return BaseReqVo.ok();
         } else {
             return BaseReqVo.error(577,"超期不能评论！");

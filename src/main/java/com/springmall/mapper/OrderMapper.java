@@ -42,4 +42,7 @@ public interface OrderMapper {
     int updateOrderDeletedAndTimeById(@Param("id") Integer id);
 
     int OrderPayById(@Param("id") int id, @Param("status") short status, @Param("payId") String payId);
+
+    int CommentSubOne(Integer orderGoodsId);
+
 }

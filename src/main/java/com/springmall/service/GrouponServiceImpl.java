@@ -94,6 +94,7 @@ public class GrouponServiceImpl implements GrouponService {
                 Groupon groupon = grouponResult.getGroupon();
                 List subGroupons = grouponResult.getSubGroupons();
                 subGroupons.add(0, groupon);
+                grouponResult.setSubGroupons(subGroupons);
             }
         }
         /*//sub暂定

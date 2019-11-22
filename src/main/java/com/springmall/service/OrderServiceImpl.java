@@ -214,7 +214,12 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public int updateOrderStatusById(int orderId, int status) {
         Order order = new Order();
+        //查询订单中的商品
+        Order_goodsExample orderGoodsExample = new Order_goodsExample();
+        orderGoodsExample.createCriteria().andOrderIdEqualTo(orderId).andDeletedEqualTo(false);
+        List<Order_goods> order_goods = order_goodsMapper.selectByExample(orderGoodsExample);
         order.setId(orderId);
+        order.setComments((short) order_goods.size());
         order.setOrderStatus((short) status);
         order.setUpdateTime(new Date());
         return orderMapper.updateByPrimaryKeySelective(order);

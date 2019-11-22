@@ -7,6 +7,7 @@ import com.springmall.mapper.AddressMapper;
 import com.springmall.exception.DbException;
 import com.springmall.mapper.CouponMapper;
 import com.springmall.mapper.Coupon_userMapper;
+import com.springmall.mapper.UserMapper;
 import com.springmall.utils.RandomUtil;
 import com.springmall.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,8 @@ public class CouponServiceImpl implements CouponService{
     CartService cartService;
     @Autowired
     AddressMapper addressMapper;
+    @Autowired
+    UserMapper userMapper;
 
     /**
      * 查找优惠券并分页
@@ -40,8 +43,13 @@ public class CouponServiceImpl implements CouponService{
 
         Short type = request.getType();
         Short status = request.getStatus();
+        String order = request.getOrder();
+        String sort = request.getSort();
 
         CouponExample couponExample = new CouponExample();
+        if (order != null && sort != null) {
+            couponExample.setOrderByClause(sort + " " + order);
+        }
         CouponExample.Criteria criteria = couponExample.createCriteria();
         //判空，若不为空则添加条件
         if (!StringUtils.isEmpty(request.getName())) {
@@ -178,17 +186,8 @@ public class CouponServiceImpl implements CouponService{
     @Override
     public HashMap<String, Object> queryCouponListByPage(String page, String size) {
         PageHelper.startPage(Integer.parseInt(page), Integer.parseInt(size));
-        CouponExample couponExample = new CouponExample();
         //优惠券状态需为正常可用，优惠券赠送类型需为通用券，过滤逻辑删除。
-        couponExample.createCriteria().andStatusEqualTo((short) 0).andTypeEqualTo((short) 0).andDeletedEqualTo(false);
-        List<Coupon> cpList = couponMapper.selectByExample(couponExample);
-        List<Coupon> couponList = new ArrayList<>();
-        for (Coupon coupon : cpList) {
-            //若time_type为1，需判断当前是否已满足使用券开始时间start_time。
-            if(coupon.getTimeType()==0 || coupon.getStartTime().before(new Date())){
-                couponList.add(coupon);
-            }
-        }
+        List<Coupon> couponList = queryUsableCoupon((short) 0);
         PageInfo<Coupon> pageInfo = new PageInfo<>(couponList);
         HashMap<String, Object> dataMap = new HashMap<>();
         dataMap.put("data",couponList);
@@ -352,5 +351,40 @@ public class CouponServiceImpl implements CouponService{
     @Override
     public List<Coupon> getAllCoupon() {
         return couponMapper.selectAllCoupon();
+    }
+
+    /**
+     * 分发注册赠券
+     * @param username 用户账号
+     */
+    @Override
+    public void sendRegistCoupon(String username) {
+        UserExample userExample = new UserExample();
+        userExample.createCriteria().andUsernameEqualTo(username);
+        User user = userMapper.selectByExample(userExample).get(0);
+        //优惠券状态需为正常可用，优惠券赠送类型需为注册赠券，过滤逻辑删除。
+        List<Coupon> couponList = queryUsableCoupon((short) 1);
+        for (Coupon coupon : couponList) {
+            exchangeCouponJudge(coupon,user.getId());
+        }
+    }
+
+    /**
+     * 查询相应优惠券类型当前可用券列表的辅助方法
+     * @param type 优惠券类型
+     * @return 相应优惠券类型当前全部可用券列表
+     */
+    private List<Coupon> queryUsableCoupon(short type){
+        CouponExample couponExample = new CouponExample();
+        couponExample.createCriteria().andStatusEqualTo((short) 0).andTypeEqualTo(type).andDeletedEqualTo(false);
+        List<Coupon> cpList = couponMapper.selectByExample(couponExample);
+        List<Coupon> couponList = new ArrayList<>();
+        for (Coupon coupon : cpList) {
+            //若time_type为1，需判断当前是否已满足使用券开始时间start_time。
+            if(coupon.getTimeType()==0 || coupon.getStartTime().before(new Date())){
+                couponList.add(coupon);
+            }
+        }
+        return couponList;
     }
 }

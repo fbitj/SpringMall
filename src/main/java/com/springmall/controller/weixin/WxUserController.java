@@ -132,8 +132,7 @@ public class WxUserController {
         return baseReqVo;
     }
 
-
-
+    //商品，专辑评论列表
     /**
      * request
      * 商品评论

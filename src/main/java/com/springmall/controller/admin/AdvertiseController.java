@@ -6,6 +6,8 @@ import com.springmall.bean.BaseReqVo;
 import com.springmall.bean.DataForPage;
 import com.springmall.service.AdvertiseService;
 import com.springmall.utils.ResultUtil;
+import org.apache.shiro.authz.annotation.Logical;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,6 +28,7 @@ public class AdvertiseController {
      * @return
      */
     @RequestMapping("list")
+    @RequiresPermissions(value = {"admin:ad:list"})
     public BaseReqVo advertiseList(PageRequest adRequest) {
         DataForPage<Ad> advertises = advertiseService.totalAdvertise(adRequest);
 

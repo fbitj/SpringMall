@@ -19,7 +19,7 @@ public class BrandController {
     BrandService brandService;
     //显示全部品牌
     @RequestMapping("list")
-    @RequiresPermissions(value = {"admin:brand:update"})
+    @RequiresPermissions(value = {"admin:brand:list"})
     public BaseReqVo brandList(Integer page, Integer limit, Integer id, String name) {
         BaseReqVo baseReqVo = new BaseReqVo();
         //Map<String, Object> map = new HashMap<>();

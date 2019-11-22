@@ -315,7 +315,15 @@
   </update>
 
   <select id="selectAdminByUsername" resultType="com.springmall.bean.Admin">
-    select id,username,password,avatar,role_ids from cskaoyan_mall_admin where username=#{username}
+    select id,username,password,avatar,role_ids roleIds from cskaoyan_mall_admin where username=#{username}
   </select>
+
+  <select id="selectAllPermission" resultType="string">
+    select id from cskaoyan_mall_permission3;
+  </select>
+  <select id="selectPermissionByRoldId" resultType="java.lang.String">
+    select permission from cskaoyan_mall_permission where role_id=#{roleId}
+  </select>
+
 
 </mapper>

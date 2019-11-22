@@ -18,6 +18,6 @@ public class CustomExceptionHandler {
         e.printStackTrace();
 //        BaseReqVo fail = BaseReqVo.fail();
 //        fail.setErrmsg("没有权限");
-        return BaseReqVo.error(700, "没有权限");
+        return BaseReqVo.error(605, "您没有该权限");
     }
 }

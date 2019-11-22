@@ -6,6 +6,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -56,4 +57,8 @@ public interface AdminService {
     int storageDelete(Storage storage);
 
     void recordUserLoginInfo(String ip);
+
+    List<Role> getRoles(ArrayList<Integer> rolesIdList);
+
+    ArrayList<String> getPermsByRolesId(ArrayList<Integer> rolesIdList);
 }

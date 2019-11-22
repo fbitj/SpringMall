@@ -1,6 +1,7 @@
 package com.springmall.shiro;
 
 import com.springmall.bean.Admin;
+import com.springmall.bean.Admin2;
 import com.springmall.mapper.AdminMapper;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
@@ -10,6 +11,9 @@ import org.apache.shiro.subject.PrincipalCollection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -47,13 +51,30 @@ public class AdminRealm extends AuthorizingRealm {
      */
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
-//        Admin primaryPrincipal = (Admin) principalCollection.getPrimaryPrincipal();
-//        String username = primaryPrincipal.getUsername();
-//        List<String> perms = adminMapper.selectPermsByUsername(username);
-//        SimpleAuthorizationInfo authorizationInfo = new SimpleAuthorizationInfo();
-//        authorizationInfo.addStringPermissions(perms);
-//        return authorizationInfo;
-        return null;
+        Admin primaryPrincipal = (Admin) principalCollection.getPrimaryPrincipal();
+        String roleIds = primaryPrincipal.getRoleIds();
+        // 将roleIds字符串转换为Integer类型的List
+        String[] splitRoles = roleIds.replace("[", "").replace("]", "").replaceAll(" ", "").split(",");
+        ArrayList<Integer> rolesIdList = new ArrayList<>();
+        for (String splitRole : splitRoles) {
+            rolesIdList.add(Integer.valueOf(splitRole));
+        }
+        // 从数据库查询权限信息
+        SimpleAuthorizationInfo authorizationInfo = new SimpleAuthorizationInfo();
+        HashSet<String> permsSet = new HashSet<>();
+        if (rolesIdList.contains(1)) { // 若为超级管理员，直接查询所有接口
+            List<String> permsList = adminMapper.selectAllPermission();
+            authorizationInfo.addStringPermissions(permsList);
+            return authorizationInfo;
+        }
+        for (Integer roleId : rolesIdList) {
+            List<String> permsList = adminMapper.selectPermissionByRoldId(roleId);
+            for (String perm : permsList) {
+                permsSet.add(perm);
+            }
+        }
+        authorizationInfo.addStringPermissions(permsSet);
+        return authorizationInfo;
     }
 
 

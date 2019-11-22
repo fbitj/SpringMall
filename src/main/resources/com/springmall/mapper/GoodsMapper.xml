@@ -225,9 +225,7 @@
         retail_price,
       </if>
         add_time,
-      <if test="updateTime != null">
         update_time,
-      </if>
       <if test="deleted != null">
         deleted,
       </if>

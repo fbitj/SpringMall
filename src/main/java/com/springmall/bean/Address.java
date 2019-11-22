@@ -27,6 +27,12 @@ public class Address {
 
     private String mobile;
 
+    private String province;
+
+    private String city;
+
+    private String area;
+
     private Boolean isDefault;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone ="GMT+8")
@@ -168,5 +174,28 @@ public class Address {
         this.areaName = areaName;
     }
 
+    public String getProvince() {
+        return province;
+    }
+
+    public void setProvince(String province) {
+        this.province = province;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getArea() {
+        return area;
+    }
+
+    public void setArea(String area) {
+        this.area = area;
+    }
 }
 

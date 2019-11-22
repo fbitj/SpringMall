@@ -15,4 +15,7 @@ public interface AddressService {
     Date queryAddTime(Integer id);
     void deleteAddress(Integer id);
     void setDefault();
+
+    int selectRegionCode(Integer areaId);
+    String selectRegionName(Integer id);
 }

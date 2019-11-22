@@ -37,4 +37,8 @@ public interface AddressMapper {
     int deleteAddress(Integer id);
 
     int updateDefault();
+
+    int selectById(Integer id);
+
+    String queryRegionName(Integer id);
 }

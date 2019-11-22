@@ -133,6 +133,9 @@ public class CouponController {
         if (coupon.getTimeType() == 1 && (coupon.getEndTime().getTime() - new Date().getTime() < 1000*60*60)) {
             return "有效期最后时间最少要大于当前1小时";
         }
+        if (coupon.getType() == 1 && coupon.getLimit() != 1) {
+            return "注册赠券每个用户限领一张";
+        }
         return null;
     }
 }

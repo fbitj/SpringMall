@@ -1,7 +1,7 @@
 package com.springmall.expection;
 
 import com.springmall.bean.BaseRespVo;
-import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.apache.shiro.authz.AuthorizationException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -9,12 +9,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @ControllerAdvice
 @ResponseBody
 public class ResExceptionHandler {
-
-    /**
-     * 处理接收json格式请求时数据转换异常
-     * @param exception
-     * @return
-     */
     /*@ExceptionHandler(HttpMessageNotReadableException.class)
     public BaseRespVo handleCustomException(HttpMessageNotReadableException exception){
         BaseRespVo BaseRespVo = new BaseRespVo();
@@ -22,5 +16,8 @@ public class ResExceptionHandler {
         BaseRespVo.setErrmsg("参数值不对");
         return BaseRespVo;
     }*/
-
+    @ExceptionHandler(AuthorizationException.class)
+    public BaseRespVo noPermission() {
+        return BaseRespVo.failed("没有权限,请联系管理员", 605);
+    }
 }

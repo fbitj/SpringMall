@@ -302,4 +302,10 @@
       role_ids = #{roleIds,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
+    <select id="queryAdminByName" resultMap="BaseResultMap">
+      select * from  cskaoyan_mall_admin  where username = #{username} and deleted = 0
+    </select>
+  <select id="queryRoleIdsByUsername" resultType="java.lang.String">
+    select role_ids from cskaoyan_mall_admin where username = #{username} and deleted = 0
+  </select>
 </mapper>

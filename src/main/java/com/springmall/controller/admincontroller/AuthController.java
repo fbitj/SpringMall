@@ -1,15 +1,26 @@
 package com.springmall.controller.admincontroller;
 
+import com.springmall.annotation.ActionType;
+import com.springmall.annotation.ControllerLog;
 import com.springmall.bean.Admin;
 import com.springmall.bean.BaseRespVo;
 import com.springmall.bean.InfoData;
 import com.springmall.service.AdminService;
+import com.springmall.shiro.CustomToken;
+import com.springmall.utils.Md5Utils;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.AuthenticationException;
+import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
+import java.io.Serializable;
 import java.util.ArrayList;
 
 
@@ -24,17 +35,19 @@ public class AuthController {
     AdminService adminService;
 
     @RequestMapping("login")
-    public BaseRespVo<String> login(@RequestBody Admin admin) {
-        BaseRespVo<String> BaseRespVo = new BaseRespVo<>();
-//        if (adminService.login(admin) == 1) {
-            BaseRespVo.setErrno(0);
-            BaseRespVo.setData("6d182056-3821-4a75-ac59-1724a0707524");
-            BaseRespVo.setErrmsg("成功");
-        /*} else {
-            BaseRespVo.setErrno(605);
-            BaseRespVo.setErrmsg("用户账号或密码不正确");
-        }*/
-        return  BaseRespVo;
+    @ControllerLog(actionType = ActionType.LOGIN,description = "用户登陆")
+    public BaseRespVo<String> login(@Valid @RequestBody Admin admin) {
+        String username = admin.getUsername();
+        String md5EncryptPassword = Md5Utils.getDefaultMd5Encrypt(admin.getPassword());
+        CustomToken token = new CustomToken(username, md5EncryptPassword, "admin");
+        Subject subject = SecurityUtils.getSubject();
+        try {
+            subject.login(token);
+        } catch (AuthenticationException e) {
+            return BaseRespVo.failed("用户名或密码不正确，请重试！",605);
+        }
+        Serializable id = subject.getSession().getId();
+        return BaseRespVo.ok(id);
     }
 
     @RequestMapping("info")
@@ -56,6 +69,12 @@ public class AuthController {
         return BaseRespVo;
     }
 
+    @RequestMapping("logout")
+    public BaseRespVo logout(String token) {
+        Subject subject = SecurityUtils.getSubject();
+        subject.logout();
+        return BaseRespVo.ok();
+    }
 
 }
 

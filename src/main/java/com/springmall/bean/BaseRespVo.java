@@ -16,9 +16,12 @@ public class BaseRespVo<T> {
         this.errmsg = errmsg;
         this.errno = errno;
     }
-
     public static BaseRespVo ok(){
+        return ok(null);
+    }
+    public static BaseRespVo ok(Object object){
         BaseRespVo tBaseRespVo = new BaseRespVo<>();
+        tBaseRespVo.setData(object);
         tBaseRespVo.setErrmsg("成功");
         tBaseRespVo.setErrno(0);
         return tBaseRespVo;

@@ -225,4 +225,10 @@
       deleted = #{deleted,jdbcType=BIT}
     where id = #{id,jdbcType=INTEGER}
   </update>
+    <select id="queryPermissionsInRoleIds" resultType="java.lang.String">
+      SELECT permission FROM `cskaoyan_mall_permission` where role_id in
+      <trim prefix="(" suffix=")">
+      ${roleIds}
+    </trim>
+    </select>
 </mapper>

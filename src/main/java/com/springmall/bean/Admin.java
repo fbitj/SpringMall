@@ -2,13 +2,17 @@ package com.springmall.bean;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import javax.validation.Valid;
+import javax.validation.constraints.Size;
 import java.util.Date;
 
 public class Admin {
     private Integer id;
 
+    @Size(min = 8)
     private String username;
 
+    @Size(min = 8)
     private String password;
 
     private String lastLoginIp;

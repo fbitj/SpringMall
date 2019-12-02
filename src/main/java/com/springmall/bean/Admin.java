@@ -9,7 +9,7 @@ import java.util.Date;
 public class Admin {
     private Integer id;
 
-    @Size(min = 8)
+    @Size(min = 8, message = "用户名必须超过8位")
     private String username;
 
     @Size(min = 8)
